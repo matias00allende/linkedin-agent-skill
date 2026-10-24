@@ -93,3 +93,34 @@ class CarpetasTemporales(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CitasLargas(unittest.TestCase):
+    def test_very_long_quotes_and_parentheses_are_protected(self):
+        long_quote = "\"" + "Dicho esto, utilizamos esto. " * 80 + "\""
+        long_paren = "(" + "Dicho esto, utilizamos esto. " * 60 + ")"
+        text = f"Cita: {long_quote}\n{long_paren}"
+        self.assertEqual(clean_text(text)[0], text + "\n")
+
+    def test_unclosed_quote_does_not_hide_the_rest_of_the_text(self):
+        out, _ = clean_text('Abrió una comilla " y luego utilizamos esto.')
+        self.assertIn("usamos esto", out)
+
+    def test_views_column_is_not_taken_as_impressions(self):
+        with self.assertRaises(agentin.UserError) as ctx:
+            agentin.parse_analytics("Fecha,Visualizaciones,Reacciones\n2026-01-01,100,5\n")
+        self.assertIn("puede medir otra cosa", str(ctx.exception))
+
+
+class CasosDeSeleccion(unittest.TestCase):
+    def test_selection_cases_cover_every_skill_and_negatives(self):
+        import json
+        from helpers import ROOT
+        with open(os.path.join(ROOT, "tests", "seleccion.json"), encoding="utf-8") as fh:
+            cases = json.load(fh)
+        expected = {x for c in cases for x in c["esperada"]}
+        skills = {d for d in os.listdir(os.path.join(ROOT, "skills")) if d.startswith("ag-")}
+        self.assertTrue(skills <= expected, skills - expected)
+        for kind in ("ninguna", "pregunta", "rechazo"):
+            self.assertIn(kind, expected)
+        self.assertGreaterEqual(len(cases), 30)

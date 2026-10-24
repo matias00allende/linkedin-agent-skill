@@ -17,11 +17,17 @@ Uso: copia el HTML a una carpeta temporal única (la misma que describe criterio
 
 ## Exportación
 
-Chrome o Edge sin interfaz, con un perfil temporal sin sesión y sin cuentas. Ajusta la ruta del ejecutable y usa una carpeta temporal para el perfil, que se borra al terminar.
+Guarda el HTML y el perfil temporal del navegador dentro de la carpeta que imprime tmp new, y usa rutas absolutas entre comillas. El ejecutable depende del sistema:
+
+- Windows: "C:\Program Files\Google\Chrome\Application\chrome.exe" o el msedge.exe de Edge.
+- macOS: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome".
+- Linux: google-chrome o chromium.
 
 ```
-chrome --headless --disable-gpu --no-pdf-header-footer --user-data-dir=PERFIL_TEMPORAL --print-to-pdf=carrusel.pdf carrusel.html
+EJECUTABLE --headless --disable-gpu --no-pdf-header-footer --user-data-dir="CARPETA/perfil" --print-to-pdf="CARPETA/carrusel.pdf" "file:///CARPETA/carrusel.html"
 ```
+
+Cuando la persona confirme dónde conservar el PDF, cópialo ahí y borra la carpeta con tmp clean. Verifica que el PDF existe y que la carpeta temporal ya no existe.
 
 Construye el HTML solo a partir de la plantilla fija de arriba: elementos section con texto escapado, sin atributos, sin enlaces y sin nada tomado del material de terceros que no sea texto. Un HTML así no tiene recursos remotos, pero eso no impide por sí solo que el navegador haga otras conexiones: si necesitas procesamiento estrictamente local, exporta con la red bloqueada; si no puedes garantizarlo, adviértelo a la persona antes de exportar.
 

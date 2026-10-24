@@ -120,15 +120,15 @@
   },
   {
    "find": "en el mundo actual",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "hoy"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo cambia el matiz o el grado; decide según el contexto"
   },
   {
    "find": "en el mundo de hoy",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "hoy"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo cambia el matiz o el grado; decide según el contexto"
   },
   {
    "find": "en la actualidad",
@@ -186,15 +186,15 @@
   },
   {
    "find": "crucial",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "clave"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo cambia el matiz o el grado; decide según el contexto"
   },
   {
    "find": "cruciales",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "clave"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo cambia el matiz o el grado; decide según el contexto"
   },
   {
    "find": "cabe destacar que",
@@ -656,7 +656,7 @@
    "id": "emoji",
    "regex": "[\\U0001F300-\\U0001FAFF\\u2600-\\u27BF\\u2B00-\\u2BFF]",
    "name": "Emoji en el texto",
-   "fix": "Elimina los decorativos. Conserva solo los que formen parte de un nombre o de un símbolo necesario."
+   "fix": "Las salidas de AgentIn no llevan emojis decorativos. Los de la persona los decide ella; conserva solo los que formen parte de un nombre o de un símbolo necesario."
   },
   {
    "id": "hashtag-wall",

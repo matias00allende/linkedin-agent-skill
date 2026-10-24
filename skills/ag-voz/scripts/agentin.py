@@ -34,7 +34,7 @@ import tempfile
 import time
 import unicodedata
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -288,7 +288,7 @@ def restore(text: str, found: list[str], marker: str) -> str:
     return re.sub(re.escape(marker) + r"(\d+)" + re.escape(marker), lambda m: found[int(m.group(1))], text)
 
 
-_QUOTES = [re.compile(r'"[^"]{0,600}"'), re.compile(r"\u00ab[^\u00bb]{0,600}\u00bb"), re.compile(r"\([^)]{0,400}\)")]
+_QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"\u00ab[^\u00bb]*\u00bb"), re.compile(r"\([^)]*\)")]
 
 
 def protect_quotes(text: str) -> tuple[str, list[str], str]:
@@ -328,7 +328,7 @@ def pass_typography(text: str) -> tuple[str, list[dict]]:
         count("U+2013 semiraya (en dash)", n_en, "guion o coma")
     text = re.sub(r"(?m)^([ \t]*)\u2022[ \t]*", r"\1- ", text)
     simple = [("\u2018", "'", "comilla simple izquierda"), ("\u2019", "'", "comilla simple derecha / apostrofe"),
-              ("\u2032", "'", "prima"), ("\u201c", '"', "comilla doble izquierda"),
+              ("\u201c", '"', "comilla doble izquierda"),
               ("\u201d", '"', "comilla doble derecha"), ("\u2026", "...", "puntos suspensivos (un caracter)"),
               ("\u2192", "->", "flecha"), ("\u2022", "-", "viñeta")]
     for ch, to, name in simple:
@@ -537,7 +537,7 @@ def check_rhythm(text: str):
         return None, f"no evaluable: se necesitan {MIN_SENTENCES}+ oraciones (hay {len(lens)})"
     mean = statistics.mean(lens)
     cv = statistics.pstdev(lens) / mean if mean else 0.0
-    return scale(cv, 0.70, 0.22), f"variación {cv:.2f} en {len(lens)} oraciones (se busca 0.55 o más)"
+    return scale(cv, 0.70, 0.22), f"variación {cv:.2f} en {len(lens)} oraciones (referencia: más variación suele sonar menos monótono)"
 
 
 def check_specificity(text: str):
@@ -552,7 +552,7 @@ def check_specificity(text: str):
         proper.update(t for t in toks if len(t) >= 2 and t.isupper())
     hits = numbers + len(proper)
     density = hits * 100 / len(w)
-    return scale(density, 6.0, 0.5), f"marcadores concretos: {hits} ({density:.1f} por 100 palabras; se busca 4 o más)"
+    return scale(density, 6.0, 0.5), f"marcadores concretos: {hits} ({density:.1f} por 100 palabras)"
 
 
 def check_filler(text: str, lex: dict):
@@ -661,7 +661,7 @@ def render_check(res: dict, label: str | None, out) -> None:
         if res["verdict"] != "BIEN":
             weakest = min((k for k in CHECK_KEYS if res["checks"][k][0] is not None),
                           key=lambda k: res["checks"][k][0])
-            print(f"Punto más débil: {CHECK_LABELS[weakest].lower()}. Parta por ahí.", file=out)
+            print(f"Chequeo con menor puntaje: {CHECK_LABELS[weakest].lower()}. Es una heurística: puede reflejar el tipo de texto.", file=out)
     print("Esto mide muletillas, ritmo e higiene tipográfica. No mide autoría y no predice el "
           "veredicto de ningún detector externo. No agregues cifras ni nombres solo para subir el índice. La revisión final es suya.\n", file=out)
 
@@ -737,7 +737,7 @@ def cmd_limits(args: argparse.Namespace) -> int:
 # ----------------------------------------------------------------------------
 
 _ALIASES = {
-    "impressions": {"impressions", "impresiones", "views", "vistas", "visualizaciones", "impresionesdelpost"},
+    "impressions": {"impressions", "impresiones", "impresionesdelpost"},
     "reactions": {"reactions", "reacciones", "likes", "megusta", "reaccionestotales"},
     "comments": {"comments", "comentarios"},
     "reposts": {"reposts", "shares", "compartidos", "republicaciones", "recompartidos", "veces compartido"},
@@ -787,6 +787,10 @@ def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
         for key, names in _ALIASES.items():
             if norm in {_norm_header(n) for n in names} and key not in index:
                 index[key] = i
+    ambiguous = [h for h in header if _norm_header(h) in ("views", "vistas", "visualizaciones")]
+    if "impressions" not in index and ambiguous:
+        raise UserError(f"la columna {ambiguous[0]!r} puede medir otra cosa (por ejemplo reproducciones de video). "
+                        "Confirme que mide impresiones y renómbrela a 'impresiones' antes de calcular.")
     if "impressions" not in index or not ({"reactions", "comments"} & set(index)):
         raise UserError("el CSV necesita al menos una columna de impresiones y otra de reacciones o comentarios. "
                         f"Columnas encontradas: {', '.join(header)}")
@@ -938,7 +942,7 @@ def cmd_tmp(args: argparse.Namespace) -> int:
     if os.path.dirname(real) != os.path.realpath(root):
         raise UserError(f"solo se borran carpetas creadas con 'tmp new' directamente dentro de {root}")
     if not os.path.isfile(os.path.join(real, TMP_MARKER)):
-        raise UserError("esa carpeta no fue creada por AgentIn; no se borra")
+        raise UserError("esa carpeta no tiene la marca de tmp new; no se borra")
     remove_tree(real)
     if os.path.exists(real):
         print(f"no se pudo borrar completamente: {real}. Puede eliminar a mano solo esa carpeta.", file=sys.stderr)
@@ -961,7 +965,7 @@ HELP_ES = """AgentIn: utilidades locales de texto. Uso:
   python -I agentin.py stats ARCHIVO.csv [--followers N] [--top N] [--json]
       Métricas de interacción desde un CSV de analítica.
   python -I agentin.py tmp new
-      Crea una carpeta temporal única y la imprime. Con "tmp clean RUTA" la borra y comprueba que ya no existe.
+      Crea una carpeta temporal única y la imprime. Con "tmp clean RUTA" borra una carpeta marcada por tmp new dentro de la raíz temporal y comprueba que ya no existe.
 Códigos de salida: 0 correcto, 1 resultado negativo pedido, 2 error de uso o de entrada.
 Opciones generales: -h o --help muestra esta ayuda; --version muestra la versión."""
 

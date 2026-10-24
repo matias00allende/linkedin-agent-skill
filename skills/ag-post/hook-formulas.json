@@ -47,7 +47,7 @@
       "template": "{N} cosas que ojalá me hubieran dicho antes de {hito}.",
       "example": "7 cosas que ojalá me hubieran dicho antes de contratar a mi primera persona.",
       "use": "Contenido para guardar y volver a leer.",
-      "trap": "Una N sobre 10. El lector no cree que tengas 15 buenas, y probablemente no las tienes."
+      "trap": "Una N alta. Una lista larga suele sonar a relleno."
     },
     {
       "id": 6,
@@ -62,7 +62,7 @@
       "name": "La interpelación",
       "template": "Si todavía {haces algo obsoleto}, para.",
       "example": "Si todavía escribes tus publicaciones directo en el cuadro de LinkedIn, para.",
-      "use": "Posts cortos con una sola instrucción. Es de las fórmulas más rápidas de escribir.",
+      "use": "Publicaciones cortas con una sola instrucción.",
       "trap": "Interpelar algo que nadie hace, o peor, tratar con desprecio a tu propia audiencia."
     },
     {
@@ -70,7 +70,7 @@
       "name": "La pregunta con dilema",
       "template": "{Escenario concreto con un costo real}. ¿Qué haces?",
       "example": "Tu mejor cliente te pide un 40% de descuento y deja caer que se va si no lo aceptas. ¿Qué haces?",
-      "use": "Generar respuestas: la gente contesta escenarios y deja pasar los '¿qué opinan?'.",
+      "use": "Invitar a responder con un caso concreto, cuando hay un dilema real.",
       "trap": "Una pregunta con respuesta obvia. Tiene que haber una bifurcación real."
     },
     {
@@ -102,7 +102,7 @@
       "name": "La comparación",
       "template": "{Opción cara} vs {opción barata}. {Veredicto sorprendente}.",
       "example": "Una agencia de marca de $8.000.000 vs una herramienta de $20.000 y un fin de semana. Ganó el fin de semana.",
-      "use": "Posts de herramientas y procesos; se comparten fácil.",
+      "use": "Publicaciones de herramientas y procesos; pueden circular entre colegas.",
       "trap": "Una comparación injusta. Reconoce lo que la opción cara hace mejor."
     },
     {

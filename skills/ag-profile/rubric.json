@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "total": 100,
-  "note": "Doce ítems. Cada ítem se puntúa en tres niveles: completo, la mitad o cero. Si un ítem no aplica al objetivo o al rol (cargo directivo, búsqueda de empleo, especialista sin oferta de servicios), se excluye del total posible. Informe los puntos obtenidos sobre los observables y la cobertura; no penalice lo que no pudo ver. Las cantidades, plazos y encuadres que aparecen son orientaciones, no requisitos universales, y no deben empujar a inventar cifras, divulgar datos ni adoptar un tono comercial. Los criterios son de oficio, no una medición de LinkedIn.",
+  "note": "Doce ítems. Cada ítem se puntúa en tres niveles: completo, la mitad o cero. Si un ítem no aplica al objetivo o al rol (cargo directivo, búsqueda de empleo, especialista sin oferta de servicios), se excluye del total posible. Informe los puntos obtenidos sobre los observables y la cobertura; no penalice lo que no pudo ver. Las cantidades, plazos y encuadres que aparecen son orientaciones, no requisitos universales, y no deben empujar a inventar cifras, divulgar datos ni adoptar un tono comercial. Los criterios son de oficio, no una medición de LinkedIn. Para puntuar un ítem cita la parte del perfil que lo respalda. Niveles: completo si cumple lo descrito, la mitad si cumple una parte clara y falta otra, cero si no lo cumple; no observado y no aplica se excluyen del total posible.",
   "items": [
     {
       "id": "headline",

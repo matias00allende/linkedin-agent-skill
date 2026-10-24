@@ -62,10 +62,10 @@ python -I skills/ag-voz/scripts/agentin.py stats analitica.csv --followers 4200
 python -I skills/ag-voz/scripts/agentin.py tmp new
 ```
 
-- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva emoji compuestos (y los señala), enlaces, hashtags, menciones, código y citas entre comillas o paréntesis. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
+- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva los emoji compuestos de la persona (y los señala), enlaces, hashtags, menciones, código y citas entre comillas o paréntesis. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
 - check entrega un índice de estilo con cinco chequeos y su cobertura. Los que no tienen datos suficientes se marcan como no evaluables. Son heurísticas sin calibración, no una medición de voz ni de autoría.
 - limits cuenta caracteres contra limits.json (valores reportados, no verificados).
-- tmp new crea una carpeta temporal única con permisos restrictivos para los borradores; tmp clean RUTA la borra y comprueba que ya no existe.
+- tmp new crea una carpeta temporal única para los borradores (en Linux y macOS con permisos solo para el usuario; en Windows dependen de tu carpeta de usuario); tmp clean RUTA borra una carpeta marcada por tmp new y comprueba que ya no existe.
 - stats calcula tasa de interacción, comentarios por reacción e impresiones por seguidor desde un CSV. Valida los números, distingue un cero de un dato ausente y no compara filas con distinta cobertura.
 
 Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de rango, check con --fail-under), 2 error de uso. La salida es texto plano.

@@ -1,5 +1,13 @@
 # Cambios
 
+## 1.4.0 - 2026-10-24
+
+- Las citas y los paréntesis se protegen sin límite de largo. Los reemplazos automáticos quedan solo para equivalencias mecánicas; el resto se señala.
+- La analítica no toma "vistas" ni "visualizaciones" como impresiones: pide confirmar qué mide la columna.
+- El símbolo de prima ya no se convierte. El informe de estilo deja de dar metas numéricas y aclara que es una heurística.
+- Respaldo mínimo breve en cada skill, criterio común con fronteras entre skills y lectura compartida de voz.md, planes y extracciones sin calendario impuesto, rúbrica con condiciones por nivel y cita obligatoria, plantilla de PDF por sistema operativo.
+- Casos de selección de skills (tests/seleccion.json) con consultas ambiguas, compuestas y fuera de alcance.
+
 ## 1.3.0 - 2026-10-24
 
 - Las citas entre comillas y los paréntesis, también de varias líneas, no reciben cambios léxicos. Los controles de dirección que invierten el texto se eliminan siempre.
