@@ -59,11 +59,13 @@ python -I skills/ag-voz/scripts/agentin.py clean borrador.txt -o limpio.txt --re
 python -I skills/ag-voz/scripts/agentin.py check borrador.txt limpio.txt
 python -I skills/ag-voz/scripts/agentin.py limits --kind invite nota.txt
 python -I skills/ag-voz/scripts/agentin.py stats analitica.csv --followers 4200
+python -I skills/ag-voz/scripts/agentin.py tmp new
 ```
 
-- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva emoji compuestos, enlaces, hashtags, menciones y código. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
+- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva emoji compuestos (y los señala), enlaces, hashtags, menciones, código y citas entre comillas o paréntesis. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
 - check entrega un índice de estilo con cinco chequeos y su cobertura. Los que no tienen datos suficientes se marcan como no evaluables. Son heurísticas sin calibración, no una medición de voz ni de autoría.
 - limits cuenta caracteres contra limits.json (valores reportados, no verificados).
+- tmp new crea una carpeta temporal única con permisos restrictivos para los borradores; tmp clean RUTA la borra y comprueba que ya no existe.
 - stats calcula tasa de interacción, comentarios por reacción e impresiones por seguidor desde un CSV. Valida los números, distingue un cero de un dato ausente y no compara filas con distinta cobertura.
 
 Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de rango, check con --fail-under), 2 error de uso. La salida es texto plano.
@@ -73,7 +75,7 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 1. Ayuda a mejorar tu voz, no a ocultar autoría. Si usas IA para redactar, cómo lo comunicas lo decides tú.
 2. No evade detectores de IA ni los mide. El índice de estilo mide muletillas, ritmo e higiene tipográfica. Nadie puede prometer el veredicto de un detector externo.
 3. Respeta las reglas de cada contexto. Si un trabajo académico, un concurso, una postulación o un empleador exige declarar o prohíbe el uso de IA, cúmplelo.
-4. Revisión humana siempre. Cada skill termina en un texto para copiar y pegar.
+4. Revisión humana siempre. Las skills de redacción entregan textos para copiar; las de análisis y planificación entregan resultados; y un texto con marcadores {{dato: ...}} pendientes no está listo para publicar.
 5. Los hechos son tuyos. Las skills no inventan cifras, clientes ni experiencias; preguntan o dejan {{dato: ...}}.
 6. No automatiza LinkedIn. No hay publicación, raspado ni envío automático, porque el Acuerdo de Usuario de LinkedIn restringe esas prácticas.
 

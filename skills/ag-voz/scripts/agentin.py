@@ -30,9 +30,11 @@ import os
 import re
 import statistics
 import sys
+import tempfile
+import time
 import unicodedata
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -79,11 +81,12 @@ def read_text(path: str) -> str:
 
 
 def write_text(path: str, text: str, force: bool) -> None:
-    if os.path.exists(path) and not force:
-        raise UserError(f"{path} ya existe; use --force para sobrescribirlo")
+    mode = "w" if force else "x"
     try:
-        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        with open(path, mode, encoding="utf-8", newline="\n") as fh:
             fh.write(text)
+    except FileExistsError:
+        raise UserError(f"{path} ya existe; use --force para sobrescribirlo")
     except OSError as exc:
         raise UserError(f"no se pudo escribir {path}: {exc.strerror or exc}")
 
@@ -250,7 +253,7 @@ def pass_invisible(text: str) -> tuple[str, list[dict]]:
             return ch
         if cp == 0x200C and prev.isalpha() and nxt.isalpha() and ord(prev) > 0x24F and ord(nxt) > 0x24F:
             return ch
-        if (cp in (0x200E, 0x200F, 0x061C) or 0x202A <= cp <= 0x202E or 0x2066 <= cp <= 0x2069) and has_rtl:
+        if cp in (0x200E, 0x200F, 0x061C) and has_rtl:
             return ch
         note(ch, "borrado")
         return ""
@@ -283,6 +286,23 @@ def protect(text: str) -> tuple[str, list[str], str]:
 
 def restore(text: str, found: list[str], marker: str) -> str:
     return re.sub(re.escape(marker) + r"(\d+)" + re.escape(marker), lambda m: found[int(m.group(1))], text)
+
+
+_QUOTES = [re.compile(r'"[^"]{0,600}"'), re.compile(r"\u00ab[^\u00bb]{0,600}\u00bb"), re.compile(r"\([^)]{0,400}\)")]
+
+
+def protect_quotes(text: str) -> tuple[str, list[str], str]:
+    """Aparta citas textuales y paréntesis (también de varias líneas) para que la pasada léxica no los toque."""
+    marker = pick_marker(text, 0xE300)
+    found: list[str] = []
+
+    def stash(m: re.Match) -> str:
+        found.append(m.group(0))
+        return f"{marker}{len(found) - 1}{marker}"
+
+    for rx in _QUOTES:
+        text = rx.sub(stash, text)
+    return text, found, marker
 
 
 def pass_typography(text: str) -> tuple[str, list[dict]]:
@@ -421,7 +441,9 @@ def clean(text: str, lang: str, lex: dict | None = None, hygiene_only: bool = Fa
     shielded, typography = pass_typography(shielded)
     lexical = {"replaced": [], "deleted": [], "flagged": []}
     if lex is not None and not hygiene_only:
-        shielded, lexical = pass_lexical(shielded, lex)
+        q_shield, q_found, q_marker = protect_quotes(shielded)
+        q_shield, lexical = pass_lexical(q_shield, lex)
+        shielded = restore(q_shield, q_found, q_marker)
     shielded = re.sub(r"[ \t]+(?=\n|$)", "", shielded)
     shielded = re.sub(r"(?<=\S)[ \t]{2,}(?=\S)", " ", shielded)
     shielded = re.sub(r"\n{3,}", "\n\n", shielded)
@@ -494,7 +516,7 @@ def cmd_clean(args: argparse.Namespace) -> int:
 # ----------------------------------------------------------------------------
 
 CHECK_KEYS = ["rhythm", "specificity", "filler", "hygiene", "voice"]
-CHECK_LABELS = {"rhythm": "Ritmo", "specificity": "Concreción", "filler": "Muletillas",
+CHECK_LABELS = {"rhythm": "Ritmo", "specificity": "Marcadores numéricos y nombres", "filler": "Muletillas",
                 "hygiene": "Higiene", "voice": "Marcas de persona"}
 MIN_SENTENCES, MIN_WORDS = 4, 25
 
@@ -871,6 +893,61 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 
 # ----------------------------------------------------------------------------
+# tmp: carpetas temporales únicas y borrado comprobado
+# ----------------------------------------------------------------------------
+
+TMP_MARKER = ".agentin-tmp"
+
+
+def tmp_root() -> str:
+    base = os.environ.get("AGENTIN_HOME") or os.path.join(os.path.expanduser("~"), ".claude", "agentin")
+    return os.path.join(base, "tmp")
+
+
+def remove_tree(path: str) -> None:
+    for dp, dn, fn in os.walk(path, topdown=False, followlinks=False):
+        for f in fn:
+            try:
+                os.remove(os.path.join(dp, f))
+            except OSError:
+                pass
+        for d in dn:
+            full = os.path.join(dp, d)
+            try:
+                os.remove(full) if os.path.islink(full) else os.rmdir(full)
+            except OSError:
+                pass
+    try:
+        os.rmdir(path)
+    except OSError:
+        pass
+
+
+def cmd_tmp(args: argparse.Namespace) -> int:
+    root = tmp_root()
+    if args.action == "new":
+        os.makedirs(root, exist_ok=True)
+        path = tempfile.mkdtemp(prefix=time.strftime("%Y%m%d-%H%M%S-"), dir=root)
+        with open(os.path.join(path, TMP_MARKER), "w", encoding="utf-8") as fh:
+            fh.write("agentin\n")
+        print(path)
+        return 0
+    if not args.path:
+        raise UserError("falta la ruta de la carpeta temporal que se debe borrar")
+    real = os.path.realpath(args.path)
+    if os.path.dirname(real) != os.path.realpath(root):
+        raise UserError(f"solo se borran carpetas creadas con 'tmp new' directamente dentro de {root}")
+    if not os.path.isfile(os.path.join(real, TMP_MARKER)):
+        raise UserError("esa carpeta no fue creada por AgentIn; no se borra")
+    remove_tree(real)
+    if os.path.exists(real):
+        print(f"no se pudo borrar completamente: {real}. Puede eliminar a mano solo esa carpeta.", file=sys.stderr)
+        return 1
+    print("carpeta temporal borrada y comprobada")
+    return 0
+
+
+# ----------------------------------------------------------------------------
 # CLI
 # ----------------------------------------------------------------------------
 
@@ -883,6 +960,8 @@ HELP_ES = """AgentIn: utilidades locales de texto. Uso:
       Cuenta caracteres contra los límites de LinkedIn. TIPO: invite, post, headline, about o comment.
   python -I agentin.py stats ARCHIVO.csv [--followers N] [--top N] [--json]
       Métricas de interacción desde un CSV de analítica.
+  python -I agentin.py tmp new
+      Crea una carpeta temporal única y la imprime. Con "tmp clean RUTA" la borra y comprueba que ya no existe.
 Códigos de salida: 0 correcto, 1 resultado negativo pedido, 2 error de uso o de entrada.
 Opciones generales: -h o --help muestra esta ayuda; --version muestra la versión."""
 
@@ -922,6 +1001,11 @@ def build_parser() -> argparse.ArgumentParser:
     li.add_argument("--json", action="store_true")
     li.add_argument("--limits-file")
     li.set_defaults(fn=cmd_limits)
+
+    tm = sub.add_parser("tmp", add_help=False)
+    tm.add_argument("action", choices=["new", "clean"])
+    tm.add_argument("path", nargs="?")
+    tm.set_defaults(fn=cmd_tmp)
 
     st = sub.add_parser("stats", add_help=False)
     st.add_argument("input")

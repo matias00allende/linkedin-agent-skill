@@ -135,9 +135,9 @@ class Lexicon(unittest.TestCase):
         self.assertEqual(rep["lexical"]["flagged"][0]["find"], "me emociona anunciar")
 
     def test_spanish_lexicon(self):
-        text = "Cabe destacar que el equipo trabajó. Utilizamos robustas soluciones con el fin de crecer."
+        text = "Cabe destacar que el equipo trabajó. Utilizamos soluciones con el fin de crecer."
         out, _ = clean_text(text)
-        self.assertEqual(out, "El equipo trabajó. Usamos sólidas soluciones para crecer.\n")
+        self.assertEqual(out, "El equipo trabajó. Usamos soluciones para crecer.\n")
 
     def test_hygiene_only_skips_lexicon(self):
         text = "Dicho esto, utilizamos esto."

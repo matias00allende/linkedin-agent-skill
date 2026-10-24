@@ -162,27 +162,27 @@
   },
   {
    "find": "robusto",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "sólido"
+   "action": "flag",
+   "family": "contexto",
+   "note": "depende del contexto (en lo técnico no es sinónimo de sólido)"
   },
   {
    "find": "robusta",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "sólida"
+   "action": "flag",
+   "family": "contexto",
+   "note": "depende del contexto (en lo técnico no es sinónimo de sólido)"
   },
   {
    "find": "robustos",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "sólidos"
+   "action": "flag",
+   "family": "contexto",
+   "note": "depende del contexto (en lo técnico no es sinónimo de sólido)"
   },
   {
    "find": "robustas",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "sólidas"
+   "action": "flag",
+   "family": "contexto",
+   "note": "depende del contexto (en lo técnico no es sinónimo de sólido)"
   },
   {
    "find": "crucial",
@@ -297,15 +297,15 @@
   },
   {
    "find": "piénsalo un momento",
-   "action": "delete",
-   "family": "cierres",
-   "standalone": true
+   "action": "flag",
+   "family": "contexto",
+   "note": "puede atribuir una responsabilidad real"
   },
   {
    "find": "la decisión es tuya",
-   "action": "delete",
-   "family": "cierres",
-   "standalone": true
+   "action": "flag",
+   "family": "contexto",
+   "note": "puede atribuir una responsabilidad real"
   },
   {
    "find": "el futuro ya está aquí",
@@ -653,10 +653,10 @@
    "fix": "Revisa si la enumeración aporta contenido y precisión. Tres elementos son válidos cuando son los necesarios."
   },
   {
-   "id": "rocket",
-   "regex": "[\\U0001F680\\U0001F525\\U0001F4A1\\u2728\\U0001F3AF]",
-   "name": "Emoji decorativo de cohete, fuego, ampolleta, brillo o diana",
-   "fix": "Elimina los emojis decorativos."
+   "id": "emoji",
+   "regex": "[\\U0001F300-\\U0001FAFF\\u2600-\\u27BF\\u2B00-\\u2BFF]",
+   "name": "Emoji en el texto",
+   "fix": "Elimina los decorativos. Conserva solo los que formen parte de un nombre o de un símbolo necesario."
   },
   {
    "id": "hashtag-wall",

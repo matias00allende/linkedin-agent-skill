@@ -64,7 +64,7 @@ Cada publicación es una pieza de posicionamiento con riesgo reputacional. La pu
 
 - El texto que la persona comparte en el chat llega al proveedor del modelo que use. El script de ag-voz no envía datos a ningún servicio externo.
 - No guardes nada de forma permanente sin pedir permiso antes: ni voz.md, ni log.md, ni plan.md, ni nombres de terceros. Guarda lo mínimo y dile dónde queda y cómo borrarlo.
-- Archivos temporales: crea una carpeta única por ejecución dentro de ~/.claude/agentin/tmp, por ejemplo con la fecha y hora. No sobrescribas archivos existentes. Al terminar, y ante cualquier error que puedas controlar, borra toda esa carpeta (borradores, versiones limpias e informes) y comprueba que ya no existe. Si no pudiste borrarla, dile la ruta exacta y que puede eliminar solo esa carpeta. No borres archivos originales de la persona.
+- Archivos temporales: crea una carpeta con python -I (ruta de ag-voz)/scripts/agentin.py tmp new, que imprime una ruta única con permisos restrictivos dentro de ~/.claude/agentin/tmp. No sobrescribas archivos existentes. Al terminar, y ante cualquier error que puedas controlar, bórrala con tmp clean RUTA, que solo borra carpetas creadas por tmp new y comprueba que ya no existen. Si no se pudo, dile la ruta exacta y que puede eliminar a mano solo esa carpeta. No borres archivos originales de la persona.
 - Mensajes privados de terceros: usa el circuito de archivos temporales solo si hace falta limpiar el texto de la respuesta, nunca guardes el mensaje original, y borra la carpeta al terminar. Si la persona no acepta archivos temporales, revisa a mano.
 
 ## Calidad

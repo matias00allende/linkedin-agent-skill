@@ -36,7 +36,7 @@ De tres a cinco cosas que creo y que parte de mi audiencia no comparte. Aquí na
 
 ## Hechos que sí puedo usar
 
-Cifras, resultados e historias reales que acepto firmar con mi nombre. Las skills nunca inventan una: si esta sección está vacía, cada borrador volverá con {{dato: ...}} para que lo completes tú.
+Cifras, resultados e historias reales que acepto firmar con mi nombre. Las skills nunca inventan una: si esta sección está vacía y tu encargo tampoco aporta hechos, cada borrador volverá con {{dato: ...}} para que lo completes tú.
 
 -
 -

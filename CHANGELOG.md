@@ -1,5 +1,16 @@
 # Cambios
 
+## 1.3.0 - 2026-10-24
+
+- Las citas entre comillas y los paréntesis, también de varias líneas, no reciben cambios léxicos. Los controles de dirección que invierten el texto se eliminan siempre.
+- Reemplazos y borrados más prudentes: robusto, la decisión es tuya y piénsalo un momento pasan a señalarse y no a cambiarse.
+- El informe señala cualquier emoji. El chequeo de concreción pasó a llamarse marcadores numéricos y nombres, con advertencia sobre el rol emisor.
+- Nuevo subcomando tmp: crea carpetas temporales únicas con permisos restrictivos y las borra comprobando el resultado; solo borra carpetas que creó. La escritura de salida es exclusiva salvo con --force.
+- Rúbrica con tres niveles de puntaje, exclusión de ítems que no aplican y orientaciones en vez de requisitos. Reglas de los ganchos sin absolutos.
+- Respaldo mínimo ampliado, preguntas solo cuando faltan datos, referencias al material original permitidas, extracción para varios formatos y fronteras de skills ajustadas.
+- Metadatos y prosa en español sin anglicismos evitables.
+- Pruebas: 103.
+
 ## 1.2.0 - 2026-10-24
 
 - Criterio común más estricto: separación entre encargo y material fuente, política de autoría y detectores en el criterio compartido, formato por tipo de tarea, privacidad con carpetas temporales únicas y borrado comprobado, y precedencia del criterio y del encargo sobre rúbricas y plantillas.

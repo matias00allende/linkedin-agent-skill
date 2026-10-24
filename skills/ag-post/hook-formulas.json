@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "note": "21 fórmulas de gancho. La primera línea de un post es la que se ve antes de 'ver más'; el gancho tiene que sostenerse solo. Cada fórmula trae plantilla, ejemplo, para qué sirve y cómo se arruina. Los ejemplos son ilustrativos: sus cifras y personajes son inventados y no deben copiarse como hechos propios. Las notas de 'uso' son criterios de oficio, no resultados medidos; contrástelas con sus propios datos (ag-audit).",
+  "note": "21 fórmulas de gancho. La primera línea de una publicación es la que se ve antes de 'ver más'; el gancho tiene que sostenerse solo. Cada fórmula trae plantilla, ejemplo, para qué sirve y cómo se arruina. Los ejemplos son ilustrativos: sus cifras y personajes son inventados y no deben copiarse como hechos propios. Las notas de 'uso' son criterios de oficio, no resultados medidos; contrástelas con sus propios datos (ag-audit).",
   "rules": [
-    "Una idea por gancho. Si necesita una coma para juntar dos cosas, son dos posts.",
+    "Una idea por gancho. Si necesitas juntar dos cosas, revisa si en realidad son dos publicaciones.",
     "La línea 2 no es otro gancho: es el pago de la línea 1. No la gastes en preámbulo.",
-    "Sin signos de pregunta en la línea 1, salvo que la pregunta sea tan específica que solo tú podrías hacerla.",
-    "Los números pesan más que los adjetivos: '$4.200' le gana a 'mucha plata'.",
-    "Si el gancho funciona con el nombre de cualquier otra persona, no es tu gancho."
+    "Evita signos de pregunta en la línea 1, salvo que la pregunta sea tan específica que solo tú podrías hacerla.",
+    "Los números pesan más que los adjetivos cuando existen y se pueden divulgar.",
+    "Si el gancho funciona con el nombre de cualquier otra persona, probablemente no es tu gancho."
   ],
   "hooks": [
     {
@@ -30,7 +30,7 @@
       "name": "Confesión de error",
       "template": "{Costo concreto} fue lo que me costó {un error}.",
       "example": "$1.800.000 fue lo que me costó no tener contrato en marzo.",
-      "use": "Confianza: la gente comparte los posts donde quien escribe queda mal parado.",
+      "use": "Genera confianza cuando quien escribe asume un error propio; es una hipótesis que conviene contrastar con tus datos.",
       "trap": "El falso defecto ('me importa demasiado') suena a presunción y mata el post."
     },
     {
@@ -61,7 +61,7 @@
       "id": 7,
       "name": "La interpelación",
       "template": "Si todavía {haces algo obsoleto}, para.",
-      "example": "Si todavía escribes tus posts directo en el cuadro de LinkedIn, para.",
+      "example": "Si todavía escribes tus publicaciones directo en el cuadro de LinkedIn, para.",
       "use": "Posts cortos con una sola instrucción. Es de las fórmulas más rápidas de escribir.",
       "trap": "Interpelar algo que nadie hace, o peor, tratar con desprecio a tu propia audiencia."
     },
@@ -93,7 +93,7 @@
       "id": 11,
       "name": "Desmontar un mito",
       "template": "{Explicación popular} no es la razón por la que {mal resultado} te está pasando.",
-      "example": "El algoritmo no es la razón por la que tus posts no se mueven.",
+      "example": "El algoritmo no es la razón por la que tus publicaciones no se mueven.",
       "use": "Reencuadrar. Te deja entregar una explicación posible, con su evidencia, en la línea 3.",
       "trap": "Desmontar el mito y no nombrar el reemplazo. Nómbralo siempre."
     },
@@ -118,7 +118,7 @@
       "name": "Corte seco",
       "template": "{Una o tres palabras, con punto final.}",
       "example": "Me echaron.",
-      "use": "Frenar el scroll. El espacio en blanco hace el trabajo.",
+      "use": "Detener el desplazamiento. El espacio en blanco hace el trabajo.",
       "trap": "El abuso. Si lo usas en todas tus publicaciones se vuelve un tic."
     },
     {
@@ -127,7 +127,7 @@
       "template": "{Práctica común} te está costando en silencio {cosa concreta que te importa}.",
       "example": "Tu 'llamadita rápida para alinear' te está costando seis horas a la semana.",
       "use": "Audiencias que sienten el problema pero no lo han conectado con su causa.",
-      "trap": "Miedo sin salida. Da la solución en el mismo post o solo generaste ansiedad."
+      "trap": "Miedo sin salida. Da la solución en la misma publicación o solo generaste ansiedad."
     },
     {
       "id": 16,
@@ -141,7 +141,7 @@
       "id": 17,
       "name": "Ancla de tiempo",
       "template": "{Tarea} me tomaba {mucho tiempo}. Ahora me toma {poco tiempo}.",
-      "example": "Escribir los posts de una semana me tomaba 5 horas. Ahora me toma 20 minutos.",
+      "example": "Escribir las publicaciones de una semana me tomaba 5 horas. Ahora me toma 20 minutos.",
       "use": "Herramientas, sistemas y automatizaciones; encaja bien con un cómo-hacerlo.",
       "trap": "Una proporción increíble. De 5 horas a 20 minutos se cree; de 5 horas a 8 segundos, no."
     },
@@ -159,7 +159,7 @@
       "template": "{El mejor/peor} {cosa} que he {verbo} {rompió la regla obvia}.",
       "example": "La mejor contratación que he hecho reprobó la entrevista.",
       "use": "Aperturas que dan ganas de tocar 'ver más'.",
-      "trap": "Un vacío que nunca cierras. Págalo antes de la línea 4 o es clickbait."
+      "trap": "Un vacío que nunca cierras. Págalo antes de la línea 4 o es cebo de clics."
     },
     {
       "id": 20,

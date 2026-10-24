@@ -23,7 +23,7 @@ Chrome o Edge sin interfaz, con un perfil temporal sin sesión y sin cuentas. Aj
 chrome --headless --disable-gpu --no-pdf-header-footer --user-data-dir=PERFIL_TEMPORAL --print-to-pdf=carrusel.pdf carrusel.html
 ```
 
-Antes de exportar, comprueba que el HTML no contiene recursos externos: busca "http", "src=", "<script", "<iframe" y "@import". Un HTML sin recursos remotos no impide por sí solo que el navegador haga otras conexiones: si necesitas procesamiento estrictamente local, exporta con la red bloqueada; si no puedes garantizarlo, adviértelo a la persona antes de exportar.
+Construye el HTML solo a partir de la plantilla fija de arriba: elementos section con texto escapado, sin atributos, sin enlaces y sin nada tomado del material de terceros que no sea texto. Un HTML así no tiene recursos remotos, pero eso no impide por sí solo que el navegador haga otras conexiones: si necesitas procesamiento estrictamente local, exporta con la red bloqueada; si no puedes garantizarlo, adviértelo a la persona antes de exportar.
 
 ## Revisión
 

@@ -199,11 +199,11 @@ class Hygiene(unittest.TestCase):
                 elif isinstance(node.func, ast.Attribute):
                     self.assertNotIn(node.func.attr, ("system", "popen", "popen2", "spawn", "startfile"))
         self.assertEqual(imported & banned_modules, set())
-        self.assertLessEqual(imported, {"__future__", "argparse", "csv", "io", "json", "os", "re", "statistics", "sys", "unicodedata"})
+        self.assertLessEqual(imported, {"__future__", "argparse", "csv", "io", "json", "os", "re", "statistics", "sys", "tempfile", "time", "unicodedata"})
 
     def test_script_writes_only_where_asked(self):
         text = read(SCRIPT)
-        self.assertEqual(len(re.findall(r"open\([^)]*[\"']w[\"']", text)), 1)
+        self.assertEqual(len(re.findall(r"open\([^\n]*(?:\"w\"|mode)", text)), 2)  # write_text y la marca de tmp new
 
     def test_no_forbidden_claims_in_docs(self):
         banned = ["undetectable", "indetectable", "bypass", "evade ai detect", "humanizer", "huella de ia"]

@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "total": 100,
-  "note": "Doce ítems. Puntúe cada uno con honestidad según el rol y el objetivo de la persona (cargo directivo, búsqueda de empleo, especialista sin oferta de servicios). Informe los puntos obtenidos sobre los observables y la cobertura; no penalice lo que no pudo ver ni exija cifras, llamadas comerciales o actividad semanal cuando no corresponden. Los criterios son de oficio, no una medición de LinkedIn.",
+  "note": "Doce ítems. Cada ítem se puntúa en tres niveles: completo, la mitad o cero. Si un ítem no aplica al objetivo o al rol (cargo directivo, búsqueda de empleo, especialista sin oferta de servicios), se excluye del total posible. Informe los puntos obtenidos sobre los observables y la cobertura; no penalice lo que no pudo ver. Las cantidades, plazos y encuadres que aparecen son orientaciones, no requisitos universales, y no deben empujar a inventar cifras, divulgar datos ni adoptar un tono comercial. Los criterios son de oficio, no una medición de LinkedIn.",
   "items": [
     {
       "id": "headline",
@@ -31,7 +31,7 @@
     {
       "id": "photo",
       "points": 6,
-      "full_marks": "El rostro ocupa cerca del 60% del encuadre, se ven los ojos, es de los últimos dos años y el fondo no distrae."
+      "full_marks": "Orientación: el rostro se ve con claridad, la foto es reciente y el fondo no distrae. No aplica si la persona decide no mostrarse."
     },
     {
       "id": "current_role",
@@ -46,12 +46,12 @@
     {
       "id": "skills",
       "points": 6,
-      "full_marks": "Las tres primeras competencias son las tres por las que quieres que te contraten y tienen avales. Las otras 47 son ruido."
+      "full_marks": "Las primeras competencias reflejan aquello por lo que la persona quiere ser reconocida. Orientación: lo demás es ruido si no suma al objetivo."
     },
     {
       "id": "recommendations",
       "points": 8,
-      "full_marks": "Al menos tres recibidas en los últimos dos años, cada una con un resultado específico y no con adjetivos sobre tu carácter."
+      "full_marks": "Orientación: recomendaciones recientes que nombran resultados específicos y no solo rasgos de carácter. No aplica si el rol no las usa."
     },
     {
       "id": "activity",
@@ -61,7 +61,7 @@
     {
       "id": "contact",
       "points": 6,
-      "full_marks": "URL personalizada, un correo o enlace de agenda que funcione en la información de contacto y el mismo identificador que en tus otras plataformas."
+      "full_marks": "Hay una forma de contacto que funciona si el objetivo la requiere, y una URL personalizada. La coherencia con otras plataformas es opcional."
     }
   ]
 }
