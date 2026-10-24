@@ -1,6 +1,6 @@
 # voz.md
 
-Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Todas las skills de AgentIn lo leen.
+Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Las skills que redactan lo usan cuando existe. Las salidas de AgentIn no llevan emojis, así que no hay una preferencia al respecto.
 
 Si prefieres no llenarlo a mano, pega tres posts tuyos y pide que lo escriba a partir de ellos. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
 
@@ -19,7 +19,6 @@ Si prefieres no llenarlo a mano, pega tres posts tuyos y pide que lo escriba a p
 - Largo de las oraciones (cortas, mezcladas o largas):
 - Tuteo o usted:
 - Chilenismos (ninguno, pocos o libremente):
-- Emoji (nunca, uno rara vez o libremente):
 
 ## Mis posturas
 

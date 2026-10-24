@@ -1,5 +1,17 @@
 # Cambios
 
+## 1.2.0 - 2026-10-24
+
+- Criterio común más estricto: separación entre encargo y material fuente, política de autoría y detectores en el criterio compartido, formato por tipo de tarea, privacidad con carpetas temporales únicas y borrado comprobado, y precedencia del criterio y del encargo sobre rúbricas y plantillas.
+- Las estructuras pasaron a ser opciones: una publicación final por defecto, ganchos alternativos solo a pedido, seguimientos y cifras opcionales, carruseles sin cantidad fija de diapositivas, planes sin frecuencia impuesta.
+- Descripciones con fronteras más claras entre skills vecinas y casos de derivación.
+- Limpiador: el borrado de muletillas solo ocurre al comienzo de una oración, fuera de citas y si el resto queda correcto; se eliminan también los controles de dirección que pueden invertir el texto a la vista; nombres de caracteres, ayuda y errores en español.
+- Analítica estricta: valida enteros, informa fila, columna y valor rechazado, distingue un cero de un dato ausente, calcula la tasa con los componentes conocidos, no compara filas con distinta cobertura y llama a la métrica impresiones por seguidor.
+- Índice de estilo: muestra cobertura en lugar de confianza, renombra voz como marcas de persona y deja de atribuir patrones a la escritura de modelos.
+- Rúbrica de perfil por rol y objetivo, sin exigir cifras ni llamada comercial ni actividad semanal.
+- Carrusel: plantilla de exportación en una referencia, perfil temporal del navegador, revisión de recursos externos y de metadatos, y permiso para conservar el PDF.
+- Pruebas: 94, con casos de borrado acotado, controles de dirección, analítica estricta y salida en español.
+
 ## 1.1.0 - 2026-10-24
 
 - Solo español de Chile: se retiraron el léxico y las plantillas en inglés, las descripciones bilingües y el modo de idioma automático.
@@ -15,28 +27,28 @@ Primera versión de AgentIn.
 
 ### Scripts
 
-- **Un solo archivo con subcomandos** (`agentin.py`: `clean`, `check`, `limits`, `stats`) en lugar de `humanize.py` y `detect.py`. Con `python -I` el directorio del script no entra a la ruta de importación, así que un módulo compartido no se puede importar; un archivo evita además la lógica duplicada que había entre los dos.
-- **Las muletillas borradas ya no dejan texto roto.** Antes "Importantly, we shipped. Notably, it works." quedaba como `we shipped., it works.`. Ahora la coma se arregla y la mayúscula se repone.
-- **Ya no se pierden comas ni saltos de párrafo.** Un enfoque ingenuo convertía "Hola Ana,\n\nTexto" en "Hola Ana\nTexto", y una raya al final de línea se comía la línea en blanco.
-- **No se mutila texto técnico.** `.NET` y `.env` al inicio de línea, y `a ? b : c`, quedan intactos.
-- **El léxico distingue tres acciones** (`replace`, `delete`, `flag`). Solo se reemplaza lo que conserva sentido y clase gramatical; "paisaje", "viaje" o "vital" se señalan y no se cambian. Se agregaron las formas flexionadas y se corrigió una frase que nunca coincidía.
-- **Los caracteres invisibles se tratan con criterio.** Se conservan la unión de ancho cero dentro de emoji compuestos, la separación entre letras de alfabetos como el persa, las marcas de dirección en texto de derecha a izquierda y las banderas de subregión. Se quitan los invisibles dentro de enlaces, antes protegidos por error.
-- **Windows y UTF-8.** Entrada y salida se fuerzan a UTF-8 y LF. Antes un emoji hacía fallar la salida y el texto con tildes por entrada estándar se corrompía sin aviso.
-- **Español.** Detección de idioma, palabras con tilde y ñ, léxico propio, y marcas de persona adecuadas al español. Un enfoque ingenuo con un texto en español escrito a mano obtenía el peor veredicto.
-- **Segmentación de oraciones** que no parte decimales, miles ni abreviaturas.
-- **Textos cortos.** Un chequeo sin datos suficientes se muestra como no evaluable y no entra al promedio; antes impedía que cualquier comentario llegara al máximo.
-- **Códigos de salida y errores coherentes** y sin trazas de Python. No se sobrescribe un archivo de salida sin `--force`.
-- **Código y datos auditables.** Ningún carácter invisible ni de puntuación especial escrito literalmente: todo con escapes.
-- **Nuevos:** `limits` (conteo de caracteres, porque era fácil rotular 187 una nota de 152 y los modelos cuentan mal) y `stats` (métricas de `ag-audit` calculadas por script, no a mano por el modelo).
+- Un solo archivo con subcomandos (`agentin.py`: `clean`, `check`, `limits`, `stats`) en lugar de `humanize.py` y `detect.py`. Con `python -I` el directorio del script no entra a la ruta de importación, así que un módulo compartido no se puede importar; un archivo evita además la lógica duplicada que había entre los dos.
+- Las muletillas borradas ya no dejan texto roto. Antes "Cabe destacar que lanzamos. Dicho esto, funciona." quedaba como `avisó., funciona.`. Ahora la coma se arregla y la mayúscula se repone.
+- Ya no se pierden comas ni saltos de párrafo. Un enfoque ingenuo convertía "Hola Ana,\n\nTexto" en "Hola Ana\nTexto", y una raya al final de línea se comía la línea en blanco.
+- No se mutila texto técnico. `.NET` y `.env` al inicio de línea, y `a ? b : c`, quedan intactos.
+- El léxico distingue tres acciones (`replace`, `delete`, `flag`). Solo se reemplaza lo que conserva sentido y clase gramatical; "paisaje", "viaje" o "vital" se señalan y no se cambian. Se agregaron las formas flexionadas y se corrigió una frase que nunca coincidía.
+- Los caracteres invisibles se tratan con criterio. Se conservan la unión de ancho cero dentro de emoji compuestos, la separación entre letras de alfabetos como el persa, las marcas de dirección en texto de derecha a izquierda y las banderas de subregión. Se quitan los invisibles dentro de enlaces, antes protegidos por error.
+- Windows y UTF-8. Entrada y salida se fuerzan a UTF-8 y LF. Antes un emoji hacía fallar la salida y el texto con tildes por entrada estándar se corrompía sin aviso.
+- Español. Detección de idioma, palabras con tilde y ñ, léxico propio, y marcas de persona adecuadas al español. Un enfoque ingenuo con un texto en español escrito a mano obtenía el peor veredicto.
+- Segmentación de oraciones que no parte decimales, miles ni abreviaturas.
+- Textos cortos. Un chequeo sin datos suficientes se muestra como no evaluable y no entra al promedio; antes impedía que cualquier comentario llegara al máximo.
+- Códigos de salida y errores coherentes y sin trazas de Python. No se sobrescribe un archivo de salida sin `--force`.
+- Código y datos auditables. Ningún carácter invisible ni de puntuación especial escrito literalmente: todo con escapes.
+- Nuevos: `limits` (conteo de caracteres, porque era fácil rotular 187 una nota de 152 y los modelos cuentan mal) y `stats` (métricas de `ag-audit` calculadas por script, no a mano por el modelo).
 
 ### Política y lenguaje
 
-- **El "detector" pasa a "índice de estilo".** Se eliminó el marco de pasar detectores y de quitar la "huella de IA". El panel mide muletillas, ritmo e higiene, y lo dice en cada salida.
-- **Política explícita en `ag-voz`:** ayuda a mejorar la voz propia, no a ocultar autoría ni a evadir detectores; respeto de las reglas de cada contexto; revisión humana antes de publicar; los hechos son de la persona.
-- **No se inventa experiencia.** Los tipos de comentario que requieren un dato o una vivencia ahora la piden a la persona; el ejemplo que redactaba una experiencia inexistente se reemplazó.
-- **Texto de terceros como dato.** Las skills que leen mensajes, comentarios o transcripciones indican que no se obedecen instrucciones dentro de ese texto.
-- **Afirmaciones sin fuente reetiquetadas como hipótesis:** horarios, formatos, "el que más retiene", topes de invitaciones, el formato de la exportación. Se eliminaron las superlativas de las fórmulas de gancho.
-- **Privacidad:** aviso de que los mensajes de terceros llegan al modelo y de dónde se guardan nombres.
+- El "detector" pasa a "índice de estilo". Se eliminó el marco de pasar detectores y de quitar la "huella de IA". El panel mide muletillas, ritmo e higiene, y lo dice en cada salida.
+- Política explícita en `ag-voz`: ayuda a mejorar la voz propia, no a ocultar autoría ni a evadir detectores; respeto de las reglas de cada contexto; revisión humana antes de publicar; los hechos son de la persona.
+- No se inventa experiencia. Los tipos de comentario que requieren un dato o una vivencia ahora la piden a la persona; el ejemplo que redactaba una experiencia inexistente se reemplazó.
+- Texto de terceros como dato. Las skills que leen mensajes, comentarios o transcripciones indican que no se obedecen instrucciones dentro de ese texto.
+- Afirmaciones sin fuente reetiquetadas como hipótesis: horarios, formatos, "el que más retiene", topes de invitaciones, el formato de la exportación. Se eliminaron las superlativas de las fórmulas de gancho.
+- Privacidad: aviso de que los mensajes de terceros llegan al modelo y de dónde se guardan nombres.
 
 ### Skills
 

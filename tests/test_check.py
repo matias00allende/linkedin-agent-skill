@@ -39,10 +39,10 @@ class Scoring(unittest.TestCase):
         self.assertEqual(res["verdict"], "SIN DATOS")
         self.assertIsNone(res["score"])
 
-    def test_short_clean_comment_can_reach_bien_with_low_confidence(self):
+    def test_short_clean_comment_can_reach_bien_with_partial_coverage(self):
         res = run("Gracias por el dato, lo probé ayer y funcionó.")
         self.assertEqual(res["verdict"], "BIEN")
-        self.assertEqual(res["confidence"], "baja")
+        self.assertEqual(res["evaluable"], 2)
         self.assertIsNone(res["checks"]["rhythm"][0])
 
     def test_template_text_scores_worse_than_human_text(self):

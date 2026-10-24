@@ -32,7 +32,7 @@ import statistics
 import sys
 import unicodedata
 
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -195,24 +195,28 @@ HAS_RTL = re.compile(r"[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufeff]")
 EMOJI_TAG_SEQ = "\U0001F3F4[\U000E0020-\U000E007E]+\U000E007F"
 INVIS_RE = re.compile(
     "(" + EMOJI_TAG_SEQ + ")"
-    "|([\u200b-\u200f\u2060-\u2064\u206a-\u206f\ufeff\u00ad\u180e\u061c\u034f\ufff9-\ufffb\U000E0000-\U000E007F])"
+    "|([\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\u206a-\u206f\ufeff\u00ad\u180e\u061c\u034f\ufff9-\ufffb\U000E0000-\U000E007F])"
     "|([\u00a0\u202f\u2000-\u200a\u205f\u1680])")
 
 _INVIS_NAMES = {
-    0x200B: "ZERO WIDTH SPACE", 0x200C: "ZERO WIDTH NON-JOINER", 0x200D: "ZERO WIDTH JOINER",
-    0x200E: "LEFT-TO-RIGHT MARK", 0x200F: "RIGHT-TO-LEFT MARK", 0x2060: "WORD JOINER",
-    0xFEFF: "ZERO WIDTH NO-BREAK SPACE (BOM)", 0x00AD: "SOFT HYPHEN", 0x180E: "MONGOLIAN VOWEL SEPARATOR",
-    0x061C: "ARABIC LETTER MARK", 0x034F: "COMBINING GRAPHEME JOINER",
-    0x00A0: "NO-BREAK SPACE", 0x202F: "NARROW NO-BREAK SPACE", 0x2009: "THIN SPACE",
-    0x2007: "FIGURE SPACE", 0x2003: "EM SPACE", 0x2002: "EN SPACE",
+    0x200B: "espacio de ancho cero", 0x200C: "separador de ancho cero", 0x200D: "unión de ancho cero",
+    0x200E: "marca de izquierda a derecha", 0x200F: "marca de derecha a izquierda", 0x2060: "unión de palabras",
+    0xFEFF: "marca de orden de bytes", 0x00AD: "guion blando", 0x180E: "separador vocálico mongol",
+    0x061C: "marca de letra árabe", 0x034F: "unión de grafemas",
+    0x00A0: "espacio duro", 0x202F: "espacio duro angosto", 0x2009: "espacio fino",
+    0x2007: "espacio de cifra", 0x2003: "espacio largo", 0x2002: "espacio medio",
+    0x202A: "control de dirección", 0x202B: "control de dirección", 0x202C: "control de dirección",
+    0x202D: "control de dirección", 0x202E: "control de dirección (puede invertir el texto a la vista)",
+    0x2066: "aislamiento de dirección", 0x2067: "aislamiento de dirección", 0x2068: "aislamiento de dirección",
+    0x2069: "aislamiento de dirección",
 }
 
 
 def _invisible_name(ch: str) -> str:
     cp = ord(ch)
     if 0xE0000 <= cp <= 0xE007F:
-        return "TAG CHARACTERS (texto oculto tipo ASCII smuggling)"
-    return f"U+{cp:04X} " + _INVIS_NAMES.get(cp, unicodedata.name(ch, "FORMAT CHARACTER"))
+        return "caracteres tag (pueden esconder texto)"
+    return f"U+{cp:04X} " + _INVIS_NAMES.get(cp, "carácter de formato")
 
 
 def is_emoji_like(ch: str) -> bool:
@@ -246,7 +250,7 @@ def pass_invisible(text: str) -> tuple[str, list[dict]]:
             return ch
         if cp == 0x200C and prev.isalpha() and nxt.isalpha() and ord(prev) > 0x24F and ord(nxt) > 0x24F:
             return ch
-        if cp in (0x200E, 0x200F, 0x061C) and has_rtl:
+        if (cp in (0x200E, 0x200F, 0x061C) or 0x202A <= cp <= 0x202E or 0x2066 <= cp <= 0x2069) and has_rtl:
             return ch
         note(ch, "borrado")
         return ""
@@ -351,19 +355,23 @@ def pass_lexical(text: str, lex: dict) -> tuple[str, dict]:
         rx = re.compile(r"(?P<pre>,[ \t]*)?" + core + post + r"(?P<tail>[ \t]*)(?P<nxt>\w)?", re.IGNORECASE)
         n = 0
 
-        def sub_delete(m: re.Match) -> str:
+        def sub_delete(m: re.Match, e=e) -> str:
             nonlocal n
-            n += 1
             pre, post_g = m.group("pre"), m.group("post")
             tail, nxt = m.group("tail") or "", m.group("nxt") or ""
             phrase_start = m.end("pre") if pre else m.start()
-            if not pre and at_sentence_start(m.string[:phrase_start]):
-                return nxt.upper()
-            if pre and post_g:
-                return "," + tail + nxt
-            if pre:
-                return tail + nxt
-            return mark + nxt
+            before = m.string[:phrase_start]
+            # Solo se borra al comienzo de una oración, fuera de citas y paréntesis, y si el resto queda correcto.
+            if pre or not at_sentence_start(before) or before.rstrip(" \t")[-1:] in ("\"", "\u201c", "\u00ab", "'", "("):
+                return m.group(0)
+            if e.get("standalone"):
+                terminal = bool(post_g and re.search(r"[.!?]$", post_g.strip())) or e["find"].endswith("?")
+                if not (terminal or (not post_g and not nxt)):
+                    return m.group(0)
+            elif not (post_g or e["find"].endswith(" que")):
+                return m.group(0)
+            n += 1
+            return nxt.upper()
 
         text = rx.sub(sub_delete, text)
         if n:
@@ -399,7 +407,7 @@ def scan_structures(text: str, lex: dict) -> list[dict]:
         if cv < 0.35:
             flags.append({"id": "uniform-length", "name": f"Oraciones de largo uniforme (variación {cv:.2f})",
                           "count": len(lens), "lines": [],
-                          "fix": "Parte una oracion a la mitad y deja otra más larga. Los modelos escriben parejo."})
+                          "fix": "Si el ritmo suena monótono, parte una oración a la mitad y deja otra más larga."})
     return flags
 
 
@@ -487,7 +495,7 @@ def cmd_clean(args: argparse.Namespace) -> int:
 
 CHECK_KEYS = ["rhythm", "specificity", "filler", "hygiene", "voice"]
 CHECK_LABELS = {"rhythm": "Ritmo", "specificity": "Concreción", "filler": "Muletillas",
-                "hygiene": "Higiene", "voice": "Voz"}
+                "hygiene": "Higiene", "voice": "Marcas de persona"}
 MIN_SENTENCES, MIN_WORDS = 4, 25
 
 
@@ -602,7 +610,7 @@ def run_checks(text: str, lex: dict, lang: str) -> dict:
     }
     scored = [v[0] for v in results.values() if v[0] is not None]
     if not scored:
-        return {"checks": results, "score": None, "verdict": "SIN DATOS", "confidence": "ninguna", "evaluable": 0}
+        return {"checks": results, "score": None, "verdict": "SIN DATOS", "evaluable": 0}
     overall = statistics.mean(scored) * 0.6 + min(scored) * 0.4
     if overall >= 70 and min(scored) >= 55:
         verdict = "BIEN"
@@ -610,9 +618,7 @@ def run_checks(text: str, lex: dict, lang: str) -> dict:
         verdict = "REVISAR"
     else:
         verdict = "CORREGIR"
-    confidence = "alta" if len(scored) == 5 else ("media" if len(scored) >= 3 else "baja")
-    return {"checks": results, "score": overall, "verdict": verdict, "confidence": confidence,
-            "evaluable": len(scored)}
+    return {"checks": results, "score": overall, "verdict": verdict, "evaluable": len(scored)}
 
 
 def fmt1(x: float) -> str:
@@ -629,13 +635,13 @@ def render_check(res: dict, label: str | None, out) -> None:
         print("Índice: sin datos suficientes.", file=out)
     else:
         print(f"Índice: {fmt1(res['score'])} de 100. Veredicto: {res['verdict'].lower()}. "
-              f"Confianza {res['confidence']} ({res['evaluable']} de 5 chequeos).", file=out)
+              f"Cobertura: {res['evaluable']} de 5 chequeos calculables.", file=out)
         if res["verdict"] != "BIEN":
             weakest = min((k for k in CHECK_KEYS if res["checks"][k][0] is not None),
                           key=lambda k: res["checks"][k][0])
             print(f"Punto más débil: {CHECK_LABELS[weakest].lower()}. Parta por ahí.", file=out)
     print("Esto mide muletillas, ritmo e higiene tipográfica. No mide autoría y no predice el "
-          "veredicto de ningún detector externo. La revisión final es suya.\n", file=out)
+          "veredicto de ningún detector externo. No agregues cifras ni nombres solo para subir el índice. La revisión final es suya.\n", file=out)
 
 
 def cmd_check(args: argparse.Namespace) -> int:
@@ -651,7 +657,7 @@ def cmd_check(args: argparse.Namespace) -> int:
             "checks": {k: {"score": None if v[0] is None else round(v[0], 1), "detail": v[1]}
                        for k, v in res["checks"].items()},
             "score": None if res["score"] is None else round(res["score"], 1),
-            "verdict": res["verdict"], "confidence": res["confidence"], "evaluable": res["evaluable"],
+            "verdict": res["verdict"], "evaluable": res["evaluable"],
         })
     if args.json:
         print(json.dumps(payload if args.compare else payload[0], indent=2, ensure_ascii=False))
@@ -727,9 +733,20 @@ def _norm_header(h: str) -> str:
     return re.sub(r"[^a-z0-9]", "", h)
 
 
-def _count(value: str) -> int | None:
-    digits = re.sub(r"\D", "", value or "")
-    return int(digits) if digits else None
+COMPONENT_NAMES = {"reactions": "reacciones", "comments": "comentarios", "reposts": "republicaciones"}
+
+
+def parse_count(value: str, column: str, row: int, problems: list) -> int | None:
+    """Entero no negativo. Vacío es dato ausente; todo lo ambiguo se informa y se trata como ausente."""
+    v = (value or "").strip()
+    if v == "":
+        return None
+    if re.fullmatch(r"\d+", v):
+        return int(v)
+    if re.fullmatch(r"\d{1,3}(?:[.,]\d{3})+", v):
+        return int(re.sub(r"[.,]", "", v))
+    problems.append(f"fila {row}, columna {column}: valor no válido {v!r}; se trata como dato ausente")
+    return None
 
 
 def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
@@ -760,39 +777,52 @@ def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
             i = index.get(key)
             return row[i].strip() if i is not None and i < len(row) else ""
 
-        imp = _count(get("impressions"))
+        imp = parse_count(get("impressions"), "impresiones", n, warnings)
         if not imp:
-            warnings.append(f"fila {n}: sin impresiones validas; omitida")
+            warnings.append(f"fila {n}: sin impresiones válidas; omitida")
             continue
         rec = {"row": n, "impressions": imp, "text": get("text")[:80], "date": get("date"), "hook": get("hook")}
         for key in ("reactions", "comments", "reposts", "saves", "sends"):
-            rec[key] = _count(get(key)) or 0
+            rec[key] = parse_count(get(key), key, n, warnings) if key in index else None
         out.append(rec)
     if not out:
-        raise UserError("ninguna fila tenia impresiones validas")
+        raise UserError("ninguna fila tenía impresiones válidas")
     return out, warnings
 
 
 def compute_stats(rows: list[dict], followers: int | None, top: int) -> dict:
     for r in rows:
-        r["engagement_rate"] = (r["reactions"] + r["comments"] + r["reposts"]) / r["impressions"]
-        r["comment_ratio"] = (r["comments"] / r["reactions"]) if r["reactions"] else None
-        r["save_send_rate"] = ((r["saves"] + r["sends"]) / r["impressions"]) if (r["saves"] or r["sends"]) else None
+        known = tuple(k for k in ("reactions", "comments", "reposts") if r.get(k) is not None)
+        r["coverage"] = known
+        r["engagement_rate"] = (sum(r[k] for k in known) / r["impressions"]) if known else None
+        r["comment_ratio"] = (r["comments"] / r["reactions"]) if (r.get("reactions") and r.get("comments") is not None) else None
+        sv = [r[k] for k in ("saves", "sends") if r.get(k) is not None]
+        r["save_send_rate"] = (sum(sv) / r["impressions"]) if sv else None
         r["reach_multiple"] = (r["impressions"] / followers) if followers else None
-    ranked = sorted(rows, key=lambda r: r["engagement_rate"], reverse=True)
-    groups: dict[str, list[float]] = {}
+    counts: dict[tuple, int] = {}
     for r in rows:
+        if r["coverage"]:
+            counts[r["coverage"]] = counts.get(r["coverage"], 0) + 1
+    if not counts:
+        raise UserError("ninguna fila tiene reacciones, comentarios ni republicaciones conocidas")
+    main_cov = max(counts, key=lambda c: (counts[c], len(c)))
+    comparable = [r for r in rows if r["coverage"] == main_cov]
+    excluded = len(rows) - len(comparable)
+    ranked = sorted(comparable, key=lambda r: r["engagement_rate"], reverse=True)
+    groups: dict[str, list[float]] = {}
+    for r in comparable:
         if r["hook"]:
             groups.setdefault(r["hook"], []).append(r["engagement_rate"])
     by_hook = sorted(({"hook": k, "n": len(v), "mean_engagement_rate": statistics.mean(v)} for k, v in groups.items()),
                      key=lambda g: g["mean_engagement_rate"], reverse=True)
-    n = len(rows)
+    n = len(comparable)
     note = None
     if n < 10:
-        note = f"Con {n} publicaciones no hay muestra para concluir patrones; trate lo siguiente como descripción, no como hallazgo."
-    return {"n": n, "followers": followers,
-            "mean_engagement_rate": statistics.mean(r["engagement_rate"] for r in rows),
-            "median_engagement_rate": statistics.median(r["engagement_rate"] for r in rows),
+        note = f"Con {n} publicaciones comparables no hay muestra para concluir patrones; trate lo siguiente como descripción, no como hallazgo."
+    return {"n": n, "followers": followers, "coverage": [COMPONENT_NAMES[k] for k in main_cov],
+            "complete_rate": len(main_cov) == 3, "excluded_rows": excluded,
+            "mean_engagement_rate": statistics.mean(r["engagement_rate"] for r in comparable),
+            "median_engagement_rate": statistics.median(r["engagement_rate"] for r in comparable),
             "top": ranked[:top], "bottom": ranked[-top:][::-1] if n > top else [], "by_hook": by_hook,
             "sample_note": note}
 
@@ -809,17 +839,22 @@ def cmd_stats(args: argparse.Namespace) -> int:
         return f"{x * 100:.1f}".replace(".", ",") + " %"
 
     def line(r: dict) -> str:
-        reach = f", alcance {r['reach_multiple']:.2f}".replace(".", ",") + " veces los seguidores" if r["reach_multiple"] is not None else ""
-        cr = f"{r['comment_ratio']:.2f}".replace(".", ",") if r["comment_ratio"] is not None else "sin reacciones"
+        reach = f", {r['reach_multiple']:.2f}".replace(".", ",") + " impresiones por seguidor" if r["reach_multiple"] is not None else ""
+        cr = f"{r['comment_ratio']:.2f}".replace(".", ",") if r["comment_ratio"] is not None else "no calculable"
         imp = f"{r['impressions']:,}".replace(",", ".")
         return (f"  {pct(r['engagement_rate'])}, {imp} impresiones, comentarios por reacción {cr}{reach}. "
                 f"{r['date']} {r['text']}".rstrip())
 
+    cov = ", ".join(stats["coverage"])
+    label = "Tasa de interacción" if stats["complete_rate"] else "Tasa parcial de interacción (falta algún componente)"
+    print(f"{label}, calculada con: {cov}.")
+    if stats["excluded_rows"]:
+        print(f"Aviso: {stats['excluded_rows']} publicaciones tienen otra cobertura de datos y no se comparan con las demás.")
     print(f"Publicaciones: {stats['n']}. Interacción media {pct(stats['mean_engagement_rate'])}, "
           f"mediana {pct(stats['median_engagement_rate'])}.")
     if stats["sample_note"]:
         print(f"Aviso: {stats['sample_note']}")
-    print("Mejores por tasa de interacción (reacciones más comentarios más reposts, sobre impresiones):")
+    print("Mejores por tasa de interacción (componentes conocidos, sobre impresiones):")
     for r in stats["top"]:
         print(line(r))
     if stats["bottom"]:
@@ -839,40 +874,58 @@ def cmd_stats(args: argparse.Namespace) -> int:
 # CLI
 # ----------------------------------------------------------------------------
 
+HELP_ES = """AgentIn: utilidades locales de texto. Uso:
+  python -I agentin.py clean [ARCHIVO] [-o SALIDA] [--force] [--report] [--json] [--hygiene-only] [--lexicon RUTA]
+      Limpia un borrador: caracteres invisibles, tipografía y muletillas. Sin ARCHIVO o con - lee la entrada estándar.
+  python -I agentin.py check [ARCHIVO] [SEGUNDO_ARCHIVO] [--json] [--lexicon RUTA] [--fail-under N]
+      Índice de estilo heurístico. Con dos archivos muestra antes y después. No es un detector de IA.
+  python -I agentin.py limits --kind TIPO [ARCHIVO] [--premium] [--json] [--limits-file RUTA]
+      Cuenta caracteres contra los límites de LinkedIn. TIPO: invite, post, headline, about o comment.
+  python -I agentin.py stats ARCHIVO.csv [--followers N] [--top N] [--json]
+      Métricas de interacción desde un CSV de analítica.
+Códigos de salida: 0 correcto, 1 resultado negativo pedido, 2 error de uso o de entrada.
+Opciones generales: -h o --help muestra esta ayuda; --version muestra la versión."""
+
+
+class EsParser(argparse.ArgumentParser):
+    def error(self, message):
+        raise UserError("uso incorrecto de los argumentos. Use -h para ver la ayuda.")
+
+
 def build_parser() -> argparse.ArgumentParser:
-    ap = argparse.ArgumentParser(prog="agentin.py", description="Utilidades locales de texto de AgentIn.")
+    ap = EsParser(prog="agentin.py", add_help=False)
     ap.add_argument("--version", action="version", version=f"agentin {__version__}")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
-    c = sub.add_parser("clean", help="higiene de un borrador (invisibles, tipografía, muletillas)")
-    c.add_argument("input", nargs="?", default="-", help="archivo UTF-8, o - para stdin")
-    c.add_argument("-o", "--out", help="escribir aqui en vez de stdout")
-    c.add_argument("--force", action="store_true", help="permitir sobrescribir --out")
-    c.add_argument("--report", action="store_true", help="informe de cambios en stderr")
-    c.add_argument("--json", action="store_true", help="emitir {text, report} como JSON")
-    c.add_argument("--hygiene-only", action="store_true", help="solo invisibles y tipografía, sin muletillas")
-    c.add_argument("--lexicon", help="ruta a un léxico alternativo")
+    c = sub.add_parser("clean", add_help=False)
+    c.add_argument("input", nargs="?", default="-")
+    c.add_argument("-o", "--out")
+    c.add_argument("--force", action="store_true")
+    c.add_argument("--report", action="store_true")
+    c.add_argument("--json", action="store_true")
+    c.add_argument("--hygiene-only", action="store_true")
+    c.add_argument("--lexicon")
     c.set_defaults(fn=cmd_clean)
 
-    k = sub.add_parser("check", help="índice de estilo (heurístico, no es un detector)")
+    k = sub.add_parser("check", add_help=False)
     k.add_argument("input", nargs="?", default="-")
-    k.add_argument("compare", nargs="?", help="segundo archivo, para comparar antes y despues")
+    k.add_argument("compare", nargs="?")
     k.add_argument("--json", action="store_true")
     k.add_argument("--lexicon")
-    k.add_argument("--fail-under", type=float, help="salir con código 1 si el índice queda bajo este valor")
+    k.add_argument("--fail-under", type=float)
     k.set_defaults(fn=cmd_check)
 
-    li = sub.add_parser("limits", help="cuenta caracteres contra los límites de LinkedIn")
-    li.add_argument("--kind", required=True, help="invite, post, headline, about o comment")
+    li = sub.add_parser("limits", add_help=False)
+    li.add_argument("--kind", required=True)
     li.add_argument("input", nargs="?", default="-")
-    li.add_argument("--premium", action="store_true", help="usar el límite premium si existe")
+    li.add_argument("--premium", action="store_true")
     li.add_argument("--json", action="store_true")
     li.add_argument("--limits-file")
     li.set_defaults(fn=cmd_limits)
 
-    st = sub.add_parser("stats", help="métricas de interacción desde un CSV de analítica")
-    st.add_argument("input", help="CSV UTF-8 (separador coma, punto y coma o tabulador)")
-    st.add_argument("--followers", type=int, help="seguidores, para el múltiplo de alcance")
+    st = sub.add_parser("stats", add_help=False)
+    st.add_argument("input")
+    st.add_argument("--followers", type=int)
     st.add_argument("--top", type=int, default=5)
     st.add_argument("--json", action="store_true")
     st.set_defaults(fn=cmd_stats)
@@ -881,8 +934,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     setup_stdio()
-    args = build_parser().parse_args(argv)
+    argv = sys.argv[1:] if argv is None else argv
+    if any(a in ("-h", "--help") for a in argv):
+        print(HELP_ES)
+        return 0
     try:
+        args = build_parser().parse_args(argv)
         return args.fn(args)
     except UserError as exc:
         print(f"error: {exc}", file=sys.stderr)

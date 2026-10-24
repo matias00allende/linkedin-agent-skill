@@ -157,8 +157,18 @@ class Lexicon(unittest.TestCase):
                     continue
                 find = e["find"]
                 with self.subTest(lang=lang, find=find):
-                    out, _ = agentin.clean(f"{find[0].upper() + find[1:]}, lanzamos.", lang, lex)
+                    sep = "." if e.get("standalone") else ","
+                    out, _ = agentin.clean(f"{find[0].upper() + find[1:]}{sep} lanzamos.", lang, lex)
                     self.assertEqual(out, "Lanzamos.\n")
+
+    def test_deletions_only_happen_at_the_start_of_a_sentence(self):
+        for text in ("Si ya lo sabes, avisa.", "Dime qué pasó, dicho esto, avisa.",
+                     "Escribió \"dicho esto, nos vamos\" en el acta.", "Quedó claro que no es ningún secreto que hubo cambios."):
+            self.assertEqual(clean_text(text)[0], text + "\n", text)
+
+    def test_closer_inside_a_sentence_is_kept(self):
+        text = "Si quieres, léelo de nuevo, y me cuentas."
+        self.assertEqual(clean_text(text)[0], text + "\n")
 
     def test_every_replace_entry_applies(self):
         for lang, lex in LEX.items():

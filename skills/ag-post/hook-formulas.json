@@ -94,7 +94,7 @@
       "name": "Desmontar un mito",
       "template": "{Explicación popular} no es la razón por la que {mal resultado} te está pasando.",
       "example": "El algoritmo no es la razón por la que tus posts no se mueven.",
-      "use": "Reencuadrar. Te deja entregar la causa real en la línea 3.",
+      "use": "Reencuadrar. Te deja entregar una explicación posible, con su evidencia, en la línea 3.",
       "trap": "Desmontar el mito y no nombrar el reemplazo. Nómbralo siempre."
     },
     {
@@ -110,7 +110,7 @@
       "name": "Permiso explícito",
       "template": "Tienes permiso para {cosa por la que tu lector se siente culpable}.",
       "example": "Tienes permiso para rechazar un trabajo que paga bien y te hace infeliz.",
-      "use": "Llegar más allá de tu nicho: estos posts suelen viajar más que los tácticos.",
+      "use": "Puede llegar más allá de tu nicho; contrástalo con tus propios datos.",
       "trap": "Autocuidado genérico. Tiene que ser específico de la vida laboral de tu lector."
     },
     {
@@ -119,7 +119,7 @@
       "template": "{Una o tres palabras, con punto final.}",
       "example": "Me echaron.",
       "use": "Frenar el scroll. El espacio en blanco hace el trabajo.",
-      "trap": "El abuso. Una vez al mes. Si todos tus posts parten así, es un tic."
+      "trap": "El abuso. Si lo usas en todas tus publicaciones se vuelve un tic."
     },
     {
       "id": 15,

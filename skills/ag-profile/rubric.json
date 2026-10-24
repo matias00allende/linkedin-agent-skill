@@ -1,22 +1,22 @@
 {
   "version": "1.0",
   "total": 100,
-  "note": "Doce ítems. Puntúe cada uno con honestidad: un puntaje generoso no sirve. Lo normal en una primera pasada es quedar en los 30 o 40 puntos. Los criterios son de oficio, no una medición de LinkedIn.",
+  "note": "Doce ítems. Puntúe cada uno con honestidad según el rol y el objetivo de la persona (cargo directivo, búsqueda de empleo, especialista sin oferta de servicios). Informe los puntos obtenidos sobre los observables y la cobertura; no penalice lo que no pudo ver ni exija cifras, llamadas comerciales o actividad semanal cuando no corresponden. Los criterios son de oficio, no una medición de LinkedIn.",
   "items": [
     {
       "id": "headline",
       "points": 12,
-      "full_marks": "Dice a quién ayudas y qué cambia para esa persona, trae una prueba y no es solo el cargo. Usa los 220 caracteres, no 60."
+      "full_marks": "Dice qué haces y para quién, con una prueba cuando existe, y no es solo el cargo. Aprovecha el espacio disponible sin rellenarlo."
     },
     {
       "id": "about_open",
       "points": 10,
-      "full_marks": "Las dos primeras líneas (lo visible antes de 'ver más') nombran el problema del lector. Sin 'apasionado por', sin biografía en tercera persona, sin partir con tu propio nombre."
+      "full_marks": "Las dos primeras líneas (lo visible antes de 'ver más') dicen qué haces y qué cambia para quien te lee. Sin 'apasionado por', sin biografía en tercera persona, sin partir con tu propio nombre."
     },
     {
       "id": "about_body",
       "points": 10,
-      "full_marks": "Escrito para una persona, en segunda persona: su problema, lo que haces, una cifra como prueba y el siguiente paso. Menos de 1.400 caracteres."
+      "full_marks": "Escrito para el lector que importa según tu objetivo: el problema que atiendes o la responsabilidad que ejerces, cómo lo haces, evidencia verificable (cifra o hecho cualitativo) y, si corresponde, el siguiente paso. Breve."
     },
     {
       "id": "featured",
@@ -36,12 +36,12 @@
     {
       "id": "current_role",
       "points": 10,
-      "full_marks": "Una línea de alcance y luego dos o tres viñetas con resultados y cifras. Las tareas no son resultados."
+      "full_marks": "Una línea de alcance y dos o tres resultados o responsabilidades verificables. Las tareas sueltas no son resultados."
     },
     {
       "id": "experience_depth",
       "points": 8,
-      "full_marks": "Los dos últimos cargos con detalle; lo anterior a diez años, resumido en una línea por cargo."
+      "full_marks": "Los últimos cargos con detalle; la experiencia anterior resumida según su relevancia para tu objetivo, no por un corte de años."
     },
     {
       "id": "skills",
@@ -56,7 +56,7 @@
     {
       "id": "activity",
       "points": 10,
-      "full_marks": "Publicaste o comentaste en los últimos siete días. Una actividad vacía se lee como un perfil abandonado."
+      "full_marks": "Si tu objetivo incluye visibilidad, hay actividad reciente acorde con tu capacidad. Si no, este ítem no aplica y no se penaliza."
     },
     {
       "id": "contact",

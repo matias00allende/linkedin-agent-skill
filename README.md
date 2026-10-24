@@ -8,7 +8,7 @@ No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titula
 
 ## Qué hace
 
-- /ag-post: una idea o experiencia a una publicación, con tres ganchos entre 21 fórmulas y un texto listo para copiar.
+- /ag-post: una idea o experiencia a una publicación lista para copiar; ofrece ganchos alternativos entre 21 fórmulas si los pides.
 - /ag-comment: comentarios para publicaciones de otras personas, de nueve tipos.
 - /ag-reply: respuestas a los comentarios de tu propia publicación, ordenadas por valor.
 - /ag-profile: puntúa tu perfil sobre 100 con una rúbrica de 12 ítems y reescribe en orden de impacto.
@@ -16,7 +16,7 @@ No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titula
 - /ag-voz: limpieza, revisión de estilo y conteo de caracteres de un borrador.
 - /ag-carousel: texto de un carrusel y su PDF.
 - /ag-repurpose: un contenido largo propio a publicaciones que se sostienen solas.
-- /ag-dm: nota de invitación, primer mensaje y dos seguimientos.
+- /ag-dm: nota de invitación, primer mensaje y, si corresponde, seguimientos.
 - /ag-inbox: ordena los mensajes recibidos en oportunidades, reclutadores, pares, pedidos y spam.
 - /ag-audit: qué patrones se asocian a mejores resultados en lo ya publicado, con métricas calculadas por script desde un CSV.
 
@@ -46,13 +46,13 @@ Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ de
 /plugin install agentin@agentin
 ```
 
-Luego dedica diez minutos a templates/voz.md: cópialo a ~/.claude/agentin/voz.md y complétalo, o pega unas publicaciones tuyas y pide que lo escriba a partir de ellos. Sin ese archivo, todo sale con una voz promedio.
+Luego dedica diez minutos a templates/voz.md: cópialo a ~/.claude/agentin/voz.md y complétalo, o pega unas publicaciones tuyas y pide que lo escriba a partir de ellos. Sin ese archivo las skills trabajan con las preferencias que declares o con una muestra breve tuya, y el resultado tiende a una voz promedio.
 
 Requisitos: Claude Code y Python 3.9 o superior (python en Windows, python3 en macOS y Linux). Probado localmente en Python 3.14; el repositorio trae integración continua para Linux, Windows y macOS.
 
 ## El limpiador de borradores
 
-Un solo archivo, solo biblioteca estándar. Corre en tu máquina y no sube nada. Se invoca siempre con python -I y la ruta completa.
+Un solo archivo, solo biblioteca estándar. Corre en tu máquina y no sube nada. Se invoca siempre con python -I y la ruta del script (completa, o relativa a la raíz del repositorio como en los ejemplos).
 
 ```
 python -I skills/ag-voz/scripts/agentin.py clean borrador.txt -o limpio.txt --report
@@ -61,10 +61,10 @@ python -I skills/ag-voz/scripts/agentin.py limits --kind invite nota.txt
 python -I skills/ag-voz/scripts/agentin.py stats analitica.csv --followers 4200
 ```
 
-- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva emoji compuestos, enlaces, hashtags, menciones y código, y no toca párrafos ni comas.
-- check entrega un índice de estilo con cinco chequeos. Los que no tienen datos suficientes se marcan como no evaluables.
+- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si la oración queda correcta) o flag (solo se señala). Conserva emoji compuestos, enlaces, hashtags, menciones y código. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
+- check entrega un índice de estilo con cinco chequeos y su cobertura. Los que no tienen datos suficientes se marcan como no evaluables. Son heurísticas sin calibración, no una medición de voz ni de autoría.
 - limits cuenta caracteres contra limits.json (valores reportados, no verificados).
-- stats calcula tasa de interacción, comentarios por reacción y múltiplo de alcance desde un CSV.
+- stats calcula tasa de interacción, comentarios por reacción e impresiones por seguidor desde un CSV. Valida los números, distingue un cero de un dato ausente y no compara filas con distinta cobertura.
 
 Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de rango, check con --fail-under), 2 error de uso. La salida es texto plano.
 
@@ -79,7 +79,7 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 
 ## Privacidad
 
-El limpiador procesa el texto en tu equipo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. Todo texto pegado se trata como dato, no como instrucciones.
+El script no envía datos a ningún servicio externo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. El material fuente que pegas (publicaciones, mensajes, transcripciones) se trata como dato, no como instrucciones; tu encargo directo sí orienta la tarea.
 
 ## Lo que no está verificado
 
@@ -116,4 +116,5 @@ MIT. Ver LICENSE, que conserva los avisos de copyright exigidos por la licencia.
 ## Autor
 
 Matías Allende
-[LinkedIn](https://www.linkedin.com/in/matiasallende/) · matias.allende.contreras@gmail.com
+LinkedIn: https://www.linkedin.com/in/matiasallende/
+Correo: matias.allende.contreras@gmail.com

@@ -314,12 +314,6 @@
    "standalone": true
   },
   {
-   "find": "ya lo sabes",
-   "action": "delete",
-   "family": "cierres",
-   "standalone": true
-  },
-  {
    "find": "en un mundo cada vez más",
    "action": "flag",
    "family": "contexto",
@@ -656,13 +650,13 @@
    "id": "triad",
    "regex": "(?i)\\b\\w+, \\w+ y \\w+\\.",
    "name": "Tríada (regla de tres)",
-   "fix": "Dos elementos o cuatro. Tres es el ritmo por defecto de un modelo."
+   "fix": "Revisa si la enumeración aporta contenido y precisión. Tres elementos son válidos cuando son los necesarios."
   },
   {
    "id": "rocket",
    "regex": "[\\U0001F680\\U0001F525\\U0001F4A1\\u2728\\U0001F3AF]",
-   "name": "Emoji cohete, fuego, ampolleta, brillo o diana",
-   "fix": "Un emoji como máximo, y que no sea de esos cinco."
+   "name": "Emoji decorativo de cohete, fuego, ampolleta, brillo o diana",
+   "fix": "Elimina los emojis decorativos."
   },
   {
    "id": "hashtag-wall",
@@ -673,8 +667,8 @@
   {
    "id": "as-an-ai",
    "regex": "(?i)\\bcomo (?:un |una )?(?:modelo de lenguaje|ia)\\b",
-   "name": "Autorreferencia de modelo",
-   "fix": "Borra la oración."
+   "name": "Autorreferencia de asistente",
+   "fix": "Revísala en contexto. Conserva una declaración legítima de uso de IA o una explicación técnica; borra solo una autorreferencia accidental del asistente."
   },
   {
    "id": "in-summary",
