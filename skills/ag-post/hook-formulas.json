@@ -1,0 +1,445 @@
+{
+  "version": "1.0",
+  "note": {
+    "es": "21 fórmulas de gancho. La primera línea de un post es la que se ve antes de 'ver más'; el gancho tiene que sostenerse solo. Cada fórmula trae plantilla, ejemplo, para qué sirve y cómo se arruina. Los ejemplos son ilustrativos: sus cifras y personajes son inventados y no deben copiarse como hechos propios. Las notas de 'uso' son criterios de oficio, no resultados medidos; contrástelas con sus propios datos (ag-audit).",
+    "en": "21 hook formulas. Line 1 of a post is what shows before 'see more', so the hook has to stand alone. Each formula has a template, an example, what it is for and how it usually gets ruined. Examples are illustrative: the figures and people are invented and must not be copied as your own facts. The 'use' notes are craft judgment, not measured results; test them against your own data (ag-audit)."
+  },
+  "rules": {
+    "es": [
+      "Una idea por gancho. Si necesita una coma para juntar dos cosas, son dos posts.",
+      "La línea 2 no es otro gancho: es el pago de la línea 1. No la gastes en preámbulo.",
+      "Sin signos de pregunta en la línea 1, salvo que la pregunta sea tan específica que solo tú podrías hacerla.",
+      "Los números pesan más que los adjetivos: '$4.200' le gana a 'mucha plata'.",
+      "Si el gancho funciona con el nombre de cualquier otra persona, no es tu gancho."
+    ],
+    "en": [
+      "One idea per hook. If it needs a comma splice, it needs two posts.",
+      "Line 2 is not a hook, it is the payoff of line 1. Do not waste it on setup.",
+      "No question marks in line 1 unless the question is specific enough that only you could ask it.",
+      "Numbers beat adjectives. '$4,200' beats 'a lot of money'.",
+      "If the hook works with any other person's name on it, it is not your hook."
+    ]
+  },
+  "hooks": [
+    {
+      "id": 1,
+      "name": {"es": "Postura contraria", "en": "Contrarian Take"},
+      "template": {
+        "es": "Todos dicen {consejo común}. Después de {experiencia concreta}, creo que está equivocado.",
+        "en": "Everyone says {common advice}. After {specific experience}, I think that is wrong."
+      },
+      "example": {
+        "es": "Todos dicen que hay que publicar a diario. Yo publiqué cuatro veces por semana durante un año y no perdí alcance.",
+        "en": "Everyone says post daily. I posted four times a week for a year and did not lose reach."
+      },
+      "use": {
+        "es": "Fijar un punto de vista. Tiende a abrir conversación si la creencia es realmente común.",
+        "en": "Establishing a point of view. Tends to open conversation if the belief is genuinely common."
+      },
+      "trap": {
+        "es": "Ser contrario a algo que nadie cree. La creencia tiene que ser común de verdad.",
+        "en": "Being contrarian about something nobody believes. The belief has to be genuinely common."
+      }
+    },
+    {
+      "id": 2,
+      "name": {"es": "Número a la vista", "en": "Number Reveal"},
+      "template": {
+        "es": "{Hice algo} durante {N} {días/semanas}. Esto fue lo que pasó.",
+        "en": "I {did thing} for {N} {days/weeks}. Here is what actually happened."
+      },
+      "example": {
+        "es": "Mandé 400 mensajes en frío en 30 días. Respondieron 11. Dos terminaron en reunión.",
+        "en": "I sent 400 cold messages in 30 days. 11 replied. Two became meetings."
+      },
+      "use": {
+        "es": "Experimentos, desafíos, todo lo que tenga un resultado contable.",
+        "en": "Experiments, challenges, anything with a countable result."
+      },
+      "trap": {
+        "es": "Enterrar el número. Va en la línea 1 o la fórmula no hace nada.",
+        "en": "Burying the number. Put it in line 1 or the formula does nothing."
+      }
+    },
+    {
+      "id": 3,
+      "name": {"es": "Confesión de error", "en": "Mistake Confession"},
+      "template": {
+        "es": "{Costo concreto} fue lo que me costó {un error}.",
+        "en": "{Specific cost} is what {one mistake} cost me."
+      },
+      "example": {
+        "es": "$1.800.000 fue lo que me costó no tener contrato en marzo.",
+        "en": "$18,000 is what not having a contract cost me last March."
+      },
+      "use": {
+        "es": "Confianza: la gente comparte los posts donde quien escribe queda mal parado.",
+        "en": "Trust: people forward the posts where the author looks bad."
+      },
+      "trap": {
+        "es": "El falso defecto ('me importa demasiado') suena a presunción y mata el post.",
+        "en": "A fake-humble mistake ('I care too much') reads as a brag and kills the post."
+      }
+    },
+    {
+      "id": 4,
+      "name": {"es": "Antes y después", "en": "Before / After"},
+      "template": {
+        "es": "Hace {tiempo} yo {estado de partida}. Hoy {estado actual}. La diferencia fue {una cosa}.",
+        "en": "{Time ago} I was {low state}. Today I {high state}. The difference was {one thing}."
+      },
+      "example": {
+        "es": "Hace 18 meses armaba cotizaciones a las 2 de la mañana. Hoy las envío en 6 minutos. Lo cambió una plantilla.",
+        "en": "18 months ago I was writing proposals at 2am. Today I send them in 6 minutes. One template did it."
+      },
+      "use": {
+        "es": "Mostrar que recorriste el camino que tu lector quiere recorrer.",
+        "en": "Proof you have travelled the distance your reader wants to travel."
+      },
+      "trap": {
+        "es": "Transformaciones de tres partes. Nombra una sola palanca o el lector deja de creerte.",
+        "en": "Three-part transformations. Name one lever or the reader stops believing you."
+      }
+    },
+    {
+      "id": 5,
+      "name": {"es": "Promesa de lista", "en": "The List Promise"},
+      "template": {
+        "es": "{N} cosas que ojalá me hubieran dicho antes de {hito}.",
+        "en": "{N} things I wish someone had told me before {milestone}."
+      },
+      "example": {
+        "es": "7 cosas que ojalá me hubieran dicho antes de contratar a mi primera persona.",
+        "en": "7 things I wish someone had told me before I hired my first employee."
+      },
+      "use": {
+        "es": "Contenido para guardar y volver a leer.",
+        "en": "Content people save to read again."
+      },
+      "trap": {
+        "es": "Una N sobre 10. El lector no cree que tengas 15 buenas, y probablemente no las tienes.",
+        "en": "N above 10. The reader does not believe you have 15 good ones, and you probably do not."
+      }
+    },
+    {
+      "id": 6,
+      "name": {"es": "Lo que nadie cuenta", "en": "Insider Secret"},
+      "template": {
+        "es": "Después de {N} años {haciendo algo}, esto es lo que nadie pone en {la oferta de trabajo/el curso/la propuesta}.",
+        "en": "After {N} years {doing thing}, here is the part nobody puts in the {job posting/course/pitch}."
+      },
+      "example": {
+        "es": "Después de 9 años en ventas, esto es lo que nadie pone en la oferta de trabajo.",
+        "en": "After 9 years in sales, here is the part nobody puts in the job posting."
+      },
+      "use": {
+        "es": "Opiniones con credencial. Solo funciona si los años son reales.",
+        "en": "Credentialed takes. Works only if the years are real."
+      },
+      "trap": {
+        "es": "Prometer un secreto y entregar algo que todos saben. Los comentarios lo dirán.",
+        "en": "Promising a secret and delivering common knowledge. The comments will say so."
+      }
+    },
+    {
+      "id": 7,
+      "name": {"es": "La interpelación", "en": "The Callout"},
+      "template": {
+        "es": "Si todavía {haces algo obsoleto}, para.",
+        "en": "If you are still {doing outdated thing}, stop."
+      },
+      "example": {
+        "es": "Si todavía escribes tus posts directo en el cuadro de LinkedIn, para.",
+        "en": "If you are still writing your posts directly in the LinkedIn composer, stop."
+      },
+      "use": {
+        "es": "Posts cortos con una sola instrucción. Es de las fórmulas más rápidas de escribir.",
+        "en": "Short posts with one instruction. One of the quickest formulas to write."
+      },
+      "trap": {
+        "es": "Interpelar algo que nadie hace, o peor, tratar con desprecio a tu propia audiencia.",
+        "en": "Calling out something nobody does, or worse, calling out your own audience with contempt."
+      }
+    },
+    {
+      "id": 8,
+      "name": {"es": "La pregunta con dilema", "en": "Question Trap"},
+      "template": {
+        "es": "{Escenario concreto con un costo real}. ¿Qué haces?",
+        "en": "{Specific scenario with a real cost}. What do you do?"
+      },
+      "example": {
+        "es": "Tu mejor cliente te pide un 40% de descuento y deja caer que se va si no lo aceptas. ¿Qué haces?",
+        "en": "Your best client asks for a 40% discount and hints they will leave without it. What do you do?"
+      },
+      "use": {
+        "es": "Generar respuestas: la gente contesta escenarios y deja pasar los '¿qué opinan?'.",
+        "en": "Eliciting answers: people reply to scenarios and skip 'thoughts?'."
+      },
+      "trap": {
+        "es": "Una pregunta con respuesta obvia. Tiene que haber una bifurcación real.",
+        "en": "A question with an obvious right answer. There has to be a real fork."
+      }
+    },
+    {
+      "id": 9,
+      "name": {"es": "Apertura de escena", "en": "Story Cold Open"},
+      "template": {
+        "es": "\"{Línea de diálogo}\"\n\n{Quién lo dijo, cuándo y por qué importó}.",
+        "en": "\"{Line of dialogue}\"\n\n{Who said it, when, and why it mattered}."
+      },
+      "example": {
+        "es": "\"Vamos a trabajar con alguien más barato.\"\n\nEse correo llegó 40 minutos después de enviar la mejor propuesta del año.",
+        "en": "\"We are going with someone cheaper.\"\n\nThat email arrived 40 minutes after I sent my best proposal of the year."
+      },
+      "use": {
+        "es": "Posts largos de relato, donde la gente se queda leyendo.",
+        "en": "Long storytelling posts, where people stay to read."
+      },
+      "trap": {
+        "es": "Diálogo que nadie diría. Usa la frase real, incluidas las partes feas.",
+        "en": "Dialogue nobody would actually say. Use the real line, including the ugly parts."
+      }
+    },
+    {
+      "id": 10,
+      "name": {"es": "El comprobante", "en": "The Receipt"},
+      "template": {
+        "es": "{Captura o cifra concreta}. {Una oración de contexto}.",
+        "en": "{Screenshot or hard number}. {One sentence of context}."
+      },
+      "example": {
+        "es": "3 clientes, 11 días, cero llamadas agendadas. Esta es la secuencia exacta que lo logró.",
+        "en": "3 clients, 11 days, zero calls booked. Here is the exact sequence that did it."
+      },
+      "use": {
+        "es": "Todo lo que puedas demostrar. Acompáñalo de una imagen cuando exista.",
+        "en": "Anything you can prove. Pair it with an image when there is one."
+      },
+      "trap": {
+        "es": "Un comprobante sin historia. El número abre la puerta, la historia es la pieza.",
+        "en": "A receipt with no story attached. The number opens the door, the story is the room."
+      }
+    },
+    {
+      "id": 11,
+      "name": {"es": "Desmontar un mito", "en": "Myth Bust"},
+      "template": {
+        "es": "{Explicación popular} no es la razón por la que {mal resultado} te está pasando.",
+        "en": "{Popular explanation} is not why {bad outcome} is happening to you."
+      },
+      "example": {
+        "es": "El algoritmo no es la razón por la que tus posts no se mueven.",
+        "en": "The algorithm is not why your posts are dying."
+      },
+      "use": {
+        "es": "Reencuadrar. Te deja entregar la causa real en la línea 3.",
+        "en": "Reframing. Sets you up to deliver the real cause in line 3."
+      },
+      "trap": {
+        "es": "Desmontar el mito y no nombrar el reemplazo. Nómbralo siempre.",
+        "en": "Busting the myth and never naming the replacement. Always name it."
+      }
+    },
+    {
+      "id": 12,
+      "name": {"es": "La comparación", "en": "The Comparison"},
+      "template": {
+        "es": "{Opción cara} vs {opción barata}. {Veredicto sorprendente}.",
+        "en": "{Expensive option} vs {cheap option}. {Surprising verdict}."
+      },
+      "example": {
+        "es": "Una agencia de marca de $8.000.000 vs una herramienta de $20.000 y un fin de semana. Ganó el fin de semana.",
+        "en": "A $12,000 brand agency vs a $20 tool and a weekend. The weekend won."
+      },
+      "use": {
+        "es": "Posts de herramientas y procesos; se comparten fácil.",
+        "en": "Tool and process posts; easy to share."
+      },
+      "trap": {
+        "es": "Una comparación injusta. Reconoce lo que la opción cara hace mejor.",
+        "en": "An unfair comparison. Concede what the expensive option genuinely does better."
+      }
+    },
+    {
+      "id": 13,
+      "name": {"es": "Permiso explícito", "en": "Permission Slip"},
+      "template": {
+        "es": "Tienes permiso para {cosa por la que tu lector se siente culpable}.",
+        "en": "You are allowed to {thing the reader feels guilty about}."
+      },
+      "example": {
+        "es": "Tienes permiso para rechazar un trabajo que paga bien y te hace infeliz.",
+        "en": "You are allowed to turn down work that pays well and makes you miserable."
+      },
+      "use": {
+        "es": "Llegar más allá de tu nicho: estos posts suelen viajar más que los tácticos.",
+        "en": "Reaching beyond your niche: these posts tend to travel further than tactical ones."
+      },
+      "trap": {
+        "es": "Autocuidado genérico. Tiene que ser específico de la vida laboral de tu lector.",
+        "en": "Generic self-care. It has to be specific to the working life of your reader."
+      }
+    },
+    {
+      "id": 14,
+      "name": {"es": "Corte seco", "en": "Pattern Interrupt"},
+      "template": {
+        "es": "{Una o tres palabras, con punto final.}",
+        "en": "{One word or three-word line, full stop.}"
+      },
+      "example": {
+        "es": "Me echaron.",
+        "en": "I got fired."
+      },
+      "use": {
+        "es": "Frenar el scroll. El espacio en blanco hace el trabajo.",
+        "en": "Stopping the scroll. Whitespace does the work."
+      },
+      "trap": {
+        "es": "El abuso. Una vez al mes. Si todos tus posts parten así, es un tic.",
+        "en": "Overuse. Once a month. Every post starting this way reads as a tic."
+      }
+    },
+    {
+      "id": 15,
+      "name": {"es": "La advertencia", "en": "The Warning"},
+      "template": {
+        "es": "{Práctica común} te está costando en silencio {cosa concreta que te importa}.",
+        "en": "{Common practice} is quietly costing you {specific thing they care about}."
+      },
+      "example": {
+        "es": "Tu 'llamadita rápida para alinear' te está costando seis horas a la semana.",
+        "en": "Your 'quick call to align' is quietly costing you six hours a week."
+      },
+      "use": {
+        "es": "Audiencias que sienten el problema pero no lo han conectado con su causa.",
+        "en": "Problem-aware audiences who have not connected cause to cost."
+      },
+      "trap": {
+        "es": "Miedo sin salida. Da la solución en el mismo post o solo generaste ansiedad.",
+        "en": "Fear with no exit. Give the fix in the same post or you have just made someone anxious."
+      }
+    },
+    {
+      "id": 16,
+      "name": {"es": "Bueno contra excelente", "en": "Good vs Great"},
+      "template": {
+        "es": "Un buen {rol} {hace X}. Un excelente {rol} {hace Y}.",
+        "en": "Good {role} {do X}. Great {role} {do Y}."
+      },
+      "example": {
+        "es": "Un buen vendedor responde la pregunta. Un excelente vendedor averigua por qué se la hicieron.",
+        "en": "Good salespeople answer the question. Great salespeople ask why it was asked."
+      },
+      "use": {
+        "es": "Frases citables de una línea; sirven para captura de pantalla.",
+        "en": "Quotable one-liners; good for screenshots."
+      },
+      "trap": {
+        "es": "Una distinción que en el fondo es 'esfuérzate más'. Y tiene que ser una acción distinta, no más esfuerzo.",
+        "en": "A distinction that is really just 'try harder'. Y has to be a different action, not more effort."
+      }
+    },
+    {
+      "id": 17,
+      "name": {"es": "Ancla de tiempo", "en": "Time Anchor"},
+      "template": {
+        "es": "{Tarea} me tomaba {mucho tiempo}. Ahora me toma {poco tiempo}.",
+        "en": "{Task} used to take me {long time}. It now takes {short time}."
+      },
+      "example": {
+        "es": "Escribir los posts de una semana me tomaba 5 horas. Ahora me toma 20 minutos.",
+        "en": "Writing a week of posts used to take me 5 hours. It now takes 20 minutes."
+      },
+      "use": {
+        "es": "Herramientas, sistemas y automatizaciones; encaja bien con un cómo-hacerlo.",
+        "en": "Tools, systems and automations; fits a how-to."
+      },
+      "trap": {
+        "es": "Una proporción increíble. De 5 horas a 20 minutos se cree; de 5 horas a 8 segundos, no.",
+        "en": "An unbelievable ratio. 5 hours to 20 minutes lands. 5 hours to 8 seconds does not."
+      }
+    },
+    {
+      "id": 18,
+      "name": {"es": "La regla impopular", "en": "The Unpopular Rule"},
+      "template": {
+        "es": "Yo no {práctica aceptada por todos}. Nunca. Te cuento por qué.",
+        "en": "I do not {widely accepted practice}. Ever. Here is why."
+      },
+      "example": {
+        "es": "Yo no hago llamadas de descubrimiento. Nunca.",
+        "en": "I do not take discovery calls. Ever."
+      },
+      "use": {
+        "es": "Posicionamiento: atrae a quien corresponde y aleja a quien no.",
+        "en": "Positioning: attracts the right people by repelling the wrong ones."
+      },
+      "trap": {
+        "es": "Una regla que rompes seguido. Alguien en los comentarios lo sabrá.",
+        "en": "A rule you break constantly. Someone in the comments will know."
+      }
+    },
+    {
+      "id": 19,
+      "name": {"es": "Vacío de curiosidad", "en": "Curiosity Gap"},
+      "template": {
+        "es": "{El mejor/peor} {cosa} que he {verbo} {rompió la regla obvia}.",
+        "en": "The {superlative} {thing} I ever {verb} {broke the obvious rule}."
+      },
+      "example": {
+        "es": "La mejor contratación que he hecho reprobó la entrevista.",
+        "en": "The best hire I ever made failed the interview."
+      },
+      "use": {
+        "es": "Aperturas que dan ganas de tocar 'ver más'.",
+        "en": "Openers that make people tap 'see more'."
+      },
+      "trap": {
+        "es": "Un vacío que nunca cierras. Págalo antes de la línea 4 o es clickbait.",
+        "en": "A gap you never close. Pay it off by line 4 or you have written clickbait."
+      }
+    },
+    {
+      "id": 20,
+      "name": {"es": "Soltar algo valioso", "en": "The Walk-Away"},
+      "template": {
+        "es": "Yo {despedí/renuncié a/eliminé/cancelé} {algo valioso}. {Resultado}.",
+        "en": "I {fired/quit/deleted/cancelled} {valuable thing}. {Result}."
+      },
+      "example": {
+        "es": "Dejé a mi cliente mejor pagado en enero. Los ingresos subieron un 30%.",
+        "en": "I fired my highest-paying client in January. Revenue is up 30%."
+      },
+      "use": {
+        "es": "Posts de valores con un resultado de negocio adjunto.",
+        "en": "Values posts with a business result attached."
+      },
+      "trap": {
+        "es": "Soltar sin costo. Nombra lo que realmente te costó o suena a teatro.",
+        "en": "Walking away with no cost. Name what it actually cost you or it reads as theatre."
+      }
+    },
+    {
+      "id": 21,
+      "name": {"es": "Valor directo", "en": "The Direct Value"},
+      "template": {
+        "es": "Este es el {artefacto} exacto que usé para {resultado concreto}. Úsalo.",
+        "en": "Here is the exact {artifact} I used to {specific outcome}. Steal it."
+      },
+      "example": {
+        "es": "Este es el correo exacto de 4 líneas que usé para reabrir 3 negocios dormidos. Úsalo.",
+        "en": "Here is the exact 4-line email I used to reopen 3 dead deals. Steal it."
+      },
+      "use": {
+        "es": "Regalar una plantilla o recurso. Funciona mejor cuando el artefacto va completo en el post.",
+        "en": "Giving away a template or resource. Works best when the artifact is fully in the post."
+      },
+      "trap": {
+        "es": "Hacerles pedir algo que podrías haber publicado. Entrega el artefacto en el post.",
+        "en": "Making them ask for something you could have just posted. Give the artifact away in the post."
+      }
+    }
+  ]
+}

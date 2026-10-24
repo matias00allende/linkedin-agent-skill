@@ -1,0 +1,908 @@
+{
+ "version": "1.0",
+ "language": "en",
+ "note": "Léxico de muletillas. action: replace (sustitución segura), delete (se quita sin dejar fragmento), flag (solo se señala). Edítelo con libertad.",
+ "contraction_regex": "\\b\\w+'(?:s|t|re|ve|ll|d|m)\\b",
+ "person_words": [
+  "i",
+  "me",
+  "my",
+  "mine",
+  "we",
+  "us",
+  "our",
+  "you",
+  "your"
+ ],
+ "entries": [
+  {
+   "find": "delve into",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "look at"
+  },
+  {
+   "find": "delves into",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looks at"
+  },
+  {
+   "find": "delved into",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looked at"
+  },
+  {
+   "find": "delving into",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looking at"
+  },
+  {
+   "find": "delve",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "look"
+  },
+  {
+   "find": "delves",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looks"
+  },
+  {
+   "find": "delved",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looked"
+  },
+  {
+   "find": "delving",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "looking"
+  },
+  {
+   "find": "dive deep into",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "get into"
+  },
+  {
+   "find": "embark on",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "start"
+  },
+  {
+   "find": "embarks on",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "starts"
+  },
+  {
+   "find": "embarked on",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "started"
+  },
+  {
+   "find": "embarking on",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "starting"
+  },
+  {
+   "find": "utilize",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "use"
+  },
+  {
+   "find": "utilizes",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "uses"
+  },
+  {
+   "find": "utilized",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "used"
+  },
+  {
+   "find": "utilizing",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "using"
+  },
+  {
+   "find": "showcase",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "show"
+  },
+  {
+   "find": "showcases",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "shows"
+  },
+  {
+   "find": "showcased",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "showed"
+  },
+  {
+   "find": "showcasing",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "showing"
+  },
+  {
+   "find": "streamline",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "simplify"
+  },
+  {
+   "find": "streamlines",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "simplifies"
+  },
+  {
+   "find": "streamlined",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "simplified"
+  },
+  {
+   "find": "streamlining",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "simplifying"
+  },
+  {
+   "find": "spearhead",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "lead"
+  },
+  {
+   "find": "spearheads",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "leads"
+  },
+  {
+   "find": "spearheaded",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "led"
+  },
+  {
+   "find": "spearheading",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "leading"
+  },
+  {
+   "find": "revolutionize",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "change"
+  },
+  {
+   "find": "revolutionizes",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "changes"
+  },
+  {
+   "find": "revolutionized",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "changed"
+  },
+  {
+   "find": "revolutionizing",
+   "action": "replace",
+   "family": "verbs",
+   "replace": "changing"
+  },
+  {
+   "find": "crucial",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "important"
+  },
+  {
+   "find": "pivotal",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "key"
+  },
+  {
+   "find": "comprehensive",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "complete"
+  },
+  {
+   "find": "meticulous",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "careful"
+  },
+  {
+   "find": "meticulously",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "carefully"
+  },
+  {
+   "find": "unparalleled",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "unmatched"
+  },
+  {
+   "find": "groundbreaking",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "new"
+  },
+  {
+   "find": "cutting-edge",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "new"
+  },
+  {
+   "find": "bespoke",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "custom"
+  },
+  {
+   "find": "multifaceted",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "complicated"
+  },
+  {
+   "find": "myriad of",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "many"
+  },
+  {
+   "find": "myriad",
+   "action": "replace",
+   "family": "adjectives",
+   "replace": "many"
+  },
+  {
+   "find": "moreover",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "also"
+  },
+  {
+   "find": "furthermore",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "also"
+  },
+  {
+   "find": "additionally",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "also"
+  },
+  {
+   "find": "nevertheless",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "still"
+  },
+  {
+   "find": "consequently",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "so"
+  },
+  {
+   "find": "thus",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "so"
+  },
+  {
+   "find": "ultimately",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "in the end"
+  },
+  {
+   "find": "in essence",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "basically"
+  },
+  {
+   "find": "in conclusion",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "so"
+  },
+  {
+   "find": "when it comes to",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "with"
+  },
+  {
+   "find": "in order to",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "to"
+  },
+  {
+   "find": "a wide range of",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "many"
+  },
+  {
+   "find": "it is worth noting that",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "note that"
+  },
+  {
+   "find": "a plethora of",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "lots of"
+  },
+  {
+   "find": "plethora of",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "lots of"
+  },
+  {
+   "find": "testament to",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "proof of"
+  },
+  {
+   "find": "a testament to",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "proof of"
+  },
+  {
+   "find": "had the opportunity to",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "got to"
+  },
+  {
+   "find": "move the needle",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "make a difference"
+  },
+  {
+   "find": "in today's fast-paced world",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "today"
+  },
+  {
+   "find": "in today's digital age",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "today"
+  },
+  {
+   "find": "in the ever-evolving landscape of",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "in"
+  },
+  {
+   "find": "in the ever-changing world of",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "in"
+  },
+  {
+   "find": "imagine a world where",
+   "action": "replace",
+   "family": "connectives",
+   "replace": "imagine if"
+  },
+  {
+   "find": "let's face it",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "here's the thing",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "picture this",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "it's no secret that",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "without further ado",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "buckle up",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "spoiler alert",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "the harsh truth is",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "notably",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "importantly",
+   "action": "delete",
+   "family": "openers"
+  },
+  {
+   "find": "we've all been there",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "let that sink in",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "read that again",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "food for thought",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "the choice is yours",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "the future is here",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "save this for later",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "who's with me",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "you're welcome",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "drop a comment below",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "what are your thoughts?",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "at the end of the day",
+   "action": "delete",
+   "family": "closers",
+   "standalone": true
+  },
+  {
+   "find": "leverage",
+   "action": "flag",
+   "family": "context",
+   "note": "como verbo suele ser 'use'; como sustantivo es legítimo"
+  },
+  {
+   "find": "leverages",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "leveraged",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "leveraging",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "harness",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "harnessing",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "foster",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "fosters",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "fostering",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "facilitate",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "facilitates",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "elevate",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "unlock",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "unlocks",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "amplify",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "cultivate",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "curate",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "curated",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "empower",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "empowers",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "underscore",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "underscores",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "deep dive",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "robust",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "seamless",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "seamlessly",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "vital",
+   "action": "flag",
+   "family": "context",
+   "note": "'vital signs' es literal"
+  },
+  {
+   "find": "transformative",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "game-changing",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "game-changer",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "invaluable",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "holistic",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "innovative",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "profound",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "remarkable",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "compelling",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "tapestry",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "realm",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "landscape",
+   "action": "flag",
+   "family": "context",
+   "note": "'landscape photo' es literal"
+  },
+  {
+   "find": "journey",
+   "action": "flag",
+   "family": "context",
+   "note": "'customer journey' y viajes literales son legítimos"
+  },
+  {
+   "find": "cornerstone",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "beacon",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "paradigm",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "synergy",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "ecosystem",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "treasure trove",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "arsenal",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "north star",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "hence",
+   "action": "flag",
+   "family": "context",
+   "note": "'hence the name' no admite 'so'"
+  },
+  {
+   "find": "needle-moving",
+   "action": "flag",
+   "family": "context"
+  },
+  {
+   "find": "i am excited to announce",
+   "action": "flag",
+   "family": "context",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "i'm excited to announce",
+   "action": "flag",
+   "family": "context",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "i'm thrilled to share",
+   "action": "flag",
+   "family": "context",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "i am thrilled to share",
+   "action": "flag",
+   "family": "context",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "i am humbled to",
+   "action": "flag",
+   "family": "context",
+   "note": "reescribir la oración completa"
+  }
+ ],
+ "structures": [
+  {
+   "id": "not-just",
+   "regex": "(?i)\\bit'?s not (?:just|only) [^.!?\\n]{2,60}[,.] it'?s\\b",
+   "name": "\"It's not just X, it's Y\"",
+   "fix": "Di lo que de verdad quieres decir. Borra la mitad de preparación."
+  },
+  {
+   "id": "not-only",
+   "regex": "(?i)\\bnot only\\b[^.!?\\n]{2,80}\\bbut also\\b",
+   "name": "\"Not only X but also Y\"",
+   "fix": "Separa en dos oraciones o deja la mitad más fuerte."
+  },
+  {
+   "id": "isnt-about",
+   "regex": "(?i)\\b(?:this|it) is(?:n'?t| not) about [^.!?\\n]{2,60}[.!] it'?s about\\b",
+   "name": "\"It isn't about X. It's about Y.\"",
+   "fix": "Parte por Y. El giro es la marca."
+  },
+  {
+   "id": "the-result",
+   "regex": "(?im)^\\s*(?:the result|the best part|the kicker|the catch)\\?\\s*$",
+   "name": "Pregunta retórica de una línea",
+   "fix": "Responde en la misma oración en vez de montar una revelación."
+  },
+  {
+   "id": "heres-what",
+   "regex": "(?i)\\bhere'?s what (?:i|we) learned\\b",
+   "name": "\"Here's what I learned\"",
+   "fix": "Escribe la lección. Omite el anuncio."
+  },
+  {
+   "id": "triad",
+   "regex": "(?i)\\b\\w+, \\w+, and \\w+\\.",
+   "name": "Tríada (regla de tres)",
+   "fix": "Dos elementos o cuatro. Tres es el ritmo por defecto de un modelo."
+  },
+  {
+   "id": "rocket",
+   "regex": "[\\U0001F680\\U0001F525\\U0001F4A1\\u2728\\U0001F3AF]",
+   "name": "Emoji cohete, fuego, ampolleta, brillo o diana",
+   "fix": "Un emoji como máximo, y que no sea de esos cinco."
+  },
+  {
+   "id": "hashtag-wall",
+   "regex": "(?:#\\w+[ \\t]*){5,}",
+   "name": "Muro de hashtags (5 o más)",
+   "fix": "Tres hashtags como máximo."
+  },
+  {
+   "id": "as-an-ai",
+   "regex": "(?i)\\bas an ai\\b|\\bas a language model\\b",
+   "name": "Autorreferencia de modelo",
+   "fix": "Borra la oración."
+  },
+  {
+   "id": "in-summary",
+   "regex": "(?im)^\\s*(?:in summary|to summarize|in conclusion)\\b",
+   "name": "Apertura de cierre de ensayo",
+   "fix": "Un post no necesita párrafo de conclusión."
+  },
+  {
+   "id": "engagement-bait",
+   "regex": "(?i)\\b(?:agree\\?|thoughts\\?|who else\\b|am i wrong\\?)\\s*$",
+   "name": "Cebo de interacción reflejo",
+   "fix": "Haz una pregunta que solo tú podrías hacer, sobre lo específico que dijiste."
+  }
+ ]
+}

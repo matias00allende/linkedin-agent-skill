@@ -1,0 +1,13 @@
+{
+  "name": "agentin",
+  "description": "Once skills de Claude para redactar y revisar contenido de LinkedIn en español (Chile) e inglés: posts, comentarios, respuestas, perfil, plan semanal, mensajes, bandeja, carruseles, reutilización y auditoría, más un limpiador de borradores que corre en tu máquina. Nada se publica sin que lo hagas tú.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Matías Allende",
+    "url": "https://github.com/matias00allende"
+  },
+  "homepage": "https://github.com/matias00allende/agentin",
+  "repository": "https://github.com/matias00allende/agentin",
+  "license": "MIT",
+  "keywords": ["linkedin", "contenido", "redaccion", "español", "chile", "claude-code", "skills"]
+}

@@ -1,0 +1,692 @@
+{
+ "version": "1.0",
+ "language": "es",
+ "note": "Léxico de muletillas y clichés de LinkedIn en español. action: replace, delete o flag. Español de Chile; edítelo con libertad.",
+ "contraction_regex": null,
+ "person_words": [
+  "yo",
+  "me",
+  "mi",
+  "mis",
+  "mío",
+  "mía",
+  "conmigo",
+  "nosotros",
+  "nosotras",
+  "nos",
+  "nuestro",
+  "nuestra",
+  "nuestros",
+  "nuestras",
+  "tú",
+  "te",
+  "ti",
+  "tu",
+  "tus",
+  "contigo",
+  "usted",
+  "ustedes",
+  "su",
+  "sus"
+ ],
+ "person_verb_regexes": [
+  "\\b\\w{3,}(?:é|í)\\b",
+  "\\b\\w{3,}(?:amos|emos|imos)\\b"
+ ],
+ "entries": [
+  {
+   "find": "utilizar",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usar"
+  },
+  {
+   "find": "utiliza",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usa"
+  },
+  {
+   "find": "utilizan",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usan"
+  },
+  {
+   "find": "utilizamos",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usamos"
+  },
+  {
+   "find": "utilizando",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usando"
+  },
+  {
+   "find": "utilizado",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usado"
+  },
+  {
+   "find": "utilizada",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usada"
+  },
+  {
+   "find": "utilizados",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usados"
+  },
+  {
+   "find": "utilizadas",
+   "action": "replace",
+   "family": "verbos",
+   "replace": "usadas"
+  },
+  {
+   "find": "con el fin de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "para"
+  },
+  {
+   "find": "a fin de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "para"
+  },
+  {
+   "find": "con el objetivo de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "para"
+  },
+  {
+   "find": "con la finalidad de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "para"
+  },
+  {
+   "find": "sin duda alguna",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "sin duda"
+  },
+  {
+   "find": "en el mundo actual",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "hoy"
+  },
+  {
+   "find": "en el mundo de hoy",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "hoy"
+  },
+  {
+   "find": "en la actualidad",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "hoy"
+  },
+  {
+   "find": "en el vertiginoso mundo de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "en"
+  },
+  {
+   "find": "en el cambiante mundo de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "en"
+  },
+  {
+   "find": "en el dinámico mundo de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "en"
+  },
+  {
+   "find": "en el competitivo mundo de",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "en"
+  },
+  {
+   "find": "robusto",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "sólido"
+  },
+  {
+   "find": "robusta",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "sólida"
+  },
+  {
+   "find": "robustos",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "sólidos"
+  },
+  {
+   "find": "robustas",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "sólidas"
+  },
+  {
+   "find": "crucial",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "clave"
+  },
+  {
+   "find": "cruciales",
+   "action": "replace",
+   "family": "conectores",
+   "replace": "clave"
+  },
+  {
+   "find": "cabe destacar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "cabe mencionar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "cabe señalar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "es importante destacar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "es importante señalar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "es importante mencionar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "vale la pena destacar que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "no es ningún secreto que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "seamos honestos",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "dicho esto",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "la dura verdad es que",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "sin más preámbulos",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "abróchate el cinturón",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "ponte cómodo",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "ponte cómoda",
+   "action": "delete",
+   "family": "aperturas"
+  },
+  {
+   "find": "léelo de nuevo",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "léelo otra vez",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "guarda este post para después",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "guarda esto para después",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "piénsalo un momento",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "la decisión es tuya",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "el futuro ya está aquí",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "ya lo sabes",
+   "action": "delete",
+   "family": "cierres",
+   "standalone": true
+  },
+  {
+   "find": "en un mundo cada vez más",
+   "action": "flag",
+   "family": "contexto",
+   "note": "completar con la idea concreta"
+  },
+  {
+   "find": "sumérgete en",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "sumérgase en",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "potenciar",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "potenciando",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "potencia",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "empoderar",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "empoderamiento",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "desbloquear",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "desbloquea",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "aprovechar al máximo",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "fomentar",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "fomenta",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "fundamental",
+   "action": "flag",
+   "family": "contexto",
+   "note": "palabra normal; revisar si se repite"
+  },
+  {
+   "find": "fundamentales",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "integral",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "holístico",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "holística",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "holísticos",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "sinergia",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "sinergias",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "ecosistema",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "paradigma",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "panorama",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "tapiz",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "faro",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "piedra angular",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "a la vanguardia",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "de vanguardia",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "innovador",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "innovadora",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "innovadores",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "innovadoras",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "transformador",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "transformadora",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "revolucionario",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "revolucionaria",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "disruptivo",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "disruptiva",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "de manera efectiva",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "de forma efectiva",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "en constante evolución",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "en constante cambio",
+   "action": "flag",
+   "family": "contexto"
+  },
+  {
+   "find": "en resumen",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cierre de ensayo"
+  },
+  {
+   "find": "en conclusión",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cierre de ensayo"
+  },
+  {
+   "find": "en definitiva",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cierre de ensayo"
+  },
+  {
+   "find": "para concluir",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cierre de ensayo"
+  },
+  {
+   "find": "te invito a reflexionar",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "los invito a reflexionar",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "me emociona anunciar",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "me complace anunciar",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "me complace compartir",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "con gran orgullo",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "estoy muy feliz de compartir",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "es un honor anunciar",
+   "action": "flag",
+   "family": "contexto",
+   "note": "reescribir la oración completa"
+  },
+  {
+   "find": "déjame tus comentarios",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cebo de interacción"
+  },
+  {
+   "find": "cuéntame en los comentarios",
+   "action": "flag",
+   "family": "contexto",
+   "note": "cebo de interacción"
+  }
+ ],
+ "structures": [
+  {
+   "id": "not-just",
+   "regex": "(?i)\\bno (?:es|son|fue|fueron) (?:solo|sólo|solamente|únicamente) [^.!?\\n]{2,60}[,.;]\\s*(?:es|son|fue|fueron|sino)\\b",
+   "name": "\"No es solo X, es Y\"",
+   "fix": "Di lo que de verdad quieres decir. Borra la mitad de preparación."
+  },
+  {
+   "id": "not-only",
+   "regex": "(?i)\\bno (?:solo|sólo|solamente) [^.!?\\n]{2,80}\\bsino (?:que )?también\\b",
+   "name": "\"No solo X, sino también Y\"",
+   "fix": "Separa en dos oraciones o deja la mitad más fuerte."
+  },
+  {
+   "id": "isnt-about",
+   "regex": "(?i)\\bno se trata de [^.!?\\n]{2,60}(?:,|\\.)\\s*(?:sino|se trata)\\b",
+   "name": "\"No se trata de X, sino de Y\"",
+   "fix": "Parte por Y. El giro es la marca."
+  },
+  {
+   "id": "the-result",
+   "regex": "(?im)^\\s*¿?(?:el resultado|la clave|lo mejor|el truco|el problema)\\?\\s*$",
+   "name": "Pregunta retórica de una línea",
+   "fix": "Responde en la misma oración en vez de montar una revelación."
+  },
+  {
+   "id": "heres-what",
+   "regex": "(?i)\\b(?:esto|eso|esta) es lo que (?:aprend(?:í|imos)|descubr(?:í|imos))\\b",
+   "name": "\"Esto es lo que aprendí\"",
+   "fix": "Escribe la lección. Omite el anuncio."
+  },
+  {
+   "id": "triad",
+   "regex": "(?i)\\b\\w+, \\w+ y \\w+\\.",
+   "name": "Tríada (regla de tres)",
+   "fix": "Dos elementos o cuatro. Tres es el ritmo por defecto de un modelo."
+  },
+  {
+   "id": "rocket",
+   "regex": "[\\U0001F680\\U0001F525\\U0001F4A1\\u2728\\U0001F3AF]",
+   "name": "Emoji cohete, fuego, ampolleta, brillo o diana",
+   "fix": "Un emoji como máximo, y que no sea de esos cinco."
+  },
+  {
+   "id": "hashtag-wall",
+   "regex": "(?:#\\w+[ \\t]*){5,}",
+   "name": "Muro de hashtags (5 o más)",
+   "fix": "Tres hashtags como máximo."
+  },
+  {
+   "id": "as-an-ai",
+   "regex": "(?i)\\bcomo (?:un |una )?(?:modelo de lenguaje|ia)\\b",
+   "name": "Autorreferencia de modelo",
+   "fix": "Borra la oración."
+  },
+  {
+   "id": "in-summary",
+   "regex": "(?im)^\\s*(?:en resumen|en conclusión|en definitiva|para concluir|para finalizar)\\b",
+   "name": "Apertura de cierre de ensayo",
+   "fix": "Un post no necesita párrafo de conclusión."
+  },
+  {
+   "id": "engagement-bait",
+   "regex": "(?i)¿(?:qué opinas|qué piensas|tú qué piensas|estás de acuerdo|quién más|me equivoco)\\?\\s*$",
+   "name": "Cebo de interacción reflejo",
+   "fix": "Haz una pregunta que solo tú podrías hacer, sobre lo específico que dijiste."
+  }
+ ]
+}

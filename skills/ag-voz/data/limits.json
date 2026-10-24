@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "note": "Límites que se reportan públicamente para el contenido de LinkedIn. No están verificados contra LinkedIn: compruébelos en la interfaz antes de depender de ellos. Edite este archivo si cambian.",
+  "kinds": {
+    "invite": {
+      "label": "Nota de invitación",
+      "max": 200,
+      "max_premium": 300,
+      "verified": false
+    },
+    "post": {
+      "label": "Publicación",
+      "max": 3000,
+      "verified": false
+    },
+    "headline": {
+      "label": "Titular del perfil",
+      "max": 220,
+      "verified": false
+    },
+    "about": {
+      "label": "Sección Acerca de",
+      "max": 2600,
+      "verified": false
+    },
+    "comment": {
+      "label": "Comentario",
+      "max": 1250,
+      "verified": false
+    }
+  }
+}
