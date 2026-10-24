@@ -1,5 +1,14 @@
 # Cambios
 
+## 1.5.0 - 2026-10-24
+
+- Corrección: las citas anidadas (una cita dentro de un paréntesis, o al revés) se restauran completas.
+- Argumentos y archivos de datos validados: seguidores y cantidad deben ser positivos, y un archivo de límites o de léxico con estructura incorrecta produce un error controlado.
+- El índice de estilo no entrega veredicto global con menos de tres chequeos calculables, y --omit permite excluir los que no corresponden al tipo de texto.
+- Reemplazos que eliminaban una caracterización pasan a señalarse. Fórmulas de gancho con causalidad más prudente.
+- Planes y extracciones: la salida (calendario, cartera, criterios) depende del encargo. Texto visible sin anglicismos evitables.
+- Pruebas: 113.
+
 ## 1.4.0 - 2026-10-24
 
 - Las citas y los paréntesis se protegen sin límite de largo. Los reemplazos automáticos quedan solo para equivalencias mecánicas; el resto se señala.

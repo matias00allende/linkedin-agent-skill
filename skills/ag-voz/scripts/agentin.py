@@ -34,7 +34,7 @@ import tempfile
 import time
 import unicodedata
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -136,6 +136,11 @@ def load_lexicon(lang: str, path: str | None = None) -> dict:
     for key in ("entries", "structures"):
         if not isinstance(lex.get(key), list):
             raise UserError(f"el léxico no tiene la lista '{key}'")
+    for e in lex["entries"]:
+        if not isinstance(e, dict) or not isinstance(e.get("find"), str) or not e["find"].strip():
+            raise UserError("el léxico tiene una entrada sin el campo 'find'")
+        if e.get("action") == "replace" and not isinstance(e.get("replace"), str):
+            raise UserError(f"la entrada {e['find']!r} es 'replace' y no tiene el campo 'replace'")
     entries = sorted(lex["entries"], key=lambda e: len(e["find"]), reverse=True)
     for e in entries:
         if e.get("action") not in ("replace", "delete", "flag"):
@@ -285,7 +290,13 @@ def protect(text: str) -> tuple[str, list[str], str]:
 
 
 def restore(text: str, found: list[str], marker: str) -> str:
-    return re.sub(re.escape(marker) + r"(\d+)" + re.escape(marker), lambda m: found[int(m.group(1))], text)
+    rx = re.compile(re.escape(marker) + r"(\d+)" + re.escape(marker))
+    for _ in range(8):  # los apartados pueden contener a otros (una cita dentro de un paréntesis)
+        new = rx.sub(lambda m: found[int(m.group(1))], text)
+        if new == text:
+            break
+        text = new
+    return text
 
 
 _QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"\u00ab[^\u00bb]*\u00bb"), re.compile(r"\([^)]*\)")]
@@ -319,13 +330,13 @@ def pass_typography(text: str) -> tuple[str, list[dict]]:
         text = re.sub(r"[ \t]*\u2014[ \t]*(?=[,.;:!?)\]\"'])", "", text)
         text = re.sub(r"(?m)[ \t]*\u2014[ \t]*$", ",", text)
         text = re.sub(r"[ \t]*\u2014[ \t]*", ", ", text)
-        count("U+2014 raya (em dash)", n_em, "coma")
+        count("U+2014 raya", n_em, "coma")
     n_en = text.count("\u2013")
     if n_en:
         text = re.sub(r"(?<=\d)[ \t]*\u2013[ \t]*(?=\d)", "-", text)
         text = re.sub(r"[ \t]+\u2013[ \t]+", ", ", text)
         text = text.replace("\u2013", "-")
-        count("U+2013 semiraya (en dash)", n_en, "guion o coma")
+        count("U+2013 semiraya", n_en, "guion o coma")
     text = re.sub(r"(?m)^([ \t]*)\u2022[ \t]*", r"\1- ", text)
     simple = [("\u2018", "'", "comilla simple izquierda"), ("\u2019", "'", "comilla simple derecha / apostrofe"),
               ("\u201c", '"', "comilla doble izquierda"),
@@ -622,7 +633,7 @@ def check_voice(text: str, lex: dict, lang: str):
     return clamp(score), detail
 
 
-def run_checks(text: str, lex: dict, lang: str) -> dict:
+def run_checks(text: str, lex: dict, lang: str, omit: tuple = ()) -> dict:
     results = {
         "rhythm": check_rhythm(text),
         "specificity": check_specificity(text),
@@ -630,7 +641,12 @@ def run_checks(text: str, lex: dict, lang: str) -> dict:
         "hygiene": check_hygiene(text),
         "voice": check_voice(text, lex, lang),
     }
+    for key in omit:
+        if key in results:
+            results[key] = (None, "omitido por la persona (no corresponde a este tipo de texto)")
     scored = [v[0] for v in results.values() if v[0] is not None]
+    if 0 < len(scored) < 3:
+        return {"checks": results, "score": None, "verdict": "PARCIAL", "evaluable": len(scored)}
     if not scored:
         return {"checks": results, "score": None, "verdict": "SIN DATOS", "evaluable": 0}
     overall = statistics.mean(scored) * 0.6 + min(scored) * 0.4
@@ -654,7 +670,7 @@ def render_check(res: dict, label: str | None, out) -> None:
         shown = "no evaluable" if score is None else f"{fmt1(score)} de 100"
         print(f"{CHECK_LABELS[key]}: {shown}. {detail}", file=out)
     if res["score"] is None:
-        print("Índice: sin datos suficientes.", file=out)
+        print("Índice global: no se calcula con menos de 3 chequeos; los resultados de arriba son parciales." if res["verdict"] == "PARCIAL" else "Índice: sin datos suficientes.", file=out)
     else:
         print(f"Índice: {fmt1(res['score'])} de 100. Veredicto: {res['verdict'].lower()}. "
               f"Cobertura: {res['evaluable']} de 5 chequeos calculables.", file=out)
@@ -672,7 +688,7 @@ def cmd_check(args: argparse.Namespace) -> int:
     for name, text in texts:
         lang = "es"
         lex = load_lexicon(lang, args.lexicon)
-        res = run_checks(text, lex, lang)
+        res = run_checks(text, lex, lang, tuple(x for x in (args.omit or "").split(",") if x))
         results.append((name, res))
         payload.append({
             "source": name, "language": lang,
@@ -706,7 +722,9 @@ def utf16_len(s: str) -> int:
 
 def cmd_limits(args: argparse.Namespace) -> int:
     data = load_json("limits.json", args.limits_file)
-    kinds = data["kinds"]
+    kinds = data.get("kinds")
+    if not isinstance(kinds, dict) or not all(isinstance(v, dict) and isinstance(v.get("max"), int) and v["max"] > 0 for v in kinds.values()):
+        raise UserError("el archivo de límites no tiene la estructura esperada (kinds con 'max' entero positivo)")
     if args.kind not in kinds:
         raise UserError(f"tipo desconocido {args.kind!r}; opciones: {', '.join(sorted(kinds))}")
     spec = kinds[args.kind]
@@ -854,6 +872,10 @@ def compute_stats(rows: list[dict], followers: int | None, top: int) -> dict:
 
 
 def cmd_stats(args: argparse.Namespace) -> int:
+    if args.followers is not None and args.followers <= 0:
+        raise UserError("--followers debe ser un número mayor que cero")
+    if args.top <= 0:
+        raise UserError("--top debe ser un número mayor que cero")
     rows, warnings = parse_analytics(read_text(args.input))
     stats = compute_stats(rows, args.followers, args.top)
     stats["warnings"] = warnings
@@ -958,8 +980,9 @@ def cmd_tmp(args: argparse.Namespace) -> int:
 HELP_ES = """AgentIn: utilidades locales de texto. Uso:
   python -I agentin.py clean [ARCHIVO] [-o SALIDA] [--force] [--report] [--json] [--hygiene-only] [--lexicon RUTA]
       Limpia un borrador: caracteres invisibles, tipografía y muletillas. Sin ARCHIVO o con - lee la entrada estándar.
-  python -I agentin.py check [ARCHIVO] [SEGUNDO_ARCHIVO] [--json] [--lexicon RUTA] [--fail-under N]
+  python -I agentin.py check [ARCHIVO] [SEGUNDO_ARCHIVO] [--json] [--lexicon RUTA] [--fail-under N] [--omit LISTA]
       Índice de estilo heurístico. Con dos archivos muestra antes y después. No es un detector de IA.
+      --omit LISTA excluye chequeos que no corresponden al tipo de texto (rhythm, specificity, filler, hygiene, voice).
   python -I agentin.py limits --kind TIPO [ARCHIVO] [--premium] [--json] [--limits-file RUTA]
       Cuenta caracteres contra los límites de LinkedIn. TIPO: invite, post, headline, about o comment.
   python -I agentin.py stats ARCHIVO.csv [--followers N] [--top N] [--json]
@@ -996,6 +1019,7 @@ def build_parser() -> argparse.ArgumentParser:
     k.add_argument("--json", action="store_true")
     k.add_argument("--lexicon")
     k.add_argument("--fail-under", type=float)
+    k.add_argument("--omit")
     k.set_defaults(fn=cmd_check)
 
     li = sub.add_parser("limits", add_help=False)

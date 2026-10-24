@@ -36,8 +36,8 @@
     {
       "id": 4,
       "name": "Antes y después",
-      "template": "Hace {tiempo} yo {estado de partida}. Hoy {estado actual}. La diferencia fue {una cosa}.",
-      "example": "Hace 18 meses armaba cotizaciones a las 2 de la mañana. Hoy las envío en 6 minutos. Lo cambió una plantilla.",
+      "template": "Hace {tiempo} yo {estado de partida}. Hoy {estado actual}. Lo que más pesó, a mi juicio, fue {una cosa}.",
+      "example": "Hace 18 meses armaba cotizaciones a las 2 de la mañana. Hoy las envío en 6 minutos. Lo que más pesó, a mi juicio, fue una plantilla.",
       "use": "Mostrar que recorriste el camino que tu lector quiere recorrer.",
       "trap": "Transformaciones de tres partes. Nombra una sola palanca o el lector deja de creerte."
     },
@@ -92,9 +92,9 @@
     {
       "id": 11,
       "name": "Desmontar un mito",
-      "template": "{Explicación popular} no es la razón por la que {mal resultado} te está pasando.",
-      "example": "El algoritmo no es la razón por la que tus publicaciones no se mueven.",
-      "use": "Reencuadrar. Te deja entregar una explicación posible, con su evidencia, en la línea 3.",
+      "template": "{Explicación popular} quizá no sea la razón por la que {mal resultado} te está pasando.",
+      "example": "El algoritmo quizá no sea la razón por la que tus publicaciones no se mueven.",
+      "use": "Reencuadrar con prudencia: ofrece una explicación posible, con su evidencia, y no una causa demostrada.",
       "trap": "Desmontar el mito y no nombrar el reemplazo. Nómbralo siempre."
     },
     {

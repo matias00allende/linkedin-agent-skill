@@ -1,6 +1,6 @@
 # AgentIn
 
-Once skills de Claude Code para redactar y revisar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Sin cuentas, sin claves de API y sin conexión a LinkedIn.
+Once skills de Claude Code para redactar y revisar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Sin cuentas, sin claves de API y sin conexión a LinkedIn (la exportación a PDF usa un navegador local, que podría hacer otras conexiones salvo que bloquees la red; ver la referencia del carrusel).
 
 Nada se publica hasta que tú lo hagas. Las skills redactan; tú revisas, corriges y publicas.
 
@@ -12,7 +12,7 @@ No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titula
 - /ag-comment: comentarios para publicaciones de otras personas, de nueve tipos.
 - /ag-reply: respuestas a los comentarios de tu propia publicación, ordenadas por valor.
 - /ag-profile: puntúa tu perfil sobre 100 con una rúbrica de 12 ítems y reescribe en orden de impacto.
-- /ag-plan: la semana de contenido y la lista de interacción.
+- /ag-plan: el plan de contenido (calendario, cartera de temas o criterios de posicionamiento) y, si lo pides, la lista de interacción.
 - /ag-voz: limpieza, revisión de estilo y conteo de caracteres de un borrador.
 - /ag-carousel: texto de un carrusel y su PDF.
 - /ag-repurpose: un contenido largo propio a publicaciones que se sostienen solas.

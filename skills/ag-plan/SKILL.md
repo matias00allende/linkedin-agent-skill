@@ -17,7 +17,7 @@ Esta skill decide qué se ejecuta; las demás ejecutan. El horizonte (una semana
 
 ## Formato de la respuesta
 
-Sigue criterio.md: un plan por día con rótulos simples y listas con guion, la lista de interacción aparte y notas de hasta cuatro líneas.
+Sigue criterio.md: la salida acordada (calendario por día, cartera de temas o criterios de decisión) con rótulos simples y listas con guion, la lista de interacción aparte si la pidieron y notas de hasta cuatro líneas. Una pregunta puntual, como a qué hora publicar un borrador, se responde sin armar un plan.
 
 ## Entrada
 
@@ -48,4 +48,4 @@ Es opcional. Propón una lista corta y reparte entre personas con alcance al que
 
 ## Salida
 
-Según el encargo (no impongas un calendario): un calendario por día, una cartera de temas o criterios de decisión, y la lista de interacción si la pidió. Incluye una señal de éxito ligada al objetivo de la persona y no solo a la interacción. Pregunta si quiere guardarlo en ~/.claude/agentin/plan.md; sin permiso no escribas el archivo. Cierra preguntando qué día quiere redactar primero.
+Según el encargo (no impongas un calendario): un calendario por día, una cartera de temas o criterios de decisión, y la lista de interacción si la pidió. Incluye una señal de éxito ligada al objetivo de la persona y no solo a la interacción. Pregunta si quiere guardarlo en ~/.claude/agentin/plan.md; sin permiso no escribas el archivo. Cierra ofreciendo el siguiente paso solo si el encargo lo admite (por ejemplo redactar la primera publicación de un calendario).

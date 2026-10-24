@@ -38,7 +38,7 @@ El formato depende del tipo de tarea.
 - Notas: como máximo cuatro líneas, separadas del texto para copiar. No expliques el método ni listes lo que hiciste, salvo que la persona pida una revisión técnica; en ese caso entrega la lista de cambios.
 - Riesgo: si el borrador exige una decisión de la persona (información confidencial, decisiones no públicas, datos de terceros), avisa antes de entregar la versión final y espera su confirmación. Un riesgo residual va en las notas.
 - Un marcador {{dato: ...}} pendiente significa que el texto aún no está listo para publicar: dilo.
-- Emojis: tus salidas no los llevan. La limpieza mecánica no elimina los que la persona escribió en su propio texto, pero los señala.
+- Emojis: la versión final que entregas como lista para publicar no lleva emojis decorativos. La limpieza mecánica conserva los que la persona escribió y los señala; si quitar uno puede cambiar el significado, pregunta antes.
 
 ## Hechos, inferencias y recomendaciones
 

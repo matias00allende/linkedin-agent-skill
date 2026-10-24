@@ -1,6 +1,6 @@
 ---
 name: ag-repurpose
-description: Extrae piezas para LinkedIn (publicaciones, y la base de un carrusel si lo piden) de un contenido largo propio (video, charla, podcast, boletín, informe, artículo, transcripción o resumen de reunión), solo las que se sostienen solas, y las ordena en una semana si hay suficiente material. Úsala cuando peguen un texto largo y pidan sacarle publicaciones, reutilizarlo o convertirlo en contenido, aunque no digan reutilizar. Si quieren una sola pieza ya decidida, usa ag-post con ese material; si piden contenido para LinkedIn sin precisar cuánto, pregunta la salida y la cantidad antes de asumir una semana. Nunca publica.
+description: Extrae piezas para LinkedIn (publicaciones, y la base de un carrusel si lo piden) de un contenido largo propio (video, charla, podcast, boletín, informe, artículo, transcripción o resumen de reunión), solo las que se sostienen solas, y las entrega como una cartera trazable; las ordena en un calendario solo si lo piden. Úsala cuando peguen un texto largo y pidan sacarle publicaciones, reutilizarlo o convertirlo en contenido, aunque no digan reutilizar. Si quieren una sola pieza ya decidida, usa ag-post con ese material; si piden contenido para LinkedIn sin precisar cuánto, pregunta la salida y la cantidad antes de asumir una semana. Nunca publica.
 ---
 
 # ag-repurpose
@@ -17,7 +17,7 @@ Un contenido largo suele esconder varias publicaciones útiles, pero no siempre.
 
 ## Formato de la respuesta
 
-Sigue criterio.md: el conteo de lo encontrado, el plan con día, ángulo y fórmula de cada pieza, y notas de hasta cuatro líneas. La extracción termina en el plan; la redacción de cada pieza empieza solo cuando la persona la pide, y para un encargo mixto (por ejemplo un carrusel y dos publicaciones) coordina con ag-post y ag-carousel.
+Sigue criterio.md: el conteo de lo encontrado, una cartera de piezas con su ángulo y el fragmento de origen (día y fórmula solo si piden calendario), y notas de hasta cuatro líneas. La extracción termina en el plan; la redacción de cada pieza empieza solo cuando la persona la pide, y para un encargo mixto (por ejemplo un carrusel y dos publicaciones) coordina con ag-post y ag-carousel.
 
 ## Entrada
 

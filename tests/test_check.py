@@ -39,11 +39,18 @@ class Scoring(unittest.TestCase):
         self.assertEqual(res["verdict"], "SIN DATOS")
         self.assertIsNone(res["score"])
 
-    def test_short_clean_comment_can_reach_bien_with_partial_coverage(self):
+    def test_very_short_text_gets_partial_results_and_no_global_verdict(self):
         res = run("Gracias por el dato, lo probé ayer y funcionó.")
-        self.assertEqual(res["verdict"], "BIEN")
+        self.assertEqual(res["verdict"], "PARCIAL")
+        self.assertIsNone(res["score"])
         self.assertEqual(res["evaluable"], 2)
         self.assertIsNone(res["checks"]["rhythm"][0])
+
+    def test_omit_excludes_checks_that_do_not_apply(self):
+        res = agentin.run_checks(HUMAN_ES, LEX["es"], "es", ("voice", "specificity"))
+        self.assertIsNone(res["checks"]["voice"][0])
+        self.assertIsNone(res["checks"]["specificity"][0])
+        self.assertEqual(res["evaluable"], 3)
 
     def test_template_text_scores_worse_than_human_text(self):
         bad = run(LLM_ES)

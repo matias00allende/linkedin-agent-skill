@@ -46,7 +46,7 @@ CARPETA se crea con python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" tmp new, 
 - No modifica enlaces, correos, hashtags, menciones ni código entre acentos graves.
 - Opción --hygiene-only: solo invisibles y tipografía, sin cambios de vocabulario. Úsala cuando piden una corrección mecánica (rayas, comillas, espacios).
 - Citas entre comillas o paréntesis, incluso de varias líneas, no reciben cambios léxicos.
-- Los emoji no se tocan, pero el informe los señala: las salidas de AgentIn no llevan emojis, y los de la persona los decide ella.
+- Los emoji no se tocan en la limpieza mecánica, pero el informe los señala: la versión final que AgentIn entrega no lleva emojis decorativos, y si quitar uno puede cambiar el significado se pregunta antes.
 
 Lo que clean no arregla se señala en el informe y lo reescribe la persona: "no es solo X, es Y", tríadas de eslogan, preguntas retóricas de una línea, emoji de cohete o fuego, muros de hashtags, cebo de interacción y oraciones de largo uniforme.
 
@@ -56,6 +56,6 @@ Si la persona pide solo evaluar un texto (estilo o riesgo reputacional) sin camb
 
 ## Qué mide check
 
-Cinco chequeos de 0 a 100: ritmo, marcadores numéricos y nombres, muletillas, higiene y marcas de persona. Son heurísticas de estilo sin calibración con un corpus; el informe muestra la cobertura (cuántos chequeos se pudieron calcular), no una confianza estadística. Las marcas de persona no miden semejanza con la voz de nadie. Úsalas para ver qué mejorar, no para sentenciar un texto. Un chequeo sin datos suficientes (menos de 4 oraciones o 25 palabras) sale como no evaluable y no entra al promedio.
+Cinco chequeos de 0 a 100: ritmo, marcadores numéricos y nombres, muletillas, higiene y marcas de persona. Son heurísticas de estilo sin calibración con un corpus; el informe muestra la cobertura (cuántos chequeos se pudieron calcular), no una confianza estadística. Las marcas de persona no miden semejanza con la voz de nadie. Úsalas para ver qué mejorar, no para sentenciar un texto. Los umbrales son: ritmo necesita al menos 4 oraciones; marcadores numéricos y nombres, y marcas de persona, necesitan al menos 25 palabras; muletillas e higiene se calculan con cualquier texto no vacío. Un chequeo sin datos sale como no evaluable y no entra al promedio. Con menos de 3 chequeos calculables no hay índice global, solo resultados parciales. Si un chequeo no corresponde al tipo de texto (una declaración institucional sin primera persona, por ejemplo), exclúyelo con --omit.
 
 Un puntaje bajo en marcadores numéricos y nombres o en marcas de persona puede deberse al rol emisor o al tipo de texto (una voz institucional, un procedimiento preciso sin cifras). Revisa si falta evidencia, pero no sugieras agregar cifras o nombres solo para subir el índice, sobre todo si pueden ser confidenciales.

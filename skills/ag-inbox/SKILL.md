@@ -1,6 +1,6 @@
 ---
 name: ag-inbox
-description: Ordena los mensajes privados que la persona recibió en LinkedIn, de cualquier remitente, individuales o en lote. Clasifica solicitudes y mensajes en oportunidades, reclutadores, pares, pedidos y spam, y redacta las respuestas que valen la pena. Úsala cuando peguen un lote de mensajes o solicitudes, pregunten si responder uno o digan que su bandeja es un desorden, o quieran responder el mensaje privado de una reclutadora, aunque no digan clasificar. Para escribirle primero a alguien o retomar un contacto sin respuesta usa ag-dm. Solo trabaja con lo que la persona pega. Nunca envía.
+description: Ordena y ayuda a contestar los mensajes privados que la persona recibió en LinkedIn, de cualquier remitente, uno solo o en lote, incluida la respuesta a una invitación que ella envió. Clasifica solicitudes y mensajes en oportunidades, reclutadores, pares, pedidos y spam, y redacta las respuestas que valen la pena. Úsala cuando peguen un lote de mensajes o solicitudes, pregunten si responder uno o digan que su bandeja es un desorden, o quieran responder el mensaje privado de una reclutadora, aunque no digan clasificar. Para escribirle primero a alguien o retomar un contacto sin respuesta usa ag-dm. Solo trabaja con lo que la persona pega. Nunca envía.
 ---
 
 # ag-inbox

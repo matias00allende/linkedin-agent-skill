@@ -124,3 +124,43 @@ class CasosDeSeleccion(unittest.TestCase):
         for kind in ("ninguna", "pregunta", "rechazo"):
             self.assertIn(kind, expected)
         self.assertGreaterEqual(len(cases), 30)
+
+
+class RondaSeis(unittest.TestCase):
+    def test_nested_quote_inside_parentheses_is_restored(self):
+        text = 'Mira (la nota dice "utilizar" aquí) y luego utilizar otra cosa.'
+        out, _ = clean_text(text)
+        self.assertEqual(out, 'Mira (la nota dice "utilizar" aquí) y luego usar otra cosa.\n')
+        self.assertFalse([c for c in out if 0xE000 <= ord(c) <= 0xF8FF])
+
+    def test_parentheses_around_a_quote_are_restored(self):
+        text = '("utilizar")'
+        self.assertEqual(clean_text(text)[0], text + "\n")
+
+    def test_negative_arguments_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "a.csv")
+            with open(path, "w", encoding="utf-8", newline="") as fh:
+                fh.write("Impresiones,Reacciones\n1000,10\n")
+            self.assertEqual(agentin.main(["stats", path, "--followers", "-10"]), 2)
+            self.assertEqual(agentin.main(["stats", path, "--top", "0"]), 2)
+
+    def test_malformed_limits_file_is_a_controlled_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = os.path.join(tmp, "limits.json")
+            with open(bad, "w", encoding="utf-8") as fh:
+                fh.write('{"kinds": {"post": {"max": "mucho"}}}')
+            txt = os.path.join(tmp, "a.txt")
+            with open(txt, "w", encoding="utf-8") as fh:
+                fh.write("hola")
+            self.assertEqual(agentin.main(["limits", "--kind", "post", txt, "--limits-file", bad]), 2)
+
+    def test_lexicon_without_find_is_a_controlled_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = os.path.join(tmp, "lex.json")
+            with open(bad, "w", encoding="utf-8") as fh:
+                fh.write('{"entries": [{"action": "flag"}], "structures": []}')
+            txt = os.path.join(tmp, "a.txt")
+            with open(txt, "w", encoding="utf-8") as fh:
+                fh.write("hola")
+            self.assertEqual(agentin.main(["clean", txt, "--lexicon", bad]), 2)

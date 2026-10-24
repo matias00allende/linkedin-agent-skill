@@ -39,4 +39,4 @@ El HTML se arma solo con el texto de la persona, escapado como texto (menor, may
 
 ## Salida
 
-Primero el texto diapositiva por diapositiva, en lista numerada. Luego el texto de la publicación que lo acompaña, de dos o tres líneas, que es el gancho real en el feed. Pasa ambos por ag-voz (clean). No declares que el PDF cumple los límites de LinkedIn sin que la persona los haya confirmado.
+Primero el texto diapositiva por diapositiva, en lista numerada. Luego el texto de la publicación que lo acompaña, de dos o tres líneas, que es el gancho real en el inicio de LinkedIn. Pasa ambos por ag-voz (clean). No declares que el PDF cumple los límites de LinkedIn sin que la persona los haya confirmado.

@@ -138,27 +138,27 @@
   },
   {
    "find": "en el vertiginoso mundo de",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "en"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo eliminaría una caracterización"
   },
   {
    "find": "en el cambiante mundo de",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "en"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo eliminaría una caracterización"
   },
   {
    "find": "en el dinámico mundo de",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "en"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo eliminaría una caracterización"
   },
   {
    "find": "en el competitivo mundo de",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "en"
+   "action": "flag",
+   "family": "contexto",
+   "note": "el reemplazo eliminaría una caracterización"
   },
   {
    "find": "robusto",

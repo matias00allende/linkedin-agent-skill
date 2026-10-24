@@ -25,7 +25,7 @@ Revisa primero lo que el encargo ya entrega y pregunta, en una sola consulta, so
 
 ## Nota de invitación
 
-Una referencia específica al destinatario, una línea de quién eres y nada que pedir. El límite reportado es de 200 caracteres en cuentas gratuitas y 300 en premium; no está verificado, la persona debe confirmarlo en la interfaz. Cuenta con el script y muestra el conteo, porque los modelos cuentan mal:
+Una referencia específica al destinatario, una línea de quién eres y nada que pedir. El límite reportado es de 200 caracteres en cuentas gratuitas y 300 en cuentas de pago; no está verificado, la persona debe confirmarlo en la interfaz. Cuenta con el script y muestra el conteo, porque los modelos cuentan mal:
 
 ```
 python -I "${CLAUDE_SKILL_DIR}/../ag-voz/scripts/agentin.py" limits --kind invite ~/.claude/agentin/tmp/CARPETA/nota.txt
@@ -33,9 +33,9 @@ python -I "${CLAUDE_SKILL_DIR}/../ag-voz/scripts/agentin.py" limits --kind invit
 
 Usa python en Windows y python3 en macOS y Linux; --premium usa el límite alto. CARPETA es la ruta que imprime el comando tmp new de agentin.py (carpeta única con permisos restrictivos); al terminar se borra con tmp clean, como indica criterio.md.
 
-Ejemplo (164 caracteres, contados con el script):
+Ejemplo (171 caracteres, contados con el script):
 
-Vi tu post sobre eliminar la llamada de descubrimiento: yo hice lo mismo en marzo y funcionó. Dirijo operaciones en un estudio de 12 personas. Me interesa seguirte.
+Vi tu publicación sobre eliminar la llamada de descubrimiento: yo hice lo mismo en marzo y funcionó. Dirijo operaciones en un estudio de 12 personas. Me interesa seguirte.
 
 ## Primer mensaje
 
