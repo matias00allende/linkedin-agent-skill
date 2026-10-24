@@ -111,23 +111,9 @@ def pick_marker(text: str, start: int = 0xE000) -> str:
 # Idioma
 # ----------------------------------------------------------------------------
 
-ES_STOP = frozenset("""el la los las de del que y en un una unos unas por con para es se no lo como mas pero su sus al
-me mi mis te tu tus ya muy fue son esta este esto si sin sobre entre cuando porque hay ser tiene tengo hace""".split())
-EN_STOP = frozenset("""the and of to in is that it for on with as was are this be at by not but have you i my we they
-from or an will can your our their what when which about had has do does""".split())
-
-
-def detect_language(text: str) -> str:
-    lowered = text.lower()
-    tokens = re.findall(r"[^\W\d_]+", lowered)
-    es = sum(1 for t in tokens if t in ES_STOP) + 2 * len(re.findall(r"[ñ\u00bf\u00a1]", lowered))
-    es += len(re.findall(r"[áéíóúü]", lowered))
-    en = sum(1 for t in tokens if t in EN_STOP)
-    return "es" if es > en else "en"
-
-
 def resolve_lang(requested: str, text: str) -> str:
-    return detect_language(text) if requested == "auto" else requested
+    """AgentIn trabaja solo en español; el parámetro se conserva para el léxico alternativo."""
+    return "es"
 
 
 # ----------------------------------------------------------------------------
@@ -442,50 +428,44 @@ def clean(text: str, lang: str, lex: dict | None = None, hygiene_only: bool = Fa
 
 
 def render_clean_report(report: dict, out) -> None:
-    def head(title: str) -> None:
-        print(f"\n{title}\n" + "-" * len(title), file=out)
-
     lx = report["lexical"]
     total = (sum(h["count"] for h in report["invisible"]) + sum(h["count"] for h in report["typography"])
              + sum(h["count"] for h in lx["replaced"]) + sum(h["count"] for h in lx["deleted"]))
-    head(f"INFORME DE LIMPIEZA (idioma: {report['language']})")
     print(f"Cambios aplicados: {total}. Términos señalados: {len(lx['flagged'])}. "
           f"Estructuras para reescribir a mano: {len(report['structures'])}.", file=out)
     if report["invisible"]:
-        head("1. CARACTERES INVISIBLES")
+        print("Caracteres invisibles:", file=out)
         for h in report["invisible"]:
-            print(f"  {h['count']:>3}x  {h['name']}  -> {h['action']}", file=out)
+            print(f"  {h['count']} x {h['name']}: {h['action']}", file=out)
     if report["normalized_nfc"]:
-        print("  (se normalizaron tildes descompuestas a NFC)", file=out)
+        print("Se normalizaron tildes descompuestas.", file=out)
     if report["typography"]:
-        head("2. TIPOGRAFÍA")
+        print("Tipografía:", file=out)
         for h in report["typography"]:
-            print(f"  {h['count']:>3}x  {h['name']}  -> {h['to']}", file=out)
+            print(f"  {h['count']} x {h['name']}: {h['to']}", file=out)
     if lx["replaced"] or lx["deleted"]:
-        head("3. MULETILLAS CAMBIADAS")
+        print("Muletillas cambiadas:", file=out)
         for h in lx["replaced"]:
-            print(f"  {h['count']:>3}x  {h['find']}  -> {h['replace']}", file=out)
+            print(f"  {h['count']} x {h['find']}: {h['replace']}", file=out)
         for h in lx["deleted"]:
-            print(f"  {h['count']:>3}x  {h['find']}  -> (borrada)", file=out)
+            print(f"  {h['count']} x {h['find']}: borrada", file=out)
     if lx["flagged"]:
-        head("4. TÉRMINOS SEÑALADOS (no se cambian solos: dependen del contexto)")
+        print("Términos señalados (dependen del contexto, no se cambian solos):", file=out)
         for h in lx["flagged"]:
-            extra = f"  [{h['note']}]" if h["note"] else ""
-            print(f"  {h['count']:>3}x  {h['find']}  líneas {h['lines']}{extra}", file=out)
+            extra = f" ({h['note']})" if h["note"] else ""
+            print(f"  {h['count']} x {h['find']}, líneas {h['lines']}{extra}", file=out)
     if report["structures"]:
-        head("5. ESTRUCTURAS PARA REESCRIBIR A MANO")
+        print("Estructuras para reescribir a mano:", file=out)
         for h in report["structures"]:
-            where = f"  líneas {h['lines']}" if h["lines"] else ""
-            print(f"  {h['count']:>3}x  {h['name']}{where}\n        {h['fix']}", file=out)
+            where = f", líneas {h['lines']}" if h["lines"] else ""
+            print(f"  {h['count']} x {h['name']}{where}. {h['fix']}", file=out)
     if not (total or lx["flagged"] or report["structures"]):
-        head("LIMPIO")
-        print("  No habia nada que cambiar.", file=out)
-    print("", file=out)
+        print("No había nada que cambiar.", file=out)
 
 
 def cmd_clean(args: argparse.Namespace) -> int:
     text = read_text(args.input)
-    lang = resolve_lang(args.lang, text)
+    lang = "es"
     lex = load_lexicon(lang, args.lexicon)
     cleaned, report = clean(text, lang, lex, hygiene_only=args.hygiene_only)
     if args.json:
@@ -506,8 +486,8 @@ def cmd_clean(args: argparse.Namespace) -> int:
 # ----------------------------------------------------------------------------
 
 CHECK_KEYS = ["rhythm", "specificity", "filler", "hygiene", "voice"]
-CHECK_LABELS = {"rhythm": "RITMO", "specificity": "CONCRECIÓN", "filler": "MULETILLAS",
-                "hygiene": "HIGIENE", "voice": "VOZ"}
+CHECK_LABELS = {"rhythm": "Ritmo", "specificity": "Concreción", "filler": "Muletillas",
+                "hygiene": "Higiene", "voice": "Voz"}
 MIN_SENTENCES, MIN_WORDS = 4, 25
 
 
@@ -635,41 +615,34 @@ def run_checks(text: str, lex: dict, lang: str) -> dict:
             "evaluable": len(scored)}
 
 
-def bar(score: float, width: int = 24) -> str:
-    filled = round(score / 100 * width)
-    return "#" * filled + "." * (width - filled)
+def fmt1(x: float) -> str:
+    return f"{x:.1f}".replace(".", ",")
 
 
 def render_check(res: dict, label: str | None, out) -> None:
-    title = "ÍNDICE DE ESTILO (heurístico)" + (f"  -  {label}" if label else "")
-    print("\n" + title, file=out)
-    print("=" * max(len(title), 64), file=out)
+    print("Índice de estilo (heurístico)" + (f": {label}" if label else ""), file=out)
     for key in CHECK_KEYS:
         score, detail = res["checks"][key]
-        if score is None:
-            print(f"  {CHECK_LABELS[key]:<12} {'-' * 24}   n/e", file=out)
-        else:
-            print(f"  {CHECK_LABELS[key]:<12} {bar(score)} {score:5.1f}", file=out)
-        print(f"  {'':<12} {detail}", file=out)
-    print("-" * 64, file=out)
+        shown = "no evaluable" if score is None else f"{fmt1(score)} de 100"
+        print(f"{CHECK_LABELS[key]}: {shown}. {detail}", file=out)
     if res["score"] is None:
-        print("  ÍNDICE       sin datos suficientes", file=out)
+        print("Índice: sin datos suficientes.", file=out)
     else:
-        print(f"  {'ÍNDICE':<12} {bar(res['score'])} {res['score']:5.1f}   {res['verdict']}"
-              f"   (confianza {res['confidence']}, {res['evaluable']} de 5 chequeos)", file=out)
+        print(f"Índice: {fmt1(res['score'])} de 100. Veredicto: {res['verdict'].lower()}. "
+              f"Confianza {res['confidence']} ({res['evaluable']} de 5 chequeos).", file=out)
         if res["verdict"] != "BIEN":
             weakest = min((k for k in CHECK_KEYS if res["checks"][k][0] is not None),
                           key=lambda k: res["checks"][k][0])
-            print(f"\n  Punto más débil: {CHECK_LABELS[weakest]}. Parta por ahí.", file=out)
-    print("\n  Esto mide muletillas, ritmo e higiene tipográfica. No mide autoría y no predice", file=out)
-    print("  el veredicto de ningún detector externo. La revisión final es suya.\n", file=out)
+            print(f"Punto más débil: {CHECK_LABELS[weakest].lower()}. Parta por ahí.", file=out)
+    print("Esto mide muletillas, ritmo e higiene tipográfica. No mide autoría y no predice el "
+          "veredicto de ningún detector externo. La revisión final es suya.\n", file=out)
 
 
 def cmd_check(args: argparse.Namespace) -> int:
     texts = [(p, read_text(p)) for p in [args.input] + ([args.compare] if args.compare else [])]
     payload, results = [], []
     for name, text in texts:
-        lang = resolve_lang(args.lang, text)
+        lang = "es"
         lex = load_lexicon(lang, args.lexicon)
         res = run_checks(text, lex, lang)
         results.append((name, res))
@@ -687,8 +660,8 @@ def cmd_check(args: argparse.Namespace) -> int:
             render_check(res, os.path.basename(name) if args.compare else None, sys.stdout)
         if args.compare and payload[0]["score"] is not None and payload[1]["score"] is not None:
             a, b = payload
-            print(f"  {a['score']:.1f} {a['verdict']}  ->  {b['score']:.1f} {b['verdict']}   "
-                  f"({b['score'] - a['score']:+.1f})\n")
+            print(f"Antes {fmt1(a['score'])} ({a['verdict'].lower()}), después {fmt1(b['score'])} "
+                  f"({b['verdict'].lower()}), diferencia {fmt1(b['score'] - a['score'])}.")
     last = payload[-1]["score"]
     if args.fail_under is not None and (last is None or last < args.fail_under):
         return 1
@@ -722,7 +695,7 @@ def cmd_limits(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps(res, indent=2, ensure_ascii=False))
     else:
-        state = "FUERA DE LÍMITE" if over else "dentro del límite"
+        state = "fuera del límite" if over else "dentro del límite"
         print(f"{spec['label']}: {chars}/{limit} caracteres ({state}; quedan {res['remaining']})")
         if units != chars:
             print(f"  Contando emoji como 2 unidades: {units}/{limit}. Se usa el mayor de los dos.")
@@ -832,30 +805,33 @@ def cmd_stats(args: argparse.Namespace) -> int:
         print(json.dumps(stats, indent=2, ensure_ascii=False))
         return 0
 
-    def line(r: dict) -> str:
-        extra = f"  alcance x{r['reach_multiple']:.2f}" if r["reach_multiple"] is not None else ""
-        cr = f"{r['comment_ratio']:.2f}" if r["comment_ratio"] is not None else "n/a"
-        imp = f"{r['impressions']:,}".replace(",", ".")
-        return (f"  {r['engagement_rate'] * 100:5.1f}%  imp {imp:>7}  coment/reac {cr:>5}{extra}  "
-                f"{r['date']:<10} {r['text']}")
+    def pct(x: float) -> str:
+        return f"{x * 100:.1f}".replace(".", ",") + " %"
 
-    print(f"PUBLICACIONES: {stats['n']}   interacción media {stats['mean_engagement_rate'] * 100:.1f}%   "
-          f"mediana {stats['median_engagement_rate'] * 100:.1f}%")
+    def line(r: dict) -> str:
+        reach = f", alcance {r['reach_multiple']:.2f}".replace(".", ",") + " veces los seguidores" if r["reach_multiple"] is not None else ""
+        cr = f"{r['comment_ratio']:.2f}".replace(".", ",") if r["comment_ratio"] is not None else "sin reacciones"
+        imp = f"{r['impressions']:,}".replace(",", ".")
+        return (f"  {pct(r['engagement_rate'])}, {imp} impresiones, comentarios por reacción {cr}{reach}. "
+                f"{r['date']} {r['text']}".rstrip())
+
+    print(f"Publicaciones: {stats['n']}. Interacción media {pct(stats['mean_engagement_rate'])}, "
+          f"mediana {pct(stats['median_engagement_rate'])}.")
     if stats["sample_note"]:
-        print(f"AVISO: {stats['sample_note']}")
-    print("\nTOP POR TASA DE INTERACCIÓN  (reacciones + comentarios + reposts) / impresiones")
+        print(f"Aviso: {stats['sample_note']}")
+    print("Mejores por tasa de interacción (reacciones más comentarios más reposts, sobre impresiones):")
     for r in stats["top"]:
         print(line(r))
     if stats["bottom"]:
-        print("\nLAS MÁS BAJAS")
+        print("Más bajas:")
         for r in stats["bottom"]:
             print(line(r))
     if stats["by_hook"]:
-        print("\nPOR FÓRMULA DE GANCHO")
+        print("Por fórmula de gancho:")
         for g in stats["by_hook"]:
-            print(f"  {g['mean_engagement_rate'] * 100:5.1f}%  n={g['n']:<3} {g['hook']}")
+            print(f"  {pct(g['mean_engagement_rate'])}, {g['n']} publicaciones, fórmula {g['hook']}")
     for w in warnings:
-        print(f"AVISO: {w}", file=sys.stderr)
+        print(f"Aviso: {w}", file=sys.stderr)
     return 0
 
 
@@ -874,7 +850,6 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--force", action="store_true", help="permitir sobrescribir --out")
     c.add_argument("--report", action="store_true", help="informe de cambios en stderr")
     c.add_argument("--json", action="store_true", help="emitir {text, report} como JSON")
-    c.add_argument("--lang", choices=["auto", "es", "en"], default="auto")
     c.add_argument("--hygiene-only", action="store_true", help="solo invisibles y tipografía, sin muletillas")
     c.add_argument("--lexicon", help="ruta a un léxico alternativo")
     c.set_defaults(fn=cmd_clean)
@@ -883,7 +858,6 @@ def build_parser() -> argparse.ArgumentParser:
     k.add_argument("input", nargs="?", default="-")
     k.add_argument("compare", nargs="?", help="segundo archivo, para comparar antes y despues")
     k.add_argument("--json", action="store_true")
-    k.add_argument("--lang", choices=["auto", "es", "en"], default="auto")
     k.add_argument("--lexicon")
     k.add_argument("--fail-under", type=float, help="salir con código 1 si el índice queda bajo este valor")
     k.set_defaults(fn=cmd_check)

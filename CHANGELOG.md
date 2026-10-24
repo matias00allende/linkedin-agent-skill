@@ -1,5 +1,14 @@
 # Cambios
 
+## 1.1.0 - 2026-10-24
+
+- Solo español de Chile: se retiraron el léxico y las plantillas en inglés, las descripciones bilingües y el modo de idioma automático.
+- Texto plano: las skills, el README, las plantillas y la salida del script no usan negritas, tablas, emojis ni adornos. El informe del script es texto corrido con decimales con coma.
+- Skills más directas y más cortas, con descripciones activas para que se usen aunque la persona no nombre la skill.
+- Nuevo references/criterio.md en ag-voz, que todas las skills leen antes de redactar: fija objetivo, tipo de salida, quién habla, audiencia, profundidad y restricciones; separa hechos, inferencias y recomendaciones; trata cada publicación como pieza de posicionamiento con riesgo reputacional basada en experiencias aportadas por la persona; y deja hashtags y fórmulas de interacción solo para cuando aportan.
+- Las skills revisan el riesgo reputacional y de confidencialidad antes de entregar.
+- Pruebas nuevas que exigen texto plano, solo español y que cada skill apunte al criterio.
+
 ## 1.0.0 - 2026-10-24
 
 Primera versión de AgentIn.

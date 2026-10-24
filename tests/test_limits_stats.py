@@ -36,7 +36,7 @@ class Limits(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             code, out, _ = call(["limits", "--kind", "invite", write(tmp, "n.txt", "x" * 201)])
         self.assertEqual(code, 1)
-        self.assertIn("FUERA DE LÍMITE", out)
+        self.assertIn("fuera del límite", out)
 
     def test_premium_limit(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -109,7 +109,7 @@ class Stats(unittest.TestCase):
             path = write(tmp, "a.csv", CSV_ES)
             code, out, _ = call(["stats", path, "--followers", "4200"])
             self.assertEqual(code, 0)
-            self.assertIn("TOP POR TASA DE INTERACCIÓN", out)
+            self.assertIn("Mejores por tasa de interacción", out)
             code, out, _ = call(["stats", path, "--json"])
             self.assertEqual(code, 0)
             self.assertIn('"n": 3', out)

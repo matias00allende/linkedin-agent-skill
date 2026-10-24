@@ -15,9 +15,9 @@ def load_agentin():
 
 
 agentin = load_agentin()
-LEX = {"en": agentin.load_lexicon("en"), "es": agentin.load_lexicon("es")}
+LEX = {"es": agentin.load_lexicon("es")}
 
 
 def clean_text(text, lang=None, **kwargs):
-    lang = lang or agentin.detect_language(text)
+    lang = "es"
     return agentin.clean(text, lang, LEX[lang], **kwargs)

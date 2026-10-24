@@ -76,7 +76,7 @@ class Cli(unittest.TestCase):
                 fh.write("I fixed the login bug on Tuesday. It took 3 hours. Dan helped.\n" * 3)
             r = run(["check", a, b])
         self.assertEqual(r.returncode, 0)
-        self.assertIn("->", r.stdout.decode("utf-8"))
+        self.assertIn("Antes", r.stdout.decode("utf-8"))
 
 
 if __name__ == "__main__":

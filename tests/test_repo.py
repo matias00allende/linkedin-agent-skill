@@ -48,12 +48,48 @@ class Structure(unittest.TestCase):
             self.assertEqual(fm["name"], d)
             self.assertTrue(40 < len(fm["description"]) <= 800, f"{d}: descripción de {len(fm['description'])}")
 
-    def test_descriptions_are_bilingual_and_say_they_do_not_publish_or_evade(self):
+    def test_descriptions_are_spanish_pushy_and_say_they_do_not_publish_or_evade(self):
         for d in EXPECTED:
             desc = frontmatter(os.path.join(ROOT, "skills", d, "SKILL.md"))["description"]
-            self.assertIn("English:", desc, d)
+            self.assertNotIn("English", desc, d)
+            self.assertIn("aunque no", desc, f"{d}: la descripción debe ser activa (aunque no digan...)")
+            if d != "ag-voz":
+                self.assertTrue("Nunca " in desc or "No programa" in desc or "Solo trabaja" in desc, d)
         voz = frontmatter(os.path.join(ROOT, "skills", "ag-voz", "SKILL.md"))["description"]
         self.assertIn("evadir detectores", voz)
+
+    def test_plain_text_no_decoration(self):
+        import re as _re
+        files = [os.path.join(ROOT, "skills", d, "SKILL.md") for d in EXPECTED]
+        files += [os.path.join(ROOT, "README.md"), os.path.join(ROOT, "CONTRIBUTING.md"),
+                  os.path.join(ROOT, "templates", "voz.md"),
+                  os.path.join(ROOT, "skills", "ag-voz", "references", "criterio.md")]
+        emoji = _re.compile("[\U0001f000-\U0001faff\u2600-\u27bf\u2b00-\u2bff]")
+        for path in files:
+            text = read(path)
+            self.assertNotIn("**", text, path)
+            self.assertNotIn("|---", text, path)
+            self.assertNotIn("| ---", text, path)
+            self.assertIsNone(emoji.search(text), path)
+            self.assertNotIn("\u00b7", text.replace("[LinkedIn]", ""), path) if path.endswith("SKILL.md") else None
+
+    def test_everything_user_facing_is_spanish_only(self):
+        for path in repo_files():
+            if path.endswith((".md", ".json")) and "CHANGELOG" not in path:
+                low = read(path).lower()
+                for w in (" the ", " and ", " with ", " your "):
+                    self.assertNotIn(w, low, f"{path}: texto en inglés ({w.strip()})")
+
+    def test_skills_define_the_response_format(self):
+        for d in EXPECTED:
+            if d != "ag-voz":
+                self.assertIn("Formato de la respuesta", read(os.path.join(ROOT, "skills", d, "SKILL.md")), d)
+
+    def test_criterio_exists_and_skills_point_to_it(self):
+        self.assertTrue(os.path.isfile(os.path.join(ROOT, "skills", "ag-voz", "references", "criterio.md")))
+        for d in EXPECTED:
+            if d != "ag-voz":
+                self.assertIn("references/criterio.md", read(os.path.join(ROOT, "skills", d, "SKILL.md")), d)
 
     def test_every_skill_has_the_common_rules_or_policy(self):
         for d in EXPECTED:
@@ -79,12 +115,12 @@ class Structure(unittest.TestCase):
         self.assertEqual([h["id"] for h in formulas["hooks"]], list(range(1, 22)))
         for h in formulas["hooks"]:
             for field in ("name", "template", "example", "use", "trap"):
-                self.assertTrue(h[field]["es"].strip() and h[field]["en"].strip(), f"{h['id']}.{field}")
-            self.assertNotIn("\\n", h["template"]["es"] + h["example"]["es"])
+                self.assertTrue(h[field].strip(), f"{h['id']}.{field}")
+            self.assertNotIn("\\n", h["template"] + h["example"])
         rubric = json.loads(read(os.path.join(ROOT, "skills", "ag-profile", "rubric.json")))
         self.assertEqual(sum(i["points"] for i in rubric["items"]), 100)
         self.assertEqual(len(rubric["items"]), 12)
-        for name in ("limits.json", "lexicon_es.json", "lexicon_en.json"):
+        for name in ("limits.json", "lexicon_es.json"):
             json.loads(read(os.path.join(DATA, name)))
         plugin = json.loads(read(os.path.join(ROOT, ".claude-plugin", "plugin.json")))
         market = json.loads(read(os.path.join(ROOT, ".claude-plugin", "marketplace.json")))

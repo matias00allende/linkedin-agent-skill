@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "agentin",
-  "description": "AgentIn: skills de Claude para contenido de LinkedIn en español (Chile) e inglés",
+  "description": "AgentIn: skills de Claude para contenido de LinkedIn en español de Chile",
   "owner": {
     "name": "Matías Allende",
     "url": "https://github.com/matias00allende"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "agentin",
-      "description": "Once skills para redactar y revisar contenido de LinkedIn, con un limpiador de borradores local. Español (Chile) e inglés. No publica nada por ti.",
+      "description": "Once skills para redactar y revisar contenido de LinkedIn, con un limpiador de borradores local. Español de Chile. No publica nada por ti.",
       "source": "./",
       "category": "productivity",
       "homepage": "https://github.com/matias00allende/agentin"
