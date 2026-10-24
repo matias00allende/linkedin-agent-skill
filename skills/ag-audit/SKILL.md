@@ -33,7 +33,7 @@ Pregunta cuántos seguidores tiene y en qué fecha, si quiere las impresiones po
 
 ## Métricas
 
-Las impresiones brutas son el número menos útil, porque dependen de cuánta gente ya te sigue. Calcula con el script, no a mano:
+Las impresiones brutas no se interpretan solas, porque dependen del tamaño de la audiencia; el objetivo de la persona define qué resultado importa (alcance, conversaciones útiles, contactos, consultas). Calcula con el script, no a mano:
 
 ```
 python -I "${CLAUDE_SKILL_DIR}/../ag-voz/scripts/agentin.py" stats ~/.claude/agentin/tmp/CARPETA/analitica.csv

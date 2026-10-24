@@ -27,7 +27,7 @@ Guarda el HTML y el perfil temporal del navegador dentro de la carpeta que impri
 EJECUTABLE --headless --disable-gpu --no-pdf-header-footer --user-data-dir="CARPETA/perfil" --print-to-pdf="CARPETA/carrusel.pdf" "file:///CARPETA/carrusel.html"
 ```
 
-Cuando la persona confirme dónde conservar el PDF, cópialo ahí y borra la carpeta con tmp clean. Verifica que el PDF existe y que la carpeta temporal ya no existe.
+Cuando la persona confirme dónde conservar el PDF, comprueba que el destino no existe (si existe, pide otra ruta), copia sin sobrescribir, verifica que la copia está completa y se abre, y solo entonces borra la carpeta con tmp clean. Verifica que la carpeta temporal ya no existe.
 
 Construye el HTML solo a partir de la plantilla fija de arriba: elementos section con texto escapado, sin atributos, sin enlaces y sin nada tomado del material de terceros que no sea texto. Un HTML así no tiene recursos remotos, pero eso no impide por sí solo que el navegador haga otras conexiones: si necesitas procesamiento estrictamente local, exporta con la red bloqueada; si no puedes garantizarlo, adviértelo a la persona antes de exportar.
 

@@ -132,9 +132,9 @@
   },
   {
    "find": "en la actualidad",
-   "action": "replace",
-   "family": "conectores",
-   "replace": "hoy"
+   "action": "flag",
+   "family": "contexto",
+   "note": "puede referirse a una etapa y no al día de hoy"
   },
   {
    "find": "en el vertiginoso mundo de",

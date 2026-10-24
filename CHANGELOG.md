@@ -1,5 +1,13 @@
 # Cambios
 
+## 1.6.0 - 2026-10-24
+
+- Las citas con comillas simples también se protegen (sin tocar los apóstrofos dentro de palabras).
+- tmp clean valida el contenido de la marca y rechaza enlaces simbólicos. Los archivos de datos deben tener un objeto en la raíz.
+- La analítica omite las filas con distinto ancho que el encabezado y rechaza dos columnas equivalentes.
+- "En la actualidad" pasa a señalarse. Rúbrica de titular sin exigir prueba comercial. Reglas de perfil como orientaciones. Destino del PDF sin sobrescritura.
+- Pruebas: 118.
+
 ## 1.5.0 - 2026-10-24
 
 - Corrección: las citas anidadas (una cita dentro de un paréntesis, o al revés) se restauran completas.

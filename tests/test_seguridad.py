@@ -164,3 +164,40 @@ class RondaSeis(unittest.TestCase):
             with open(txt, "w", encoding="utf-8") as fh:
                 fh.write("hola")
             self.assertEqual(agentin.main(["clean", txt, "--lexicon", bad]), 2)
+
+
+class RondaSiete(unittest.TestCase):
+    def test_single_quoted_citations_are_protected_but_apostrophes_are_not(self):
+        text = "Dijo 'utilizamos esto' y luego utilizamos otra cosa."
+        self.assertEqual(clean_text(text)[0], "Dijo 'utilizamos esto' y luego usamos otra cosa.\n")
+
+    def test_csv_rows_with_wrong_width_are_skipped_with_a_warning(self):
+        rows, warnings = agentin.parse_analytics("Impresiones,Reacciones\n1000,10\n2000,20,99\n")
+        self.assertEqual(len(rows), 1)
+        self.assertIn("ambigua", " ".join(warnings))
+
+    def test_duplicate_equivalent_headers_are_an_error(self):
+        with self.assertRaises(agentin.UserError):
+            agentin.parse_analytics("Impresiones,Reacciones,Reacciones totales\n1000,10,12\n")
+
+    def test_json_root_must_be_an_object(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = os.path.join(tmp, "l.json")
+            with open(bad, "w", encoding="utf-8") as fh:
+                fh.write("[]")
+            txt = os.path.join(tmp, "a.txt")
+            with open(txt, "w", encoding="utf-8") as fh:
+                fh.write("hola")
+            self.assertEqual(agentin.main(["limits", "--kind", "post", txt, "--limits-file", bad]), 2)
+
+    def test_tmp_clean_rejects_a_forged_marker(self):
+        env = {k: v for k, v in os.environ.items() if k not in ("PYTHONUTF8", "PYTHONIOENCODING")}
+        with tempfile.TemporaryDirectory() as home:
+            env["AGENTIN_HOME"] = home
+            fake = os.path.join(home, "tmp", "falsa")
+            os.makedirs(fake)
+            with open(os.path.join(fake, ".agentin-tmp"), "w", encoding="utf-8") as fh:
+                fh.write("otra cosa")
+            r = subprocess.run([sys.executable, "-I", SCRIPT, "tmp", "clean", fake], capture_output=True, env=env, timeout=60)
+            self.assertEqual(r.returncode, 2)
+            self.assertTrue(os.path.isdir(fake))

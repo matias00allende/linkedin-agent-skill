@@ -34,7 +34,7 @@ import tempfile
 import time
 import unicodedata
 
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -95,9 +95,14 @@ def load_json(name: str, path: str | None = None) -> dict:
     target = path or os.path.join(DATA, name)
     try:
         with open(target, encoding="utf-8") as fh:
-            return json.load(fh)
+            data = json.load(fh)
+        if not isinstance(data, dict):
+            raise UserError(f"{target} debe contener un objeto JSON en la raíz")
+        return data
     except FileNotFoundError:
         raise UserError(f"falta el archivo de datos: {target}")
+    except OSError as exc:
+        raise UserError(f"no se pudo leer {target}: {exc.strerror or exc}")
     except json.JSONDecodeError as exc:
         raise UserError(f"JSON inválido en {target}: {exc}")
 
@@ -299,7 +304,7 @@ def restore(text: str, found: list[str], marker: str) -> str:
     return text
 
 
-_QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"\u00ab[^\u00bb]*\u00bb"), re.compile(r"\([^)]*\)")]
+_QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"(?<![\w])'[^'\n]{1,300}'(?![\w])"), re.compile(r"\u00ab[^\u00bb]*\u00bb"), re.compile(r"\([^)]*\)")]
 
 
 def protect_quotes(text: str) -> tuple[str, list[str], str]:
@@ -803,7 +808,9 @@ def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
     for i, h in enumerate(header):
         norm = _norm_header(h)
         for key, names in _ALIASES.items():
-            if norm in {_norm_header(n) for n in names} and key not in index:
+            if norm in {_norm_header(n) for n in names}:
+                if key in index:
+                    raise UserError(f"el CSV tiene dos columnas equivalentes para '{key}': {header[index[key]]!r} y {h!r}. Deje solo una.")
                 index[key] = i
     ambiguous = [h for h in header if _norm_header(h) in ("views", "vistas", "visualizaciones")]
     if "impressions" not in index and ambiguous:
@@ -815,6 +822,9 @@ def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
     out, warnings = [], []
     for n, row in enumerate(rows[1:], start=2):
         if not any(c.strip() for c in row):
+            continue
+        if len(row) != len(header):
+            warnings.append(f"fila {n}: tiene {len(row)} columnas y el encabezado {len(header)}; omitida por ser ambigua")
             continue
 
         def get(key: str) -> str:
@@ -963,8 +973,14 @@ def cmd_tmp(args: argparse.Namespace) -> int:
     real = os.path.realpath(args.path)
     if os.path.dirname(real) != os.path.realpath(root):
         raise UserError(f"solo se borran carpetas creadas con 'tmp new' directamente dentro de {root}")
-    if not os.path.isfile(os.path.join(real, TMP_MARKER)):
-        raise UserError("esa carpeta no tiene la marca de tmp new; no se borra")
+    marker_path = os.path.join(real, TMP_MARKER)
+    try:
+        valid = (os.path.isfile(marker_path) and not os.path.islink(marker_path) and not os.path.islink(args.path)
+                 and open(marker_path, encoding="utf-8").read() == "agentin\n")
+    except OSError:
+        valid = False
+    if not valid:
+        raise UserError("esa carpeta no tiene la marca válida de tmp new; no se borra")
     remove_tree(real)
     if os.path.exists(real):
         print(f"no se pudo borrar completamente: {real}. Puede eliminar a mano solo esa carpeta.", file=sys.stderr)

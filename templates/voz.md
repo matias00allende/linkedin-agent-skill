@@ -2,7 +2,7 @@
 
 Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Las skills que redactan lo usan cuando existe. Las salidas de AgentIn no llevan emojis, así que no hay una preferencia al respecto.
 
-Si prefieres no llenarlo a mano, pega tres posts tuyos y pide que lo escriba a partir de ellos. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
+Si prefieres no llenarlo a mano, pega tres publicaciones tuyas y pide que lo escriba a partir de ellos. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
 
 ## Quién soy
 
@@ -13,7 +13,7 @@ Si prefieres no llenarlo a mano, pega tres posts tuyos y pide que lo escriba a p
 
 ## Cómo suena mi voz
 
-- Tres posts míos que suenen lo más parecido a mí:
+- Tres publicaciones mías que suenen lo más parecido a mí:
 - Palabras que uso de verdad:
 - Palabras que nunca usaría:
 - Largo de las oraciones (cortas, mezcladas o largas):
@@ -22,7 +22,7 @@ Si prefieres no llenarlo a mano, pega tres posts tuyos y pide que lo escriba a p
 
 ## Mis posturas
 
-De tres a cinco cosas que creo y que parte de mi audiencia no comparte. Aquí nacen los buenos posts.
+De tres a cinco convicciones, criterios o matices que guían lo que publico, compartan o no mi audiencia. Aquí nacen las buenas publicaciones.
 
 1.
 2.

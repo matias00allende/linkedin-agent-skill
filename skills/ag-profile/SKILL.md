@@ -21,7 +21,7 @@ Sigue criterio.md: el puntaje por ítem y el total como lista con guion, luego l
 
 ## Entrada
 
-Pide titular, acerca de, cargo actual y los dos anteriores, y si tiene banner y destacados. Una captura de la parte superior basta para una primera pasada. Confirma el rol y el objetivo profesional de la persona (por ejemplo cargo directivo, búsqueda de empleo, especialista sin oferta de servicios) porque la estructura depende de eso. Lo que no puedas observar, márcalo como no observado y no lo trates como una falla.
+Revisa lo que la persona ya entregó y pide, solo si falta, titular, acerca de, cargo actual y los dos anteriores, y si tiene banner y destacados. Una captura de la parte superior basta para una primera pasada. Confirma el rol y el objetivo profesional de la persona (por ejemplo cargo directivo, búsqueda de empleo, especialista sin oferta de servicios) porque la estructura depende de eso. Lo que no puedas observar, márcalo como no observado y no lo trates como una falla.
 
 ## Puntuar
 
@@ -39,9 +39,9 @@ python -I "${CLAUDE_SKILL_DIR}/../ag-voz/scripts/agentin.py" limits --kind headl
 
 Usa python en Windows y python3 en macOS y Linux. CARPETA es la ruta que imprime el comando tmp new de agentin.py (carpeta única con permisos restrictivos); al terminar se borra con tmp clean, como indica criterio.md.
 
-2. Acerca de, dos primeras líneas: qué haces y qué cambia para quien te lee. Sin "apasionado", sin tercera persona, sin partir con tu nombre.
+2. Acerca de, dos primeras líneas: qué haces y qué cambia para quien te lee. Evita "apasionado" y las fórmulas vacías; la tercera persona o partir por el nombre pueden ser válidos en un perfil institucional.
 3. Acerca de, cuerpo: el problema que atiendes, cómo lo haces, una prueba y el siguiente paso si corresponde. Bajo 1.400 caracteres.
-4. Destacados: tu mejor publicación, un recurso que pruebe lo que haces y una forma de contacto.
+4. Destacados: los que sirvan al objetivo, por ejemplo tu mejor publicación, un recurso que pruebe lo que haces o una forma de contacto.
 5. Experiencia: una línea de alcance y los resultados o responsabilidades verificables que correspondan. La experiencia antigua se resume según su relevancia para el objetivo, no por un corte de años: en un rol directivo puede ser decisiva.
 6. Banner: una oración de posicionamiento y una forma de contacto.
 

@@ -21,7 +21,7 @@ Sigue criterio.md: la salida acordada (calendario por día, cartera de temas o c
 
 ## Entrada
 
-Revisa siempre el contexto vigente, aunque existan voz.md y log.md: léelos para no repetir temas de las últimas dos semanas, pero pregunta lo que haya cambiado. Pide, en una sola consulta:
+Revisa siempre el contexto vigente, aunque existan voz.md y log.md: léelos para no repetir temas de las últimas dos semanas, pero pregunta lo que haya cambiado. Revisa lo aportado y pregunta, en una sola consulta, solo lo crítico que falte:
 
 1. Qué hace la persona y para quién, y su objetivo actual.
 2. Cuánto tiempo real tiene por semana.
