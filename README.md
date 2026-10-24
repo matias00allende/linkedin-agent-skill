@@ -8,17 +8,17 @@ No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titula
 
 ## Qué hace
 
-- /ag-post: una idea o experiencia a un post, con tres ganchos entre 21 fórmulas y un texto listo para copiar.
-- /ag-comment: comentarios para posts de otras personas, de nueve tipos.
-- /ag-reply: respuestas a los comentarios de tu propio post, ordenadas por valor.
+- /ag-post: una idea o experiencia a una publicación, con tres ganchos entre 21 fórmulas y un texto listo para copiar.
+- /ag-comment: comentarios para publicaciones de otras personas, de nueve tipos.
+- /ag-reply: respuestas a los comentarios de tu propia publicación, ordenadas por valor.
 - /ag-profile: puntúa tu perfil sobre 100 con una rúbrica de 12 ítems y reescribe en orden de impacto.
 - /ag-plan: la semana de contenido y la lista de interacción.
 - /ag-voz: limpieza, revisión de estilo y conteo de caracteres de un borrador.
 - /ag-carousel: texto de un carrusel y su PDF.
-- /ag-repurpose: un contenido largo propio a una semana de posts.
+- /ag-repurpose: un contenido largo propio a publicaciones que se sostienen solas.
 - /ag-dm: nota de invitación, primer mensaje y dos seguimientos.
-- /ag-inbox: ordena la bandeja en oportunidades, reclutadores, pares, pedidos y spam.
-- /ag-audit: qué funcionó en lo ya publicado, con métricas calculadas por script desde un CSV.
+- /ag-inbox: ordena los mensajes recibidos en oportunidades, reclutadores, pares, pedidos y spam.
+- /ag-audit: qué patrones se asocian a mejores resultados en lo ya publicado, con métricas calculadas por script desde un CSV.
 
 Instaladas como plugin, los comandos llevan prefijo: /agentin:ag-post.
 
@@ -46,7 +46,7 @@ Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ de
 /plugin install agentin@agentin
 ```
 
-Luego dedica diez minutos a templates/voz.md: cópialo a ~/.claude/agentin/voz.md y complétalo, o pega tres posts tuyos y pide que lo escriba a partir de ellos. Sin ese archivo, todo sale con una voz promedio.
+Luego dedica diez minutos a templates/voz.md: cópialo a ~/.claude/agentin/voz.md y complétalo, o pega unas publicaciones tuyas y pide que lo escriba a partir de ellos. Sin ese archivo, todo sale con una voz promedio.
 
 Requisitos: Claude Code y Python 3.9 o superior (python en Windows, python3 en macOS y Linux). Probado localmente en Python 3.14; el repositorio trae integración continua para Linux, Windows y macOS.
 

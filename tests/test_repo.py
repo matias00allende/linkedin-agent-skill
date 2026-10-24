@@ -140,7 +140,7 @@ class Structure(unittest.TestCase):
 
     def test_invite_example_length_claim_is_true(self):
         text = read(os.path.join(ROOT, "skills", "ag-dm", "SKILL.md"))
-        m = re.search(r"\((\d+) caracteres, contados[^)]*\):\n\n```\n(.*?)\n```", text, re.S)
+        m = re.search(r"\((\d+) caracteres, contados[^)]*\):\n\n(.*?)\n\n", text, re.S)
         self.assertIsNotNone(m)
         self.assertEqual(int(m.group(1)), len(m.group(2)))
 
