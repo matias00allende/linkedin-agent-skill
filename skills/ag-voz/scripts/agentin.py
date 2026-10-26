@@ -125,7 +125,7 @@ def load_json(name: str, path: str | None = None) -> dict:
         raise UserError(f"falta el archivo de datos: {target}")
     except OSError as exc:
         raise UserError(f"no se pudo leer {target}: {exc.strerror or exc}")
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise UserError(f"JSON inválido en {target}: {exc}")
 
 
@@ -328,7 +328,7 @@ def restore(text: str, found: list[str], marker: str) -> str:
     return text
 
 
-_QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"(?<![\w])'[^'\n]{1,300}'(?![\w])"), re.compile(r"\u00ab[^\u00bb]*\u00bb"), re.compile(r"\([^)]*\)")]
+_QUOTES = [re.compile(r'"[^"]*"'), re.compile(r"(?<![\w])'[^'\n]{1,300}'(?![\w])"), re.compile(r"\u00ab[^\u00bb]*\u00bb")]
 
 
 def protect_quotes(text: str) -> tuple[str, list[str], str]:
@@ -342,7 +342,20 @@ def protect_quotes(text: str) -> tuple[str, list[str], str]:
 
     for rx in _QUOTES:
         text = rx.sub(stash, text)
-    return text, found, marker
+    # Paréntesis: recorrido lineal (un regex con "(" sin cierre sería cuadrático).
+    out: list[str] = []
+    pos = 0
+    while True:
+        i = text.find("(", pos)
+        j = text.find(")", i + 1) if i != -1 else -1
+        if j == -1:
+            out.append(text[pos:])
+            break
+        out.append(text[pos:i])
+        found.append(text[i:j + 1])
+        out.append(f"{marker}{len(found) - 1}{marker}")
+        pos = j + 1
+    return "".join(out), found, marker
 
 
 def pass_typography(text: str) -> tuple[str, list[dict]]:
@@ -458,8 +471,8 @@ def scan_structures(text: str, lex: dict) -> list[dict]:
     for s in lex["structures"]:
         lines = [text.count("\n", 0, m.start()) + 1 for m in s["_rx"].finditer(text)]
         if lines:
-            flags.append({"id": s["id"], "name": s["name"], "count": len(lines),
-                          "lines": sorted(set(lines)), "fix": s["fix"]})
+            flags.append({"id": s["id"], "name": s.get("name", s["id"]), "count": len(lines),
+                          "lines": sorted(set(lines)), "fix": s.get("fix", "")})
     lens = [len(words_of(x)) for x in split_sentences(text)]
     if len(lens) >= 4:
         mean = statistics.mean(lens)
@@ -814,9 +827,9 @@ def parse_count(value: str, column: str, row: int, problems: list) -> int | None
     v = (value or "").strip()
     if v == "":
         return None
-    if re.fullmatch(r"\d+", v):
+    if re.fullmatch(r"\d{1,15}", v):
         return int(v)
-    if re.fullmatch(r"\d{1,3}(?:[.,]\d{3})+", v):
+    if re.fullmatch(r"\d{1,3}(?:[.,]\d{3}){1,4}", v):
         return int(re.sub(r"[.,]", "", v))
     problems.append(f"fila {row}, columna {column}: valor no válido {v!r}; se trata como dato ausente")
     return None

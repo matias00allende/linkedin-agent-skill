@@ -74,7 +74,7 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 
 ## Cumplimiento con LinkedIn
 
-AgentIn no accede a LinkedIn: no usa su API, no raspa páginas, no automatiza el navegador y no guarda sesiones ni claves. Eso reduce el riesgo, pero no certifica cumplimiento: también cuentan el contenido, el destinatario y el uso que le des a lo redactado. Resumen propio, en español, de las páginas oficiales consultadas el 2026-10-26 (consulta las cláusulas en su texto original antes de apoyarte en ellas):
+AgentIn no accede a LinkedIn: no usa su API, no raspa páginas, no automatiza un navegador sobre LinkedIn y no guarda sesiones ni claves. Eso reduce el riesgo, pero no certifica cumplimiento: también cuentan el contenido, el destinatario y el uso que le des a lo redactado. Resumen propio, en español, de las páginas oficiales consultadas el 2026-10-26 (consulta las cláusulas en su texto original antes de apoyarte en ellas):
 
 - Términos de Uso de las APIs, 3.1.26: prohíbe usar el contenido o las APIs para automatizar la publicación en los servicios de LinkedIn. Cláusula 3.1.24: prohíbe acceder, almacenar, mostrar o facilitar la transferencia de contenido de LinkedIn obtenido por raspado, rastreo u otra tecnología fuera de las APIs. Ambas son cláusulas de los términos de las APIs; el Acuerdo de Usuario es otro documento, con su propio alcance.
 - Acuerdo de Usuario, 8.2: prohíbe usar bots u otros métodos automatizados no autorizados para enviar o redirigir mensajes, crear, comentar, dar me gusta, compartir o recompartir publicaciones, o generar interacción inauténtica; también prohíbe software, scripts, robots o extensiones para raspar o copiar los servicios.

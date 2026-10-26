@@ -99,10 +99,6 @@ class SalidaEnEspanol(unittest.TestCase):
         self.assertIn("no existe el archivo", r.stderr.decode("utf-8"))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class Auditoria10(unittest.TestCase):
     def write(self, tmp, name, data):
         path = os.path.join(tmp, name)
@@ -145,3 +141,21 @@ class Auditoria10(unittest.TestCase):
             code, _, err = call(["clean", txt, "--lexicon", lex])
             self.assertEqual(code, 2)
             self.assertIn("estructura", err)
+
+    def test_unclosed_parentheses_are_linear(self):
+        import time
+        start = time.time()
+        _, found, _ = agentin.protect_quotes("(" * 100000)
+        self.assertEqual(found, [])
+        self.assertLess(time.time() - start, 1.0)
+        _, found, _ = agentin.protect_quotes("a (b) c (d\ne) f (")
+        self.assertEqual(found, ["(b)", "(d\ne)"])
+
+    def test_huge_numbers_in_analytics_are_absent_not_a_crash(self):
+        rows, warnings = agentin.parse_analytics("Impresiones,Reacciones\n1000," + "9" * 5000 + "\n")
+        self.assertIsNone(rows[0]["reactions"])
+        self.assertTrue(warnings)
+
+
+if __name__ == "__main__":
+    unittest.main()

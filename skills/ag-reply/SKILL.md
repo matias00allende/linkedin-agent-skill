@@ -53,6 +53,6 @@ Los hechos del ejemplo son ilustrativos; en un caso real los aporta la persona.
 Resumen: 17 comentarios, 1 oportunidad, 3 sustancia, 4 pares, 8 apoyo, 1 ruido.
 
 Oportunidad, Sarah: "tenemos el mismo problema con las cotizaciones".
-Respuesta: Sarah, lo que nos resolvió fue sacar la tabla de precios del documento y enviarla como página aparte. Si te sirve, te paso la plantilla.
+Respuesta: Sarah, {{dato: lo que resolvió el problema, según la experiencia de la persona}}. {{dato: oferta de ayuda, solo si el recurso existe y la persona quiere compartirlo}}
 
 La persona publica a mano: ella pega las respuestas.

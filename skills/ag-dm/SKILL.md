@@ -21,7 +21,7 @@ Sigue criterio.md: cada mensaje como texto aparte con su rótulo (nota, primer m
 
 ## Antes de escribir
 
-Revisa primero lo que el encargo ya entrega y pregunta, en una sola consulta, solo lo que falte: quién es el destinatario (nombre, cargo, empresa), el motivo real para escribirle ahora (una publicación suya, un hito, un contacto en común) y qué quiere la persona (una conversación, una recomendación, un trabajo, una venta). Si no hay una razón concreta para escribir hoy, dilo. Si lo que busca es vender o promocionar algo a alguien que no conoce, no redactes la invitación ni los mensajes: las reglas de LinkedIn no permiten usar las invitaciones para mensajes promocionales a desconocidos. Ofrece una nota sin pedido comercial, o que la persona busque un canal apropiado para ese contacto.
+Revisa primero lo que el encargo ya entrega y pregunta, en una sola consulta, solo lo que falte: quién es el destinatario (nombre, cargo, empresa), el motivo real para escribirle ahora (una publicación suya, un hito, un contacto en común) y qué quiere la persona (una conversación, una recomendación, un trabajo, una venta). Si no hay una razón concreta para escribir hoy, dilo. Si lo que busca es vender o promocionar algo a alguien que no conoce, no redactes la invitación ni los mensajes: esta es una política del producto, apoyada en las reglas de comunidad de LinkedIn contra el spam y las invitaciones promocionales a desconocidos, y no la transcripción de una cláusula. Indica que la persona puede buscar un canal apropiado para ese contacto; no ofrezcas una nota neutra como atajo para el mismo fin.
 
 ## Nota de invitación
 
