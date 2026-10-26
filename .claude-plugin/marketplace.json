@@ -12,7 +12,7 @@
       "description": "Once skills para redactar y revisar contenido de LinkedIn, con un limpiador de borradores local. Español de Chile. No se conecta a LinkedIn: tú publicas a mano.",
       "source": "./",
       "category": "productivity",
-      "homepage": "https://github.com/matias00allende/agentin"
+      "homepage": "https://github.com/matias00allende/linkedin-agent-skill"
     }
   ]
 }

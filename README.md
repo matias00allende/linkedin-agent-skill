@@ -39,8 +39,8 @@ Las publicaciones se basan en experiencias que tú aportas. Los hashtags y las f
 El paquete incluye instrucciones para Claude y un script de Python que se ejecuta en tu equipo. Clona el repositorio y revisa ambos antes de instalarlos, en vez de pedir la instalación directamente desde un enlace.
 
 ```
-git clone https://github.com/matias00allende/agentin.git
-cd agentin
+git clone https://github.com/matias00allende/linkedin-agent-skill.git
+cd linkedin-agent-skill
 python -m unittest discover -s tests
 cp -r skills/ag-* ~/.claude/skills/
 ```
@@ -50,7 +50,7 @@ Antes de copiar, lee el script skills/ag-voz/scripts/agentin.py (solo biblioteca
 Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ del proyecto. Como plugin:
 
 ```
-/plugin marketplace add matias00allende/agentin
+/plugin marketplace add matias00allende/linkedin-agent-skill
 /plugin install agentin@agentin
 ```
 
