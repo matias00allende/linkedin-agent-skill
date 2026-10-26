@@ -137,7 +137,7 @@ Ver CONTRIBUTING.md.
 
 ## Licencia
 
-MIT. Ver LICENSE, que conserva los avisos de copyright exigidos por la licencia.
+Apache License 2.0. Ver LICENSE. El archivo NOTICE conserva el aviso de copyright y la licencia MIT de la obra original de la que parte este proyecto, como exige esa licencia.
 
 ## Autor
 

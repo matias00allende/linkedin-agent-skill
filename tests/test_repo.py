@@ -126,15 +126,17 @@ class Structure(unittest.TestCase):
         market = json.loads(read(os.path.join(ROOT, ".claude-plugin", "marketplace.json")))
         self.assertEqual(plugin["name"], "agentin")
         self.assertEqual(market["plugins"][0]["name"], plugin["name"])
-        self.assertEqual(plugin["license"], "MIT")
+        self.assertEqual(plugin["license"], "Apache-2.0")
 
     def test_license_keeps_the_original_attribution(self):
-        lic = read(os.path.join(ROOT, "LICENSE"))
-        self.assertIn("MIT License", lic)
-        self.assertIn("Jake Schincariol", lic)
+        self.assertIn("Apache License", read(os.path.join(ROOT, "LICENSE")))
+        notice = read(os.path.join(ROOT, "NOTICE"))
+        self.assertIn("MIT License", notice)
+        self.assertIn("Jake Schincariol", notice)
+        self.assertIn("Matías Allende", notice)
 
     def test_required_top_level_files(self):
-        for name in ("README.md", "LICENSE", "CHANGELOG.md", "CONTRIBUTING.md"):
+        for name in ("README.md", "LICENSE", "NOTICE", "CHANGELOG.md", "CONTRIBUTING.md"):
             self.assertTrue(os.path.isfile(os.path.join(ROOT, name)), name)
         self.assertIn("## Autor", read(os.path.join(ROOT, "README.md")))
 

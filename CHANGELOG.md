@@ -1,5 +1,9 @@
 # Cambios
 
+## 1.10.0 - 2026-10-26
+
+- Licencia: pasa de MIT a Apache 2.0. Se agrega NOTICE con el copyright de Matías Allende y la licencia MIT original de Jake Schincariol, que debe conservarse.
+
 ## 1.9.0 - 2026-10-26
 
 Endurecimiento de ag-publish tras la auditoría 9 (68/100, sobre la versión 1.8.0).
