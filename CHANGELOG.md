@@ -2,13 +2,13 @@
 
 ## 2.0.0 - 2026-10-26
 
-Reducción de riesgos frente a los términos de LinkedIn. Cambio incompatible.
+Esta versión retira la publicación mediante la API para reducir riesgos frente a los términos de LinkedIn. Si usabas ag-publish, deja de estar disponible: ahora debes publicar a mano.
 
 - Se retira ag-publish y su script. La cláusula 3.1.26 de los Términos de Uso de las APIs prohíbe usar las APIs para automatizar la publicación y no distingue si una persona confirma cada texto. AgentIn ya no se conecta a LinkedIn: son once skills que redactan y analizan, y la persona publica a mano. La skill retirada queda en el historial (versiones 1.7 a 1.11).
 - Nueva sección Cumplimiento con LinkedIn en el README y en criterio.md, con las cláusulas revisadas (3.1.24, 3.1.26, Acuerdo de Usuario 8.2, software prohibido, políticas de la comunidad).
 - ag-comment: los comentarios en tanda deben responder a cada publicación en concreto, sin interacción artificial.
-- Registro de redacción: base profesional y humana, ajustable por la persona (cambio de 1.11.0, sin publicar aparte).
-- Auditoría 10 (82/100, sobre la 2.0.0) aplicada: la promesa de cumplimiento se presenta como reducción de riesgo y no como certificación; se resume fielmente la cláusula 3.1.24; se agrega una regla de procedencia del material.
+- Tono profesional y humano por defecto, ajustable según lo que pida la persona; el cambio ya estaba documentado en 1.11.0.
+- Documentación: se aclara que el diseño reduce riesgos pero no certifica cumplimiento, se ajusta el resumen de la cláusula 3.1.24 y se añade una regla sobre la procedencia del material. Responde a la auditoría 10 de la versión 2.0.0 (82/100).
 - ag-dm no redacta invitaciones ni mensajes promocionales a desconocidos; los ejemplos de ag-dm y ag-comment se marcan como ficticios o pasan a marcadores.
 - agentin.py: límite de entrada de 2 MB, errores controlados para CSV y léxico incompletos, validación de --omit y --fail-under (0 a 100), escape de controles de terminal en los informes, versión alineada con el paquete.
 - Textos: afirmaciones sin fuente reescritas como criterio; tmp clean describe exactamente su garantía; ag-voz documenta qué protege y qué no.
@@ -17,7 +17,7 @@ Reducción de riesgos frente a los términos de LinkedIn. Cambio incompatible.
 
 ## 1.11.0 - 2026-10-26
 
-- Registro de redacción: la base pasa a ser profesional y humano (hecho concreto primero, primera persona, criterio y duda reales, palabras corrientes, sin aperturas ni cierres de manual). Lo que la persona pide ahora manda sobre su voz.md, y este sobre la base. Formal institucional, cercano, técnico y breve se aplican sin discutirlos.
+- El tono por defecto pasa a ser profesional y humano: prioriza hechos concretos y palabras corrientes, y usa la primera persona cuando corresponde. Expresa el criterio y las dudas que la persona haya compartido, sin aperturas ni cierres de plantilla. Lo que la persona pide en el encargo tiene prioridad sobre su voz.md, y esta sobre el tono por defecto. Si pide un registro institucional, cercano, técnico o breve, se aplica sin discutirlo.
 - Los emojis siguen fuera por defecto, pero se usan si la persona los pide de forma expresa.
 - Regla nueva: no atribuirle a la persona emociones, conocimientos previos ni cargos que no declaró.
 - voz.md incluye el campo "Registro de base".
@@ -31,7 +31,7 @@ Reducción de riesgos frente a los términos de LinkedIn. Cambio incompatible.
 Endurecimiento de ag-publish tras la auditoría 9 (68/100, sobre la versión 1.8.0).
 
 - La confirmación humana ocurre fuera del bloqueo. Después de la espera se revalida todo con la hora actual: duplicados, tope y vista previa.
-- El bloqueo lleva dueño, solo lo borra su dueño y solo se recupera pasados 10 minutos.
+- El bloqueo identifica al proceso que lo creó y solo ese proceso puede borrarlo. La recuperación del bloqueo solo se permite después de 10 minutos.
 - Un error 5xx al publicar o al borrar queda como incierto y bloquea el texto; solo los 4xx liberan la reserva.
 - delete exige la respuesta 204, la cuenta que publicó y el bloqueo.
 - Se retira la vía antigua ugcPosts, que podía publicar con un contrato no verificado.
@@ -83,7 +83,11 @@ Endurecimiento de ag-publish tras la auditoría 9 (68/100, sobre la versión 1.8
 - Las citas y los paréntesis se protegen sin límite de largo. Los reemplazos automáticos quedan solo para equivalencias mecánicas; el resto se señala.
 - La analítica no toma "vistas" ni "visualizaciones" como impresiones: pide confirmar qué mide la columna.
 - El símbolo de prima ya no se convierte. El informe de estilo deja de dar metas numéricas y aclara que es una heurística.
-- Respaldo mínimo breve en cada skill, criterio común con fronteras entre skills y lectura compartida de voz.md, planes y extracciones sin calendario impuesto, rúbrica con condiciones por nivel y cita obligatoria, plantilla de PDF por sistema operativo.
+- Cada skill incluye reglas mínimas para trabajar si no puede leer el criterio común.
+- El criterio común aclara cuándo usar cada skill y cómo consultar voz.md.
+- Los planes y las extracciones ya no imponen un calendario.
+- La rúbrica incluye condiciones por nivel y exige citar el texto evaluado.
+- La plantilla de PDF incorpora instrucciones por sistema operativo.
 - Casos de selección de skills (tests/seleccion.json) con consultas ambiguas, compuestas y fuera de alcance.
 
 ## 1.3.0 - 2026-10-24

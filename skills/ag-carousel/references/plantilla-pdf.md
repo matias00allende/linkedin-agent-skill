@@ -1,6 +1,6 @@
 # Plantilla para exportar el carrusel a PDF
 
-Uso: copia el HTML a una carpeta temporal única (la misma que describe criterio.md), reemplaza cada sección por el texto de una diapositiva ya escapado como texto, y exporta.
+Uso: copia el HTML a una carpeta temporal única, como indica criterio.md. Sustituye el contenido de cada elemento section por el texto de una diapositiva, convirtiendo los caracteres <, > y & en entidades HTML. Luego exporta el archivo a PDF.
 
 ## HTML y CSS base
 

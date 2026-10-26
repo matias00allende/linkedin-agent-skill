@@ -1,34 +1,42 @@
 # AgentIn
 
-Once skills de Claude Code para redactar y revisar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Ninguna skill se conecta a LinkedIn ni usa tus cuentas o claves: trabajan solo con lo que tú pegas, y todo lo que escribes o publicas en LinkedIn lo haces tú, a mano (la exportación a PDF del carrusel usa un navegador local, que podría hacer otras conexiones salvo que bloquees la red; ver la referencia del carrusel).
+AgentIn reúne once skills de Claude Code para redactar y revisar contenido de LinkedIn en español de Chile. Incluye un script que limpia borradores en tu equipo.
 
-Las skills redactan; tú revisas, corriges y publicas a mano. AgentIn no publica, comenta, reacciona ni envía mensajes por ti, a propósito: ver Cumplimiento con LinkedIn.
+Trabaja con el material que tú entregas, sin conectarse a LinkedIn ni usar tus cuentas o claves. Tú revisas los textos y los publicas o envías a mano.
+
+Para exportar carruseles a PDF usa un navegador local. Ese navegador podría hacer otras conexiones si no bloqueas la red; consulta skills/ag-carousel/references/plantilla-pdf.md.
+
+AgentIn tampoco comenta ni reacciona por ti. La sección Cumplimiento con LinkedIn explica estos límites.
 
 No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titulares.
 
 ## Qué hace
 
-- /ag-post: una idea o experiencia a una publicación lista para copiar; ofrece ganchos alternativos entre 21 fórmulas si los pides.
+- /ag-post: convierte una idea o experiencia en una publicación lista para copiar; si lo pides, propone aperturas alternativas a partir de 21 fórmulas.
 - /ag-comment: comentarios para publicaciones de otras personas, de nueve tipos.
-- /ag-reply: respuestas a los comentarios de tu propia publicación, ordenadas por valor.
-- /ag-profile: puntúa tu perfil sobre 100 con una rúbrica de 12 ítems y reescribe en orden de impacto.
-- /ag-plan: el plan de contenido (calendario, cartera de temas o criterios de posicionamiento) y, si lo pides, la lista de interacción.
+- /ag-reply: redacta respuestas a los comentarios de tu propia publicación y las prioriza según su urgencia, aporte y riesgo.
+- /ag-profile: evalúa tu perfil con una rúbrica de 12 ítems y reescribe las secciones que más lo necesitan; el puntaje depende de cuánto del perfil pueda revisar.
+- /ag-plan: define qué publicar y cómo organizarlo, como calendario, lista de temas o criterios de posicionamiento; si lo pides, también propone con quién interactuar.
 - /ag-voz: limpieza, revisión de estilo y conteo de caracteres de un borrador.
-- /ag-carousel: texto de un carrusel y su PDF.
-- /ag-repurpose: un contenido largo propio a publicaciones que se sostienen solas.
-- /ag-dm: nota de invitación, primer mensaje y, si corresponde, seguimientos.
+- /ag-carousel: redacta un carrusel diapositiva por diapositiva y, si apruebas el texto y tienes un navegador compatible, genera el PDF.
+- /ag-repurpose: identifica ideas para publicaciones en un contenido largo tuyo y señala de qué fragmento sale cada una; las redacta cuando lo pides.
+- /ag-dm: redacta la nota de invitación, el primer mensaje y, si corresponde, seguimientos.
 - /ag-inbox: ordena los mensajes recibidos en oportunidades, reclutadores, pares, pedidos y spam.
-- /ag-audit: qué patrones se asocian a mejores resultados en lo ya publicado, con métricas calculadas por script desde un CSV.
+- /ag-audit: analiza tus publicaciones anteriores, calcula métricas a partir de un CSV e identifica patrones asociados a mejores resultados.
 
 Instaladas como plugin, los comandos llevan prefijo: /agentin:ag-post.
 
 ## Criterio de trabajo
 
-Todas las skills siguen references/criterio.md de ag-voz. Antes de redactar fijan objetivo, tipo de salida, quién habla, audiencia, profundidad y restricciones; separan hechos verificados, inferencias y recomendaciones; entregan la pieza final y no un borrador comentado; y tratan cada publicación como una pieza de posicionamiento con riesgo reputacional, basada en experiencias reales que tú aportas. Hashtags y fórmulas de interacción solo si aportan.
+Todas las skills siguen el criterio común de skills/ag-voz/references/criterio.md. Usan tu objetivo, audiencia y preferencias para resolver el encargo, y preguntan solo si falta información esencial.
+
+Al redactar, separan el texto para copiar de las notas. Al analizar o planificar, muestran primero el resultado. Distinguen hechos, inferencias y recomendaciones, y revisan si el contenido podría comprometerte a ti o a tu institución.
+
+Las publicaciones se basan en experiencias que tú aportas. Los hashtags y las fórmulas de interacción se usan solo cuando ayudan al texto.
 
 ## Instalación segura
 
-Son instrucciones que Claude ejecuta y un script de Python que corre en tu equipo. Revísalas antes de instalarlas. Clona y lee; no pegues en un chat un enlace con un "instala esto".
+El paquete incluye instrucciones para Claude y un script de Python que se ejecuta en tu equipo. Clona el repositorio y revisa ambos antes de instalarlos, en vez de pedir la instalación directamente desde un enlace.
 
 ```
 git clone https://github.com/matias00allende/agentin.git
@@ -46,7 +54,9 @@ Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ de
 /plugin install agentin@agentin
 ```
 
-Luego dedica diez minutos a templates/voz.md: cópialo a ~/.claude/agentin/voz.md y complétalo, o pega unas publicaciones tuyas y pide que lo escriba a partir de ellos. Sin ese archivo las skills trabajan con las preferencias que declares o con una muestra breve tuya, y el resultado tiende a una voz promedio.
+Luego define tu voz: copia templates/voz.md a ~/.claude/agentin/voz.md y complétalo. También puedes pegar publicaciones tuyas y pedirle a Claude que prepare el archivo a partir de ellas.
+
+Si no creas ese archivo, las skills usarán las preferencias que indiques o una muestra breve de tu escritura. Mientras más contexto entregues, mejor podrán ajustar el tono.
 
 Requisitos: Claude Code y Python 3.9 o superior (python en Windows, python3 en macOS y Linux). Probado localmente en Python 3.14; el repositorio trae integración continua para Linux, Windows y macOS.
 
@@ -62,7 +72,14 @@ python -I skills/ag-voz/scripts/agentin.py stats analitica.csv --followers 4200
 python -I skills/ag-voz/scripts/agentin.py tmp new
 ```
 
-- clean quita caracteres invisibles que se cuelan al copiar y pegar, ordena la tipografía y trata muletillas con un léxico editable. Cada entrada es replace (cambio seguro), delete (se borra solo si el script estima que la oración queda correcta; no entiende el sentido) o flag (solo se señala). Conserva los emoji compuestos de la persona (y los señala) y protege enlaces, hashtags, menciones, código y citas entre comillas o paréntesis de los cambios de vocabulario y tipografía; los caracteres invisibles se quitan en todo el texto, también dentro de ellos, así que revisa el código si importa su forma exacta. No toca los párrafos ni las comas, salvo al convertir una raya en coma o al borrar una muletilla, y reduce tres o más saltos de línea a dos. El borrado de muletillas solo ocurre al comienzo de una oración; revisa siempre el resultado, porque el script no entiende el sentido.
+- clean elimina caracteres invisibles, normaliza la tipografía y revisa muletillas con un léxico editable.
+
+  El léxico usa tres acciones: replace reemplaza una expresión, delete la borra al comienzo de una oración si la comprobación mecánica permite hacerlo y flag solo la señala.
+
+  clean conserva los emojis compuestos y los señala. Protege enlaces, hashtags, menciones, código y citas entre comillas o paréntesis de los cambios de vocabulario y tipografía, pero elimina caracteres invisibles también dentro de ellos. Revisa esos elementos si necesitas conservar su forma exacta.
+
+  Mantiene la separación entre párrafos y reduce tres o más saltos de línea a dos. Solo modifica comas al convertir una raya o borrar una muletilla. Revisa siempre el resultado: el script no interpreta el sentido del texto.
+
 - check entrega un índice de estilo con cinco chequeos y su cobertura. Los que no tienen datos suficientes se marcan como no evaluables. Son heurísticas sin calibración, no una medición de voz ni de autoría.
 - limits cuenta caracteres contra limits.json (valores reportados, no verificados).
 - tmp new crea una carpeta temporal única para los borradores (en Linux y macOS con permisos solo para el usuario; en Windows dependen de tu carpeta de usuario); tmp clean RUTA borra una carpeta marcada por tmp new y comprueba que ya no existe.

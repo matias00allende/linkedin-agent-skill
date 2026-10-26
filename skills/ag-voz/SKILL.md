@@ -1,6 +1,6 @@
 ---
 name: ag-voz
-description: Limpia y revisa un texto ya redactado, sin cambiar su idea, para que suene más a la persona. Quita caracteres invisibles, rayas y comillas curvas, trata muletillas, señala estructuras de plantilla, mide el estilo y cuenta caracteres contra los límites de LinkedIn. Úsala cuando pidan pulir, limpiar, revisar el estilo, quitar muletillas o rayas, contar caracteres, dejar un texto listo para pegar, digan que algo no suena a ellos, o quieran revisar el riesgo reputacional de un borrador o de una afirmación sin reescribirla, aunque no nombren la skill. Para escribir una publicación o cambiar su enfoque o estructura usa ag-post; para el contenido de un titular, ag-profile. No sirve para ocultar autoría ni evadir detectores de IA.
+description: Limpia y revisa un texto ya redactado, sin cambiar su idea, para que suene más a la persona. Elimina caracteres invisibles, normaliza rayas y comillas, revisa muletillas, señala estructuras de plantilla, evalúa rasgos de estilo con reglas orientativas y compara los caracteres con los límites de LinkedIn. Úsala para pulir un texto existente, quitar muletillas o rayas, contar caracteres, dejarlo listo para pegar o cuando digan que no suena a ellos. También sirve para evaluar el estilo o el riesgo reputacional de un borrador o de una afirmación sin reescribirla, aunque no nombren la skill. Para escribir una publicación o cambiar su enfoque o estructura usa ag-post; para el contenido de un titular, ag-profile. No sirve para ocultar autoría ni evadir detectores de IA.
 ---
 
 # ag-voz
@@ -48,7 +48,7 @@ CARPETA se crea con python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" tmp new, 
 - Las citas entre comillas dobles o paréntesis, incluso de varias líneas, no reciben cambios léxicos. Las comillas simples solo protegen citas de una línea de hasta 300 caracteres.
 - Los emoji no se tocan en la limpieza mecánica, pero el informe los señala: por defecto la versión final que AgentIn entrega no lleva emojis decorativos (salvo que la persona los pida), y si quitar uno puede cambiar el significado se pregunta antes.
 
-Lo que clean no arregla se señala en el informe y lo reescribe la persona: "no es solo X, es Y", tríadas de eslogan, preguntas retóricas de una línea, emoji de cohete o fuego, muros de hashtags, cebo de interacción y oraciones de largo uniforme.
+El informe señala lo que clean no corrige. Si el encargo incluye reescritura, corrígelo con una revisión editorial; si pide solo evaluación, descríbelo sin modificar el texto: "no es solo X, es Y", tríadas de eslogan, preguntas retóricas de una línea, emoji de cohete o fuego, muros de hashtags, cebo de interacción y oraciones de largo uniforme.
 
 ## Revisión sin reescritura
 
@@ -56,6 +56,13 @@ Si la persona pide solo evaluar un texto (estilo o riesgo reputacional) sin camb
 
 ## Qué mide check
 
-Cinco chequeos de 0 a 100: ritmo, marcadores numéricos y nombres, muletillas, higiene y marcas de persona. Son heurísticas de estilo sin calibración con un corpus; el informe muestra la cobertura (cuántos chequeos se pudieron calcular), no una confianza estadística. Las marcas de persona no miden semejanza con la voz de nadie. Úsalas para ver qué mejorar, no para sentenciar un texto. Los umbrales son: ritmo necesita al menos 4 oraciones; marcadores numéricos y nombres, y marcas de persona, necesitan al menos 25 palabras; muletillas e higiene se calculan con cualquier texto no vacío. Un chequeo sin datos sale como no evaluable y no entra al promedio. Con menos de 3 chequeos calculables no hay índice global, solo resultados parciales. Si un chequeo no corresponde al tipo de texto (una declaración institucional sin primera persona, por ejemplo), exclúyelo con --omit.
+Cinco chequeos de 0 a 100: ritmo, marcadores numéricos y nombres, muletillas, higiene y marcas de persona. Son heurísticas de estilo sin calibración con un corpus; el informe muestra la cobertura (cuántos chequeos se pudieron calcular), no una confianza estadística. Las marcas de persona no miden semejanza con la voz de nadie. Úsalas para ver qué mejorar, no para sentenciar un texto. Datos mínimos para cada chequeo:
+
+- Ritmo: 4 oraciones.
+- Marcadores numéricos y nombres: 25 palabras.
+- Marcas de persona: 25 palabras.
+- Muletillas e higiene: cualquier texto no vacío.
+
+Los chequeos sin datos suficientes aparecen como no evaluables y se excluyen del promedio. El índice global se calcula solo si hay al menos 3 chequeos evaluables; de lo contrario, se muestran resultados parciales. Si un chequeo no corresponde al tipo de texto (una declaración institucional sin primera persona, por ejemplo), exclúyelo con --omit.
 
 Un puntaje bajo en marcadores numéricos y nombres o en marcas de persona puede deberse al rol emisor o al tipo de texto (una voz institucional, un procedimiento preciso sin cifras). Revisa si falta evidencia, pero no sugieras agregar cifras o nombres solo para subir el índice, sobre todo si pueden ser confidenciales.

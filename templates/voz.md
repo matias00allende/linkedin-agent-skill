@@ -2,7 +2,7 @@
 
 Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Las skills que redactan lo usan cuando existe. Por defecto las salidas de AgentIn no llevan emojis; si quieres alguno, pídelo en el encargo.
 
-Si prefieres no llenarlo a mano, pega tres publicaciones tuyas y pide que lo escriba a partir de ellos. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
+Si prefieres no completarlo a mano, pega tres publicaciones tuyas y pídele a Claude que prepare el archivo a partir de ellas. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
 
 ## Quién soy
 
@@ -23,7 +23,7 @@ Si prefieres no llenarlo a mano, pega tres publicaciones tuyas y pide que lo esc
 
 ## Mis posturas
 
-De tres a cinco convicciones, criterios o matices que guían lo que publico, compartan o no mi audiencia. Aquí nacen las buenas publicaciones.
+De tres a cinco convicciones, criterios o matices que guían lo que publico, aunque mi audiencia no coincida con ellos. Aquí nacen las buenas publicaciones.
 
 1.
 2.
@@ -37,7 +37,7 @@ De tres a cinco convicciones, criterios o matices que guían lo que publico, com
 
 ## Hechos que sí puedo usar
 
-Cifras, resultados e historias reales que acepto firmar con mi nombre. Las skills nunca inventan una: si una pieza necesita un hecho que no aportaste en esta sección ni en el encargo, preguntará o dejará {{dato: ...}} para que lo completes tú.
+Cifras, resultados e historias reales que acepto publicar con mi nombre. Las skills no inventan estos datos. Si falta un hecho necesario para una pieza y no lo aportaste aquí ni en el encargo, AgentIn te lo preguntará o dejará un marcador {{dato: ...}} para que lo completes.
 
 -
 -
