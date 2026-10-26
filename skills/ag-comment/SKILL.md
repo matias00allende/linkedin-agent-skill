@@ -55,11 +55,11 @@ Los tipos 1 y 6 solo se usan con material que la persona entregó. Si no lo hay,
 
 ## Ejemplo de forma
 
-Los hechos entre llaves los aporta la persona; el ejemplo no los inventa.
+Solo muestra la forma: los hechos, opiniones y vivencias entre llaves los aporta la persona, y el ejemplo no se reutiliza como contenido.
 
 Opción 1, experiencia propia: {{dato: qué probó, cuándo y qué resultó}}. La diferencia no estuvo en {{dato: factor}}.
 
-Opción 2, desacuerdo respetuoso: Coincido en que el currículum distorsiona la señal. Mi duda es si quitarlo resuelve el problema o solo lo traslada a otra etapa. {{dato: opinión propia de la persona sobre qué alternativa funciona}}
+Opción 2, desacuerdo respetuoso: {{dato: en qué coincide la persona con el planteamiento}}. Mi duda es {{dato: objeción propia, en una oración}}. {{dato: opinión propia de la persona sobre qué alternativa funciona}}
 
 Las dos opciones contienen marcadores pendientes: avisa que no están listas para publicar hasta completarlos.
 

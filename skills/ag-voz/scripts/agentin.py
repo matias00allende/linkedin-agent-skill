@@ -34,7 +34,7 @@ import tempfile
 import time
 import unicodedata
 
-__version__ = "1.6.0"
+__version__ = "2.0.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(os.path.dirname(HERE), "data")
@@ -59,20 +59,42 @@ def setup_stdio() -> None:
             pass
 
 
+MAX_INPUT = 2_000_000  # bytes; un borrador o un CSV de analitica caben de sobra
+CHECK_NAMES = ("rhythm", "specificity", "filler", "hygiene", "voice")
+_CTRL = re.compile("[\x00-\x08\x0b-\x1f\x7f-\x9f]")
+
+
+def safe_text(s: str) -> str:
+    """Escapa controles de terminal en datos de terceros antes de imprimirlos."""
+    return _CTRL.sub(lambda m: f"\\x{ord(m.group(0)):02x}", s)
+
+
+def _percent(value: str) -> float:
+    try:
+        x = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{value!r} no es un número")
+    if not 0 <= x <= 100:
+        raise argparse.ArgumentTypeError("debe estar entre 0 y 100")
+    return x
+
+
 def read_text(path: str) -> str:
     """Lee un archivo (o stdin con '-') como UTF-8 y normaliza los saltos de linea."""
     if path == "-":
-        raw = sys.stdin.buffer.read()
+        raw = sys.stdin.buffer.read(MAX_INPUT + 1)
     else:
         try:
             with open(path, "rb") as fh:
-                raw = fh.read()
+                raw = fh.read(MAX_INPUT + 1)
         except FileNotFoundError:
             raise UserError(f"no existe el archivo: {path}")
         except IsADirectoryError:
             raise UserError(f"es una carpeta, no un archivo: {path}")
         except OSError as exc:
             raise UserError(f"no se pudo leer {path}: {exc.strerror or exc}")
+    if len(raw) > MAX_INPUT:
+        raise UserError(f"{path if path != '-' else 'la entrada'} supera {MAX_INPUT // 1_000_000} MB; divídalo en partes")
     try:
         text = raw.decode("utf-8-sig")
     except UnicodeDecodeError:
@@ -153,6 +175,8 @@ def load_lexicon(lang: str, path: str | None = None) -> dict:
         e["_rx"] = re.compile(phrase_pattern(e["find"]), re.IGNORECASE)
     lex["entries"] = entries
     for s in lex["structures"]:
+        if not isinstance(s, dict) or not isinstance(s.get("regex"), str) or not isinstance(s.get("id"), str):
+            raise UserError("el léxico tiene una estructura sin los campos de texto 'id' y 'regex'")
         try:
             s["_rx"] = re.compile(s["regex"], re.MULTILINE)
         except re.error as exc:
@@ -688,12 +712,16 @@ def render_check(res: dict, label: str | None, out) -> None:
 
 
 def cmd_check(args: argparse.Namespace) -> int:
+    omit = tuple(x for x in (args.omit or "").split(",") if x)
+    unknown = [x for x in omit if x not in CHECK_NAMES]
+    if unknown:
+        raise UserError(f"--omit no reconoce {', '.join(unknown)}; válidos: {', '.join(CHECK_NAMES)}")
     texts = [(p, read_text(p)) for p in [args.input] + ([args.compare] if args.compare else [])]
     payload, results = [], []
     for name, text in texts:
         lang = "es"
         lex = load_lexicon(lang, args.lexicon)
-        res = run_checks(text, lex, lang, tuple(x for x in (args.omit or "").split(",") if x))
+        res = run_checks(text, lex, lang, omit)
         results.append((name, res))
         payload.append({
             "source": name, "language": lang,
@@ -802,7 +830,10 @@ def parse_analytics(text: str) -> tuple[list[dict], list[str]]:
         dialect = csv.Sniffer().sniff(sample, delimiters=",;\t")
     except csv.Error:
         dialect = csv.excel
-    rows = list(csv.reader(io.StringIO(text), dialect))
+    try:
+        rows = list(csv.reader(io.StringIO(text), dialect))
+    except csv.Error as exc:
+        raise UserError(f"el CSV no se pudo leer: {exc}")
     header = rows[0]
     index: dict[str, int] = {}
     for i, h in enumerate(header):
@@ -901,7 +932,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
         cr = f"{r['comment_ratio']:.2f}".replace(".", ",") if r["comment_ratio"] is not None else "no calculable"
         imp = f"{r['impressions']:,}".replace(",", ".")
         return (f"  {pct(r['engagement_rate'])}, {imp} impresiones, comentarios por reacción {cr}{reach}. "
-                f"{r['date']} {r['text']}".rstrip())
+                + safe_text(f"{r['date']} {r['text']}").rstrip())
 
     cov = ", ".join(stats["coverage"])
     label = "Tasa de interacción" if stats["complete_rate"] else "Tasa parcial de interacción (falta algún componente)"
@@ -922,7 +953,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
     if stats["by_hook"]:
         print("Por fórmula de gancho:")
         for g in stats["by_hook"]:
-            print(f"  {pct(g['mean_engagement_rate'])}, {g['n']} publicaciones, fórmula {g['hook']}")
+            print(f"  {pct(g['mean_engagement_rate'])}, {g['n']} publicaciones, fórmula {safe_text(g['hook'])}")
     for w in warnings:
         print(f"Aviso: {w}", file=sys.stderr)
     return 0
@@ -1034,7 +1065,7 @@ def build_parser() -> argparse.ArgumentParser:
     k.add_argument("compare", nargs="?")
     k.add_argument("--json", action="store_true")
     k.add_argument("--lexicon")
-    k.add_argument("--fail-under", type=float)
+    k.add_argument("--fail-under", type=_percent)
     k.add_argument("--omit")
     k.set_defaults(fn=cmd_check)
 

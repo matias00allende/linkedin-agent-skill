@@ -101,3 +101,47 @@ class SalidaEnEspanol(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Auditoria10(unittest.TestCase):
+    def write(self, tmp, name, data):
+        path = os.path.join(tmp, name)
+        with open(path, "wb") as fh:
+            fh.write(data)
+        return path
+
+    def test_omit_rejects_unknown_check_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.write(tmp, "t.txt", "Una frase de prueba con varias palabras para medir.".encode())
+            code, _, err = call(["check", path, "--omit", "specificty"])
+            self.assertEqual(code, 2)
+            self.assertIn("--omit no reconoce", err)
+
+    def test_fail_under_must_be_a_finite_percentage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.write(tmp, "t.txt", b"Hola mundo y adios.")
+            for bad in ("nan", "inf", "-1", "101", "x"):
+                code, _, _ = call(["check", path, "--fail-under", bad])
+                self.assertEqual(code, 2, bad)
+
+    def test_oversized_input_is_a_controlled_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self.write(tmp, "grande.txt", b"a" * (agentin.MAX_INPUT + 1))
+            code, _, err = call(["check", path])
+            self.assertEqual(code, 2)
+            self.assertIn("supera", err)
+
+    def test_terminal_controls_in_analytics_are_escaped(self):
+        self.assertEqual(agentin.safe_text("a\x1b[31mb"), "a\\x1b[31mb")
+        self.assertEqual(agentin.safe_text("línea\ncorta\t"), "línea\ncorta\t")
+
+    def test_lexicon_structure_without_regex_is_a_controlled_error(self):
+        import json
+        with tempfile.TemporaryDirectory() as tmp:
+            lex = os.path.join(tmp, "lex.json")
+            with open(lex, "w", encoding="utf-8") as fh:
+                json.dump({"entries": [], "structures": [{"id": "x"}]}, fh)
+            txt = self.write(tmp, "t.txt", b"Hola mundo.")
+            code, _, err = call(["clean", txt, "--lexicon", lex])
+            self.assertEqual(code, 2)
+            self.assertIn("estructura", err)

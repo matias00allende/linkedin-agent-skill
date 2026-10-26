@@ -5,7 +5,7 @@ description: Ordena y ayuda a contestar los mensajes privados que la persona rec
 
 # ag-inbox
 
-La mayoría de las bandejas es ruido, y el costo es que lo importante queda sin respuesta una semana. Esta skill separa y solo escribe lo que vale la pena.
+Una bandeja con mucho ruido tiene un costo: lo importante puede quedar sin respuesta una semana. Esta skill separa y solo escribe lo que vale la pena.
 
 ## Reglas comunes de AgentIn
 
@@ -39,7 +39,7 @@ Un mensaje puede ser relevante y venir de una secuencia automática, o ser spam 
 
 ## Respuestas
 
-- Oportunidad: responde la pregunta real. La oferta es una oración al final. Si no calza, dilo y apunta a un lugar útil.
+- Oportunidad: responde la pregunta real. Si corresponde, la oferta va en una oración al final. Si no calza, dilo y apunta a un lugar útil.
 - Reclutador: si le interesa, pregunta lo que el mensaje omitió: renta, nivel y modalidad. Si no, una línea cortés.
 - Pedido: según lo que decida la persona, acepta con un alcance claro o declina en una oración amable.
 - Los rechazos son cortos, cálidos y definitivos.

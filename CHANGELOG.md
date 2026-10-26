@@ -4,11 +4,15 @@
 
 Cumplimiento con los términos de LinkedIn. Cambio incompatible.
 
-- Se retira ag-publish y su script. La cláusula 3.1.26 de los Términos de Uso de las APIs prohíbe usar las APIs para automatizar la publicación y no distingue si una persona confirma cada texto. AgentIn ya no se conecta a LinkedIn: son once skills que redactan y analizan, y la persona publica a mano. La skill retirada queda en el historial (versiones 1.8 a 1.11).
+- Se retira ag-publish y su script. La cláusula 3.1.26 de los Términos de Uso de las APIs prohíbe usar las APIs para automatizar la publicación y no distingue si una persona confirma cada texto. AgentIn ya no se conecta a LinkedIn: son once skills que redactan y analizan, y la persona publica a mano. La skill retirada queda en el historial (versiones 1.7 a 1.11).
 - Nueva sección Cumplimiento con LinkedIn en el README y en criterio.md, con las cláusulas revisadas (3.1.24, 3.1.26, Acuerdo de Usuario 8.2, software prohibido, políticas de la comunidad).
 - ag-comment: los comentarios en tanda deben responder a cada publicación en concreto, sin interacción artificial.
 - Registro de redacción: base profesional y humana, ajustable por la persona (cambio de 1.11.0, sin publicar aparte).
-- Pruebas: 119.
+- Auditoría 10 (82/100, sobre la 2.0.0) aplicada: la promesa de cumplimiento se presenta como reducción de riesgo y no como certificación; se resume fielmente la cláusula 3.1.24; se agrega una regla de procedencia del material.
+- ag-dm no redacta invitaciones ni mensajes promocionales a desconocidos; los ejemplos de ag-dm y ag-comment se marcan como ficticios o pasan a marcadores.
+- agentin.py: límite de entrada de 2 MB, errores controlados para CSV y léxico incompletos, validación de --omit y --fail-under (0 a 100), escape de controles de terminal en los informes, versión alineada con el paquete.
+- Textos: afirmaciones sin fuente reescritas como criterio; tmp clean describe exactamente su garantía; ag-voz documenta qué protege y qué no.
+- Pruebas: 124.
 
 ## 1.11.0 - 2026-10-26
 

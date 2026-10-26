@@ -5,7 +5,7 @@ description: Arma un carrusel (documento en PDF) para publicar en LinkedIn. Entr
 
 # ag-carousel
 
-Un carrusel sirve cuando la idea tiene secuencia: pasos, un marco con partes, un antes y después con progresión. Partir una sola afirmación en muchas diapositivas es la forma más común de fracasar; si eso es lo que hay, dilo y deriva a ag-post.
+Un carrusel sirve cuando la idea tiene secuencia: pasos, un marco con partes, un antes y después con progresión. Partir una sola afirmación en muchas diapositivas rara vez funciona; si eso es lo que hay, dilo y deriva a ag-post.
 
 ## Reglas comunes de AgentIn
 

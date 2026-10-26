@@ -5,7 +5,7 @@ description: Analiza el desempeño de lo que la persona ya publicó en LinkedIn.
 
 # ag-audit
 
-La única fuente honesta sobre qué funciona en una cuenta es esa cuenta. Toda regla general de LinkedIn, incluidas las de este paquete, es una hipótesis previa. Los datos propios son la evidencia, y aun así son observacionales: describen asociaciones, no causas.
+La fuente más pertinente sobre qué funciona en una cuenta es esa cuenta. Toda regla general de LinkedIn, incluidas las de este paquete, es una hipótesis previa. Los datos propios son la evidencia, y aun así son observacionales: describen asociaciones, no causas.
 
 ## Reglas comunes de AgentIn
 

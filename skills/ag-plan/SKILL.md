@@ -1,6 +1,6 @@
 ---
 name: ag-plan
-description: Arma un plan de contenido de LinkedIn (qué publicar, cuándo y con quién interactuar) o define el posicionamiento y la estrategia de contenido, a partir de lo que realmente pasó en el trabajo de la persona. Úsala cuando pidan planificar, un calendario de contenido, ideas de qué publicar durante varios días un horario de publicación, o qué temas conviene tratar y cuáles evitar, aunque no digan plan. Si solo necesitan una publicación para hoy, usa ag-post; si preguntan cuándo escribirle a una persona, usa ag-dm. Escribe el plan en ~/.claude/agentin/plan.md solo con permiso. No programa ni publica.
+description: Arma un plan de contenido de LinkedIn (qué publicar, cuándo y con quién interactuar) o define el posicionamiento y la estrategia de contenido, a partir de lo que realmente pasó en el trabajo de la persona. Úsala cuando pidan planificar, un calendario de contenido, ideas de qué publicar durante varios días, un horario de publicación, o qué temas conviene tratar y cuáles evitar, aunque no digan plan. Si solo necesitan una publicación para hoy, usa ag-post; si preguntan cuándo escribirle a una persona, usa ag-dm. Escribe el plan en ~/.claude/agentin/plan.md solo con permiso. No programa ni publica.
 ---
 
 # ag-plan

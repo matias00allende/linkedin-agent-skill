@@ -1,6 +1,6 @@
 ---
 name: ag-voz
-description: Limpia y revisa un texto ya redactado, sin cambiar su idea, para que suene más a la persona. Quita caracteres invisibles, rayas y comillas curvas, trata muletillas, señala estructuras de plantilla, mide el estilo y cuenta caracteres contra los límites de LinkedIn. Úsala cuando pidan pulir, limpiar, revisar el estilo, quitar muletillas o rayas, contar caracteres, dejar un texto listo para pegar, digan que algo no suena a ellos, o quieran revisar el riesgo reputacional de un borrador o de una afirmación sin reescribirla, aunque no nombren la skill. Con otros textos ya redactados solo aplica higiene y estilo. Para escribir o reestructurar una publicación usa ag-post; para el contenido de un titular, ag-profile. No sirve para ocultar autoría ni evadir detectores de IA.
+description: Limpia y revisa un texto ya redactado, sin cambiar su idea, para que suene más a la persona. Quita caracteres invisibles, rayas y comillas curvas, trata muletillas, señala estructuras de plantilla, mide el estilo y cuenta caracteres contra los límites de LinkedIn. Úsala cuando pidan pulir, limpiar, revisar el estilo, quitar muletillas o rayas, contar caracteres, dejar un texto listo para pegar, digan que algo no suena a ellos, o quieran revisar el riesgo reputacional de un borrador o de una afirmación sin reescribirla, aunque no nombren la skill. Para escribir una publicación o cambiar su enfoque o estructura usa ag-post; para el contenido de un titular, ag-profile. No sirve para ocultar autoría ni evadir detectores de IA.
 ---
 
 # ag-voz
@@ -36,17 +36,17 @@ python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" check ~/.claude/agentin/tmp/C
 python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" limits --kind post ~/.claude/agentin/tmp/CARPETA/limpio.txt
 ```
 
-CARPETA se crea con python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" tmp new, que imprime una ruta única con permisos restrictivos. Guarda ahí el borrador como archivo UTF-8 con la herramienta de escritura; no pases el texto por la línea de comandos, porque las comillas y los saltos de línea se corrompen. Al terminar, y ante cualquier error que puedas controlar, ejecuta tmp clean con esa ruta: borra solo carpetas creadas por tmp new y comprueba que ya no existen. Si no se pudo borrar, dile la ruta a la persona. Si ${CLAUDE_SKILL_DIR} no se resuelve, usa la ruta real de esta carpeta.
+CARPETA se crea con python -I "${CLAUDE_SKILL_DIR}/scripts/agentin.py" tmp new, que imprime una ruta única con permisos restrictivos. Guarda ahí el borrador como archivo UTF-8 con la herramienta de escritura; no pases el texto por la línea de comandos, porque las comillas y los saltos de línea se corrompen. Al terminar, y ante cualquier error que puedas controlar, ejecuta tmp clean con esa ruta: borra solo carpetas hijas de esa raíz que tengan la marca de tmp new y comprueba que ya no existen. Si no se pudo borrar, dile la ruta a la persona. Si ${CLAUDE_SKILL_DIR} no se resuelve, usa la ruta real de esta carpeta.
 
 ## Qué hace clean
 
 - Invisibles: borra espacios de ancho cero, marca de orden de bytes, guion blando, controles de dirección que pueden invertir el texto a la vista y caracteres tag que esconden texto. Conserva la unión dentro de emoji compuestos y las banderas de subregión.
 - Tipografía: raya a coma, o a guion si abre una línea; comillas curvas a rectas; puntos suspensivos de un carácter a tres puntos. No toca los párrafos ni las comas, salvo al borrar una muletilla, y reduce tres o más saltos de línea a dos.
 - Muletillas, según data/lexicon_es.json: replace cambia por una alternativa segura, delete borra solo al comienzo de una oración, fuera de citas, y si lo que queda es correcto, flag solo señala. Revisa siempre el resultado: el script no entiende el sentido.
-- No modifica enlaces, correos, hashtags, menciones ni código entre acentos graves.
+- Protege enlaces, correos, hashtags, menciones y código entre acentos graves de los cambios de vocabulario y tipografía. Los caracteres invisibles sí se quitan en todo el texto, también dentro de ellos: si la forma exacta de un enlace o de un código importa, revísalo.
 - Opción --hygiene-only: solo invisibles y tipografía, sin cambios de vocabulario. Úsala cuando piden una corrección mecánica (rayas, comillas, espacios).
-- Citas entre comillas o paréntesis, incluso de varias líneas, no reciben cambios léxicos.
-- Los emoji no se tocan en la limpieza mecánica, pero el informe los señala: la versión final que AgentIn entrega no lleva emojis decorativos, y si quitar uno puede cambiar el significado se pregunta antes.
+- Las citas entre comillas dobles o paréntesis, incluso de varias líneas, no reciben cambios léxicos. Las comillas simples solo protegen citas de una línea de hasta 300 caracteres.
+- Los emoji no se tocan en la limpieza mecánica, pero el informe los señala: por defecto la versión final que AgentIn entrega no lleva emojis decorativos (salvo que la persona los pida), y si quitar uno puede cambiar el significado se pregunta antes.
 
 Lo que clean no arregla se señala en el informe y lo reescribe la persona: "no es solo X, es Y", tríadas de eslogan, preguntas retóricas de una línea, emoji de cohete o fuego, muros de hashtags, cebo de interacción y oraciones de largo uniforme.
 

@@ -5,7 +5,7 @@ description: Responde los comentarios que recibió una publicación propia de la
 
 # ag-reply
 
-El hilo bajo tu propia publicación concentra buena parte de su recorrido, pero los comentarios no valen lo mismo. Esta skill ordena antes de escribir.
+El hilo bajo tu propia publicación es donde suele empezar la conversación, pero los comentarios no valen lo mismo. Esta skill ordena antes de escribir.
 
 ## Reglas comunes de AgentIn
 
@@ -55,4 +55,4 @@ Resumen: 17 comentarios, 1 oportunidad, 3 sustancia, 4 pares, 8 apoyo, 1 ruido.
 Oportunidad, Sarah: "tenemos el mismo problema con las cotizaciones".
 Respuesta: Sarah, lo que nos resolvió fue sacar la tabla de precios del documento y enviarla como página aparte. Si te sirve, te paso la plantilla.
 
-Nada se publica hasta que la persona lo diga. Ella pega las respuestas.
+La persona publica a mano: ella pega las respuestas.

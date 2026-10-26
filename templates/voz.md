@@ -37,7 +37,7 @@ De tres a cinco convicciones, criterios o matices que guían lo que publico, com
 
 ## Hechos que sí puedo usar
 
-Cifras, resultados e historias reales que acepto firmar con mi nombre. Las skills nunca inventan una: si esta sección está vacía y tu encargo tampoco aporta hechos, cada borrador volverá con {{dato: ...}} para que lo completes tú.
+Cifras, resultados e historias reales que acepto firmar con mi nombre. Las skills nunca inventan una: si una pieza necesita un hecho que no aportaste en esta sección ni en el encargo, preguntará o dejará {{dato: ...}} para que lo completes tú.
 
 -
 -

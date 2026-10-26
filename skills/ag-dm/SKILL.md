@@ -21,7 +21,7 @@ Sigue criterio.md: cada mensaje como texto aparte con su rótulo (nota, primer m
 
 ## Antes de escribir
 
-Revisa primero lo que el encargo ya entrega y pregunta, en una sola consulta, solo lo que falte: quién es el destinatario (nombre, cargo, empresa), el motivo real para escribirle ahora (una publicación suya, un hito, un contacto en común) y qué quiere la persona (una conversación, una recomendación, un trabajo, una venta). Si no hay una razón concreta para escribir hoy, dilo.
+Revisa primero lo que el encargo ya entrega y pregunta, en una sola consulta, solo lo que falte: quién es el destinatario (nombre, cargo, empresa), el motivo real para escribirle ahora (una publicación suya, un hito, un contacto en común) y qué quiere la persona (una conversación, una recomendación, un trabajo, una venta). Si no hay una razón concreta para escribir hoy, dilo. Si lo que busca es vender o promocionar algo a alguien que no conoce, no redactes la invitación ni los mensajes: las reglas de LinkedIn no permiten usar las invitaciones para mensajes promocionales a desconocidos. Ofrece una nota sin pedido comercial, o que la persona busque un canal apropiado para ese contacto.
 
 ## Nota de invitación
 
@@ -33,7 +33,7 @@ python -I "${CLAUDE_SKILL_DIR}/../ag-voz/scripts/agentin.py" limits --kind invit
 
 Usa python en Windows y python3 en macOS y Linux; --premium usa el límite alto. CARPETA es la ruta que imprime el comando tmp new de agentin.py (carpeta única con permisos restrictivos); al terminar se borra con tmp clean, como indica criterio.md.
 
-Ejemplo (171 caracteres, contados con el script):
+Ejemplo ficticio de forma (171 caracteres, contados con el script; no reutilices sus hechos, que deben ser los de la persona):
 
 Vi tu publicación sobre eliminar la llamada de descubrimiento: yo hice lo mismo en marzo y funcionó. Dirijo operaciones en un estudio de 12 personas. Me interesa seguirte.
 
@@ -43,7 +43,7 @@ Escríbelo cuando el contexto lo justifique, no por calendario. De dos a cuatro 
 
 ## Seguimientos: opcionales
 
-Solo si el contexto los justifica y el destinatario no ha rechazado ni pedido no recibir más mensajes. Si hubo un rechazo o una petición de no contacto, no redactes seguimientos y termina ahí. Cuando corresponda, usa como máximo dos: uno que agregue algo nuevo (nunca "solo para reflotar") y uno de cierre que diga que dejarás de escribir. Los plazos habituales de cuatro y diez días son práctica común, no un resultado medido.
+Solo si el contexto los justifica y el destinatario no ha rechazado ni pedido no recibir más mensajes. Si hubo un rechazo o una petición de no contacto, no redactes seguimientos y termina ahí. El silencio no es consentimiento. Cuando el contexto lo justifique, usa como máximo dos: uno que agregue algo nuevo (nunca "solo para reflotar") y uno de cierre que diga que dejarás de escribir. Los plazos habituales de cuatro y diez días son práctica común, no un resultado medido.
 
 ## Nunca
 
