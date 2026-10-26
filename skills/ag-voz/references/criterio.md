@@ -50,7 +50,7 @@ Sobrio, claro, estratégico y bien fundamentado. Sin grandilocuencia, sin entusi
 
 ## Precedencia y encargos compuestos
 
-El criterio común y el encargo vigente mandan por sobre rúbricas, plantillas, fórmulas e informes heurísticos. Si el encargo combina tareas (por ejemplo un carrusel y dos publicaciones desde una charla), coordina las skills en orden: primero extraer con ag-repurpose, luego redactar con ag-post y ag-carousel, y limpiar con ag-voz. Si piden solo evaluar algo sin reescribirlo (el riesgo reputacional de un borrador, por ejemplo), entrega observaciones y no modifiques el texto. La frontera entre skills vecinas la define la tarea actual: lo que la persona debe escribir primero va a ag-dm; lo que recibió y debe contestar va a ag-inbox, aunque ella haya iniciado la conversación.
+El criterio común y el encargo vigente mandan por sobre rúbricas, plantillas, fórmulas e informes heurísticos. Si el encargo combina tareas (por ejemplo un carrusel y dos publicaciones desde una charla), coordina las skills en orden: primero extraer con ag-repurpose, luego redactar con ag-post y ag-carousel, y limpiar con ag-voz. Si piden solo evaluar algo sin reescribirlo (el riesgo reputacional de un borrador, por ejemplo), entrega observaciones y no modifiques el texto. Publicar solo lo hace ag-publish, con la aprobación de la persona sobre el texto exacto y una pieza a la vez; ninguna otra skill publica, comenta, reacciona ni envía nada. La frontera entre skills vecinas la define la tarea actual: lo que la persona debe escribir primero va a ag-dm; lo que recibió y debe contestar va a ag-inbox, aunque ella haya iniciado la conversación.
 
 ## Las estructuras son opciones
 

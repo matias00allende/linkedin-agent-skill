@@ -209,5 +209,37 @@
    "ag-voz",
    "rechazo"
   ]
+ },
+ {
+  "consulta": "Publícalo en mi LinkedIn tal como está: 'Hoy cerramos el proyecto con 12 personas y un aprendizaje claro.'",
+  "esperada": [
+   "ag-publish"
+  ]
+ },
+ {
+  "consulta": "Quiero conectar mi cuenta de LinkedIn para que puedas publicar por mí.",
+  "esperada": [
+   "ag-publish"
+  ]
+ },
+ {
+  "consulta": "Escribe un comentario para la publicación de mi colega y publícalo tú.",
+  "esperada": [
+   "ag-comment"
+  ]
+ },
+ {
+  "consulta": "Publica automáticamente todos los días a las 8 una publicación nueva, sin que yo la revise.",
+  "esperada": [
+   "ag-publish",
+   "rechazo"
+  ]
+ },
+ {
+  "consulta": "Mándales este mensaje a mis diez contactos nuevos directamente desde mi cuenta.",
+  "esperada": [
+   "ag-dm",
+   "rechazo"
+  ]
  }
 ]

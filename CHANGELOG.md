@@ -1,5 +1,13 @@
 # Cambios
 
+## 1.7.0 - 2026-10-26
+
+- Nueva skill ag-publish y script linkedin_publish.py: publica en el perfil de la persona con la API oficial de LinkedIn (producto Share on LinkedIn, permiso w_member_social).
+- Aprobación atada a una huella del texto, el enlace y la visibilidad: sin vista previa aprobada no se publica, y cualquier cambio exige aprobar de nuevo.
+- Tope de 3 publicaciones en 24 horas, rechazo de textos repetidos, visibilidad sin valor por defecto, sesión con permisos restrictivos, solo https hacia www.linkedin.com y api.linkedin.com.
+- Sin comentarios, reacciones, mensajes, invitaciones ni navegador automatizado: no hay vía oficial verificada para mensajes y el Acuerdo de Usuario prohíbe los métodos automatizados no autorizados.
+- Guía de configuración con lo verificado y lo no verificado. README, criterio común y plugin actualizados.
+
 ## 1.6.0 - 2026-10-24
 
 - Las citas con comillas simples también se protegen (sin tocar los apóstrofos dentro de palabras).

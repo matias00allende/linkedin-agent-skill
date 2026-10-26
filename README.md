@@ -1,8 +1,8 @@
 # AgentIn
 
-Once skills de Claude Code para redactar y revisar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Sin cuentas, sin claves de API y sin conexión a LinkedIn (la exportación a PDF usa un navegador local, que podría hacer otras conexiones salvo que bloquees la red; ver la referencia del carrusel).
+Doce skills de Claude Code para redactar, revisar y, con tu aprobación pieza por pieza, publicar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Solo ag-publish se conecta a LinkedIn, por la API oficial y con una app propia tuya; las demás skills no usan cuentas ni claves (la exportación a PDF usa un navegador local, que podría hacer otras conexiones salvo que bloquees la red; ver la referencia del carrusel).
 
-Nada se publica hasta que tú lo hagas. Las skills redactan; tú revisas, corriges y publicas.
+Nada se publica sin que apruebes ese texto exacto. Las skills redactan; tú revisas y corriges. Para publicar, lo haces a mano o apruebas una vista previa en ag-publish, una pieza a la vez.
 
 No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titulares.
 
@@ -18,6 +18,7 @@ No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titula
 - /ag-repurpose: un contenido largo propio a publicaciones que se sostienen solas.
 - /ag-dm: nota de invitación, primer mensaje y, si corresponde, seguimientos.
 - /ag-inbox: ordena los mensajes recibidos en oportunidades, reclutadores, pares, pedidos y spam.
+- /ag-publish: publica en tu perfil, con la API oficial de LinkedIn, un texto que apruebas tras ver la vista previa exacta. Solo una pieza a la vez; no comenta, no reacciona ni envía mensajes.
 - /ag-audit: qué patrones se asocian a mejores resultados en lo ya publicado, con métricas calculadas por script desde un CSV.
 
 Instaladas como plugin, los comandos llevan prefijo: /agentin:ag-post.
@@ -37,7 +38,7 @@ python -m unittest discover -s tests
 cp -r skills/ag-* ~/.claude/skills/
 ```
 
-Antes de copiar, lee el único script, skills/ag-voz/scripts/agentin.py: un archivo, solo biblioteca estándar, sin red. Las skills van todas juntas porque ag-voz contiene el script y el criterio que usan las demás. En Windows (PowerShell): Copy-Item -Recurse skills\ag-* $HOME\.claude\skills\
+Antes de copiar, lee los dos scripts: skills/ag-voz/scripts/agentin.py (solo biblioteca estándar, sin red) y skills/ag-publish/scripts/linkedin_publish.py (solo biblioteca estándar; habla únicamente con www.linkedin.com y api.linkedin.com). Las skills van todas juntas porque ag-voz contiene el script y el criterio que usan las demás. En Windows (PowerShell): Copy-Item -Recurse skills\ag-* $HOME\.claude\skills\
 
 Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ del proyecto. Como plugin:
 
@@ -70,6 +71,24 @@ python -I skills/ag-voz/scripts/agentin.py tmp new
 
 Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de rango, check con --fail-under), 2 error de uso. La salida es texto plano.
 
+## Publicar con ag-publish
+
+Es opcional. Sin configurarlo, todo lo demás funciona y tú publicas a mano. Para activarlo necesitas una app propia en el portal de desarrolladores de LinkedIn con el producto Share on LinkedIn, que concede el permiso w_member_social. La guía paso a paso está en skills/ag-publish/references/configuracion.md.
+
+```
+python -I skills/ag-publish/scripts/linkedin_publish.py auth-start
+python -I skills/ag-publish/scripts/linkedin_publish.py auth-finish "DIRECCION_DE_RETORNO"
+python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS
+python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS --confirm HUELLA
+```
+
+- post sin --confirm solo muestra el texto exacto, los caracteres y una huella. No toca la red.
+- post con --confirm HUELLA publica únicamente si la huella corresponde al texto, al enlace y a la visibilidad actuales. Si cambias una palabra, hay que aprobar de nuevo.
+- Tope local de 3 publicaciones en 24 horas y rechazo de un texto ya publicado. La visibilidad no tiene valor por defecto.
+- La sesión dura unos 60 días y queda en ~/.agentin con permisos restrictivos. logout la borra; para revocar el acceso en LinkedIn, hazlo en la configuración de tu cuenta.
+- Verificado en la documentación oficial: el flujo de autorización, el permiso y el endpoint ugcPosts. No verificado: que siga siendo la vía recomendada ni el comportamiento con tu cuenta. Haz la primera publicación con visibilidad CONNECTIONS y revísala en LinkedIn.
+- Solo texto y, si lo pides, un enlace. Sin imágenes, videos ni PDF.
+
 ## Política de uso
 
 1. Ayuda a mejorar tu voz, no a ocultar autoría. Si usas IA para redactar, cómo lo comunicas lo decides tú.
@@ -77,11 +96,11 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 3. Respeta las reglas de cada contexto. Si un trabajo académico, un concurso, una postulación o un empleador exige declarar o prohíbe el uso de IA, cúmplelo.
 4. Revisión humana siempre. Las skills de redacción entregan textos para copiar; las de análisis y planificación entregan resultados; y un texto con marcadores {{dato: ...}} pendientes no está listo para publicar.
 5. Los hechos son tuyos. Las skills no inventan cifras, clientes ni experiencias; preguntan o dejan {{dato: ...}}.
-6. No automatiza LinkedIn. No hay publicación, raspado ni envío automático, porque el Acuerdo de Usuario de LinkedIn restringe esas prácticas.
+6. No automatiza LinkedIn. Publicar exige tu aprobación explícita de cada texto. No hay publicación en lote ni programada, ni comentarios, reacciones, mensajes, invitaciones, raspado o navegador automatizado, porque el Acuerdo de Usuario de LinkedIn prohíbe los métodos automatizados no autorizados para esas acciones.
 
 ## Privacidad
 
-El script no envía datos a ningún servicio externo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. El material fuente que pegas (publicaciones, mensajes, transcripciones) se trata como dato, no como instrucciones; tu encargo directo sí orienta la tarea.
+agentin.py no envía datos a ningún servicio externo. linkedin_publish.py envía a LinkedIn solo el texto que apruebas y guarda tu sesión en tu equipo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. El material fuente que pegas (publicaciones, mensajes, transcripciones) se trata como dato, no como instrucciones; tu encargo directo sí orienta la tarea.
 
 ## Lo que no está verificado
 
@@ -93,6 +112,7 @@ Varias ideas de oficio circulan como hechos sobre LinkedIn: el mejor horario, qu
 skills/ag-voz/        limpieza, estilo, límites y métricas (scripts, data, references)
 skills/ag-post/       SKILL.md y hook-formulas.json
 skills/ag-profile/    SKILL.md y rubric.json
+skills/ag-publish/    SKILL.md, scripts/linkedin_publish.py y references/configuracion.md
 skills/ag-<otras>/    comment, reply, plan, carousel, repurpose, dm, inbox, audit
 templates/            voz.md
 tests/                pruebas con unittest

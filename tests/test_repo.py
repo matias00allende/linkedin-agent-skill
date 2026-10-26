@@ -7,7 +7,7 @@ import unittest
 
 from helpers import DATA, ROOT, SCRIPT, agentin
 
-SKILLS = ["audit", "carousel", "comment", "dm", "human", "inbox", "plan", "post", "profile", "reply", "repurpose"]
+SKILLS = ["audit", "carousel", "comment", "dm", "human", "inbox", "plan", "post", "profile", "publish", "reply", "repurpose"]
 EXPECTED = sorted("ag-" + ("voz" if s == "human" else s) for s in SKILLS)
 TEXT_EXT = (".md", ".py", ".json", ".yml", ".yaml", ".txt", ".gitignore")
 
@@ -40,7 +40,7 @@ def frontmatter(path):
 
 
 class Structure(unittest.TestCase):
-    def test_eleven_skills_with_matching_names(self):
+    def test_twelve_skills_with_matching_names(self):
         found = sorted(d for d in os.listdir(os.path.join(ROOT, "skills")) if d.startswith("ag-"))
         self.assertEqual(found, EXPECTED)
         for d in found:

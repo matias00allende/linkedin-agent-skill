@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "agentin",
-      "description": "Once skills para redactar y revisar contenido de LinkedIn, con un limpiador de borradores local. Español de Chile. No publica nada por ti.",
+      "description": "Doce skills para redactar, revisar y publicar con tu aprobación contenido de LinkedIn, con un limpiador de borradores local. Español de Chile. Publica solo un texto aprobado a la vez.",
       "source": "./",
       "category": "productivity",
       "homepage": "https://github.com/matias00allende/agentin"
