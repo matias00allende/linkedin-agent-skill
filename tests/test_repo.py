@@ -91,6 +91,15 @@ class Structure(unittest.TestCase):
             if d != "ag-voz":
                 self.assertIn("references/criterio.md", read(os.path.join(ROOT, "skills", d, "SKILL.md")), d)
 
+    def test_registro_base_humano_y_ajustable(self):
+        crit = read(os.path.join(ROOT, "skills", "ag-voz", "references", "criterio.md"))
+        for frase in ("## Registro y tono", "profesional y humano", "lo que pide ahora, luego su voz.md",
+                      "un método para evadir detectores de IA"):
+            self.assertIn(frase, crit)
+        for d in ("ag-post", "ag-comment", "ag-reply", "ag-dm", "ag-inbox", "ag-repurpose", "ag-carousel", "ag-profile"):
+            self.assertIn("profesional y humano por defecto", read(os.path.join(ROOT, "skills", d, "SKILL.md")), d)
+        self.assertIn("Registro de base", read(os.path.join(ROOT, "templates", "voz.md")))
+
     def test_every_skill_has_the_common_rules_or_policy(self):
         for d in EXPECTED:
             text = read(os.path.join(ROOT, "skills", d, "SKILL.md"))

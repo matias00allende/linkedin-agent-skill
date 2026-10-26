@@ -1,5 +1,12 @@
 # Cambios
 
+## 1.11.0 - 2026-10-26
+
+- Registro de redacción: la base pasa a ser profesional y humano (hecho concreto primero, primera persona, criterio y duda reales, palabras corrientes, sin aperturas ni cierres de manual). Lo que la persona pide ahora manda sobre su voz.md, y este sobre la base. Formal institucional, cercano, técnico y breve se aplican sin discutirlos.
+- Los emojis siguen fuera por defecto, pero se usan si la persona los pide de forma expresa.
+- Regla nueva: no atribuirle a la persona emociones, conocimientos previos ni cargos que no declaró.
+- voz.md incluye el campo "Registro de base".
+
 ## 1.10.0 - 2026-10-26
 
 - Licencia: pasa de MIT a Apache 2.0. Se agrega NOTICE con el copyright de Matías Allende y la licencia MIT original de Jake Schincariol, que debe conservarse.

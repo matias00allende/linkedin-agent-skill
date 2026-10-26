@@ -1,6 +1,6 @@
 # voz.md
 
-Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Las skills que redactan lo usan cuando existe. Las salidas de AgentIn no llevan emojis, así que no hay una preferencia al respecto.
+Copia este archivo a ~/.claude/agentin/voz.md y complétalo. Las skills que redactan lo usan cuando existe. Por defecto las salidas de AgentIn no llevan emojis; si quieres alguno, pídelo en el encargo.
 
 Si prefieres no llenarlo a mano, pega tres publicaciones tuyas y pide que lo escriba a partir de ellos. Revisa el resultado: es tu voz, no la que el modelo cree que tienes.
 
@@ -17,6 +17,7 @@ Si prefieres no llenarlo a mano, pega tres publicaciones tuyas y pide que lo esc
 - Palabras que uso de verdad:
 - Palabras que nunca usaría:
 - Largo de las oraciones (cortas, mezcladas o largas):
+- Registro de base (formal institucional, profesional cercano, conversacional o técnico; si no eliges, AgentIn escribe profesional y humano):
 - Tuteo o usted:
 - Chilenismos (ninguno, pocos o libremente):
 
