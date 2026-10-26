@@ -1,5 +1,15 @@
 # Cambios
 
+## 2.0.0 - 2026-10-26
+
+Cumplimiento con los términos de LinkedIn. Cambio incompatible.
+
+- Se retira ag-publish y su script. La cláusula 3.1.26 de los Términos de Uso de las APIs prohíbe usar las APIs para automatizar la publicación y no distingue si una persona confirma cada texto. AgentIn ya no se conecta a LinkedIn: son once skills que redactan y analizan, y la persona publica a mano. La skill retirada queda en el historial (versiones 1.8 a 1.11).
+- Nueva sección Cumplimiento con LinkedIn en el README y en criterio.md, con las cláusulas revisadas (3.1.24, 3.1.26, Acuerdo de Usuario 8.2, software prohibido, políticas de la comunidad).
+- ag-comment: los comentarios en tanda deben responder a cada publicación en concreto, sin interacción artificial.
+- Registro de redacción: base profesional y humana, ajustable por la persona (cambio de 1.11.0, sin publicar aparte).
+- Pruebas: 119.
+
 ## 1.11.0 - 2026-10-26
 
 - Registro de redacción: la base pasa a ser profesional y humano (hecho concreto primero, primera persona, criterio y duda reales, palabras corrientes, sin aperturas ni cierres de manual). Lo que la persona pide ahora manda sobre su voz.md, y este sobre la base. Formal institucional, cercano, técnico y breve se aplican sin discutirlos.

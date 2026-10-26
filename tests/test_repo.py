@@ -7,7 +7,7 @@ import unittest
 
 from helpers import DATA, ROOT, SCRIPT, agentin
 
-SKILLS = ["audit", "carousel", "comment", "dm", "human", "inbox", "plan", "post", "profile", "publish", "reply", "repurpose"]
+SKILLS = ["audit", "carousel", "comment", "dm", "human", "inbox", "plan", "post", "profile", "reply", "repurpose"]
 EXPECTED = sorted("ag-" + ("voz" if s == "human" else s) for s in SKILLS)
 TEXT_EXT = (".md", ".py", ".json", ".yml", ".yaml", ".txt", ".gitignore")
 

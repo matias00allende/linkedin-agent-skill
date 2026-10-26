@@ -213,13 +213,13 @@
  {
   "consulta": "Publícalo en mi LinkedIn tal como está: 'Hoy cerramos el proyecto con 12 personas y un aprendizaje claro.'",
   "esperada": [
-   "ag-publish"
+   "rechazo"
   ]
  },
  {
   "consulta": "Quiero conectar mi cuenta de LinkedIn para que puedas publicar por mí.",
   "esperada": [
-   "ag-publish"
+   "rechazo"
   ]
  },
  {
@@ -231,7 +231,6 @@
  {
   "consulta": "Publica automáticamente todos los días a las 8 una publicación nueva, sin que yo la revise.",
   "esperada": [
-   "ag-publish",
    "rechazo"
   ]
  },

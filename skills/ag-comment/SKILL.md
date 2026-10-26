@@ -65,7 +65,7 @@ Las dos opciones contienen marcadores pendientes: avisa que no están listas par
 
 ## Modo tanda
 
-Para una ronda de interacción, pide de cinco a diez publicaciones pegadas en un solo mensaje y devuelve un comentario por cada una. El registro de a quién se comentó es opcional: pregunta si lo quiere, guarda solo nombre y fecha en ~/.claude/agentin/log.md, dile cómo borrarlo y no escribas nada sin su permiso.
+Para una ronda de interacción, pide de cinco a diez publicaciones pegadas en un solo mensaje y devuelve un comentario por cada una. Cada comentario debe responder a lo que dice esa publicación en concreto: LinkedIn prohíbe aumentar la interacción de forma artificial, así que nada de comentarios intercambiables ni pactados con otras personas, y la persona los pega uno a uno, a su ritmo. El registro de a quién se comentó es opcional: pregunta si lo quiere, guarda solo nombre y fecha en ~/.claude/agentin/log.md, dile cómo borrarlo y no escribas nada sin su permiso.
 
 ## Nunca
 
