@@ -5,7 +5,7 @@ Se hace una sola vez. Lo hace la persona en su propia cuenta; AgentIn no crea ap
 ## Cómo encaja
 
 - Tú publicas en tu perfil personal. El permiso w_member_social (producto Share on LinkedIn) autoriza a una app a publicar a nombre del miembro que la autoriza, es decir, tú. El script usa tu identificador de persona como autor.
-- La app necesita una página de empresa solo como dueña para registrarla. LinkedIn lo exige y no acepta un perfil personal. Esa página no publica nada, y el administrador de la página debe aprobar la asociación (hay un plazo de 30 días). Si la página es tuya, la apruebas tú.
+- La app necesita una página de empresa solo como dueña para registrarla. LinkedIn lo exige y no acepta un perfil personal. Esa página no publica nada, y el administrador de la página debe aprobar la asociación (el plazo que da LinkedIn no está verificado aquí). Si la página es tuya, la apruebas tú.
 - Publicar en una página de empresa u organización requiere otro permiso (w_organization_social) y otra aprobación de LinkedIn. AgentIn no lo hace.
 - Si no tienes una página, puedes crear una mínima solo para esto, con tu nombre de proyecto. Es pública, tú quedas como administrador y no necesita contenido ni seguidores. Si no quieres asociar una página a tu nombre, no uses ag-publish: todo lo demás de AgentIn funciona igual y publicas a mano.
 
@@ -22,7 +22,7 @@ Ninguna de estas salvaguardas es una excepción confirmada por LinkedIn. Esto re
 
 ## Qué se necesita
 
-1. Una app en el portal de desarrolladores de LinkedIn (www.linkedin.com/developers). El formulario pide nombre, página de LinkedIn, logo cuadrado de al menos 100 px y aceptar los términos de la API. Aceptar esos términos lo haces tú.
+1. Una app en el portal de desarrolladores de LinkedIn (www.linkedin.com/developers). El formulario pide nombre, página de LinkedIn, logo y aceptar los términos de la API. Aceptar esos términos lo haces tú.
 2. En la pestaña Products de la app, activar dos productos de autoservicio (la documentación de LinkedIn los llama permisos abiertos, disponibles sin aprobación especial):
    - Share on LinkedIn: concede w_member_social.
    - El producto de inicio de sesión con OpenID Connect (en el portal su nombre empieza con Sign In): concede openid y profile, necesarios para saber quién es el miembro.
@@ -37,7 +37,7 @@ Ninguna de estas salvaguardas es una excepción confirmada por LinkedIn. Esto re
 
 1. auth-start imprime una dirección. Ábrela en el navegador e inicia sesión en LinkedIn.
 2. Al aceptar, LinkedIn redirige a tu dirección de retorno con los parámetros code y state. Copia la dirección completa de la barra del navegador.
-3. Ejecuta auth-finish en tu terminal con esa dirección entre comillas; debe ser exactamente la dirección registrada, con sus parámetros. Intercambia el código por un token, consulta quién eres y guarda la sesión en ~/.agentin/token.json con permisos 600. En Windows los permisos dependen de tu carpeta de usuario.
+3. Ejecuta auth-finish en tu terminal, sin argumentos: el programa te pide la dirección en pantalla y así no queda en el historial ni en la lista de procesos (si prefieres, también acepta la dirección como argumento). Debe ser exactamente la dirección registrada, con sus parámetros. Intercambia el código por un token, consulta quién eres y guarda la sesión en ~/.agentin/token.json con permisos 600. En Windows los permisos dependen de tu carpeta de usuario.
 
 El script compara el valor state y se niega a continuar si no coincide. La sesión dura 60 días; para apps de autoservicio no hay renovación automática y hay que repetir la autorización.
 
@@ -56,9 +56,9 @@ El script compara el valor state y se niega a continuar si no coincide. La sesi�
 - previews.json: huellas de las vistas previas recientes. El script exige una vista previa de las últimas 24 horas antes de publicar.
 - auth_state.json: temporal, se borra al terminar. Guarda la app y la dirección de retorno del intento.
 
-La dirección de retorno completa que copias es sensible mientras el código siga vigente (30 minutos): no la pegues en el chat ni la guardes. Nada de esto se guarda sin tu consentimiento, y logout lo borra. CONNECTIONS limita quién ve la publicación, pero no la vuelve confidencial: no publiques nada que no quieras que alguien copie.
+La dirección de retorno completa que copias es sensible mientras el código siga vigente (30 minutos): no la pegues en el chat ni la guardes. Aunque la página no cargue, el servidor de esa dirección puede haber recibido y registrado el código. Nada de esto se guarda sin tu consentimiento; logout borra la sesión, las vistas previas y el estado de autorización, pero conserva publicaciones.json, que sostiene el tope de 3 al día y evita repetir un texto. Si quieres borrarlo, mira antes tu perfil: al borrarlo se pierden esas salvaguardas. CONNECTIONS limita quién ve la publicación, pero no la vuelve confidencial: no publiques nada que no quieras que alguien copie.
 
-Para cerrar: logout borra la sesión del equipo. Para que LinkedIn deje de aceptar el token, revoca el permiso de la app en la configuración de tu cuenta de LinkedIn.
+Para cerrar: logout borra la sesión del equipo (no el registro de publicaciones). Para que LinkedIn deje de aceptar el token, revoca el permiso de la app en la configuración de tu cuenta de LinkedIn.
 
 ## Cómo se envía una publicación
 

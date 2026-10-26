@@ -1,5 +1,21 @@
 # Cambios
 
+## 1.9.0 - 2026-10-26
+
+Endurecimiento de ag-publish tras la auditoría 9 (68/100, sobre la versión 1.8.0).
+
+- La confirmación humana ocurre fuera del bloqueo. Después de la espera se revalida todo con la hora actual: duplicados, tope y vista previa.
+- El bloqueo lleva dueño, solo lo borra su dueño y solo se recupera pasados 10 minutos.
+- Un error 5xx al publicar o al borrar queda como incierto y bloquea el texto; solo los 4xx liberan la reserva.
+- delete exige la respuesta 204, la cuenta que publicó y el bloqueo.
+- Se retira la vía antigua ugcPosts, que podía publicar con un contrato no verificado.
+- El registro conserva 2000 intentos y falla de forma cerrada si está dañado.
+- auth-finish acepta la dirección en pantalla (sin argumentos). El error del callback se muestra solo si state coincide, y saneado.
+- Se valida el tipo y el tamaño de las respuestas de LinkedIn.
+- Se rechazan textos con marcadores {{...}} pendientes.
+- Documentación: logout conserva publicaciones.json; una terminal no autentica a una persona; compatibilidad contractual no confirmada; se quitan plazos y medidas sin fuente.
+- Pruebas: 189.
+
 ## 1.8.0 - 2026-10-26
 
 - ag-publish pasa a la Posts API (/rest/posts), que reemplaza a ugcPosts, con la cabecera de versión obligatoria (por defecto 202610, ajustable con LINKEDIN_API_VERSION). La vía antigua queda como --api ugc.

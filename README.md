@@ -73,22 +73,22 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 
 ## Publicar con ag-publish
 
-Es opcional y es publicación asistida, no automática. Sin configurarlo, todo lo demás funciona y tú publicas a mano. Las publicaciones salen en tu perfil personal. LinkedIn exige que tu app propia esté asociada a una página de empresa, pero solo como dueña para registrarla; no publica nada en ella. Necesitas, además, el producto Share on LinkedIn (permiso w_member_social). La guía paso a paso, con lo verificado y lo que no, está en skills/ag-publish/references/configuracion.md.
+Es opcional y es publicación asistida, no automática. Sin configurarlo, todo lo demás funciona y tú publicas a mano. Las publicaciones salen en tu perfil personal. LinkedIn exige que tu app propia esté asociada a una página de empresa, pero solo como dueña para registrarla; no publica nada en ella. Necesitas, además, dos productos en la app: Share on LinkedIn (permiso w_member_social) e inicio de sesión con OpenID Connect. La guía paso a paso, con lo verificado y lo que no, está en skills/ag-publish/references/configuracion.md.
 
 ```
 python -I skills/ag-publish/scripts/linkedin_publish.py auth-start
-python -I skills/ag-publish/scripts/linkedin_publish.py auth-finish "DIRECCION_DE_RETORNO"
+python -I skills/ag-publish/scripts/linkedin_publish.py auth-finish
 python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS
 python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS --confirm HUELLA
 python -I skills/ag-publish/scripts/linkedin_publish.py delete urn:li:share:123 --yes
 ```
 
 - post sin --confirm solo muestra el texto exacto, los caracteres y una huella. No toca la red y deja registrada la vista previa.
-- post con --confirm HUELLA publica únicamente si hubo una vista previa de las últimas 24 horas, la huella corresponde a la cuenta, el texto, el enlace (con título y descripción), la visibilidad y la API actuales, y tú escribes la huella en una terminal interactiva. Un agente que ejecuta comandos sin terminal no puede confirmar. Es una barrera contra accidentes y contra un agente que se adelante; no protege de quien controle tu equipo. Si cambias una palabra, hay que aprobar de nuevo.
-- Si no se sabe si LinkedIn publicó (corte de red, respuesta sin identificador), el intento queda como incierto, se bloquea ese texto y debes mirar tu perfil antes de intentar otra vez.
+- post con --confirm HUELLA publica únicamente si hubo una vista previa de las últimas 24 horas, la huella corresponde a la cuenta, el texto, el enlace (con título y descripción), la visibilidad y la API actuales, y tú escribes la huella en una terminal interactiva. Un agente que ejecuta comandos sin terminal no puede confirmar, pero una terminal no autentica a una persona. Es una barrera contra accidentes y contra un agente que se adelante, no una garantía técnica; no protege de quien controle tu equipo. Si cambias una palabra, hay que aprobar de nuevo.
+- Si no se sabe si LinkedIn publicó (corte de red, error 5xx, respuesta sin identificador), el intento queda como incierto, se bloquea ese texto y debes mirar tu perfil antes de intentar otra vez.
 - Usa la Posts API (/rest/posts) con la cabecera de versión obligatoria. La versión se fija con LINKEDIN_API_VERSION (AAAAMM) y se revisa una vez al año. Los caracteres reservados del texto se escapan y las palabras con # salen como hashtag. Un enlace exige --link-title.
-- Tope local de 3 publicaciones en 24 horas y rechazo de un texto ya publicado. La visibilidad no tiene valor por defecto. delete solo borra publicaciones hechas con este programa.
-- La sesión dura unos 60 días y queda en ~/.agentin con permisos restrictivos. logout la borra; para revocar el acceso en LinkedIn, hazlo en la configuración de tu cuenta.
+- Tope local de 3 publicaciones en 24 horas y rechazo de un texto ya publicado. La visibilidad no tiene valor por defecto. delete solo borra publicaciones hechas con este programa y con la cuenta conectada, y solo da el borrado por hecho con la respuesta 204. Un texto con marcadores {{...}} pendientes se rechaza.
+- La sesión dura unos 60 días y queda en ~/.agentin con permisos restrictivos. logout la borra, pero conserva publicaciones.json (sostiene el tope y evita repetir un texto); para revocar el acceso en LinkedIn, hazlo en la configuración de tu cuenta.
 - Los Términos de Uso de las APIs de LinkedIn (cláusula 3.1.26) prohíben usar las APIs para automatizar publicaciones. Por eso no hay programación, lotes ni bucles. Esto reduce el riesgo pero no es asesoría legal: si quieres certeza, pregunta por escrito al soporte de desarrolladores de LinkedIn.
 - No verificado con una cuenta real: que la Posts API acepte tu app solo con los productos de autoservicio. Haz la primera publicación con visibilidad CONNECTIONS y revísala en LinkedIn.
 - Solo texto y, si lo pides, un enlace. Sin imágenes, videos ni PDF por ahora.
@@ -142,5 +142,4 @@ MIT. Ver LICENSE, que conserva los avisos de copyright exigidos por la licencia.
 ## Autor
 
 Matías Allende
-LinkedIn: https://www.linkedin.com/in/matiasallende/
-Correo: matias.allende.contreras@gmail.com
+[LinkedIn](https://www.linkedin.com/in/matiasallende/) · matias.allende.contreras@gmail.com

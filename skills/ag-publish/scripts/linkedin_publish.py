@@ -48,7 +48,7 @@ import urllib.parse
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 LIMITS_FILE = os.path.join(os.path.dirname(os.path.dirname(HERE)), "ag-voz", "data", "limits.json")
@@ -57,7 +57,6 @@ AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization"
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 USERINFO_URL = "https://api.linkedin.com/v2/userinfo"
 POSTS_URL = "https://api.linkedin.com/rest/posts"
-UGC_URL = "https://api.linkedin.com/v2/ugcPosts"
 FEED_URL = "https://www.linkedin.com/feed/update/"
 ALLOWED_HOSTS = ("www.linkedin.com", "api.linkedin.com")
 SCOPE = "openid profile w_member_social"
@@ -81,7 +80,12 @@ URN_RE = re.compile(r"urn:li:(share|ugcPost):\d+")
 PERSON_RE = re.compile(r"urn:li:person:[A-Za-z0-9_-]{1,64}")
 # Controles de terminal y de dirección del texto: pueden hacer que lo que se ve no sea lo que se envía.
 BAD_CHARS = re.compile("[\x00-\x08\x0b-\x1f\x7f-\x9f\u202a-\u202e\u2066-\u2069]")
-LOCK_STALE = 120
+# Un bloqueo solo se recupera si lleva mucho más de lo que dura cualquier paso que lo toma (la
+# confirmación humana ocurre fuera del bloqueo; dentro solo hay archivos locales y una llamada de 30 s).
+LOCK_STALE = 600
+LOG_KEEP = 2000
+MAX_RESPONSE = 1_000_000
+PENDING_RE = re.compile(r"\{\{[^{}]*\}\}")
 
 
 class UserError(Exception):
@@ -140,11 +144,18 @@ def private_write(path: str, data: dict) -> None:
 
 @contextlib.contextmanager
 def locked():
-    """Bloqueo entre procesos para leer, reservar y registrar sin que dos ejecuciones se pisen."""
+    """Bloqueo entre procesos para leer, reservar y registrar sin que dos ejecuciones se pisen.
+
+    El archivo lleva un identificador del dueño: al salir solo se borra si sigue siendo el propio,
+    y solo se recupera un bloqueo ajeno si lleva mucho más tiempo del que puede durar un paso.
+    """
     path = os.path.join(home_dir(), "lock")
+    mine = f"{os.getpid()}.{secrets.token_hex(8)}"
     for _ in range(50):
         try:
-            os.close(os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600))
+            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            with os.fdopen(fd, "w", encoding="ascii") as fh:
+                fh.write(mine)
             break
         except FileExistsError:
             try:
@@ -160,7 +171,10 @@ def locked():
         yield
     finally:
         with contextlib.suppress(OSError):
-            os.remove(path)
+            with open(path, encoding="ascii") as fh:
+                owner = fh.read()
+            if owner == mine:
+                os.remove(path)
 
 
 def private_read(path: str):
@@ -171,7 +185,9 @@ def private_read(path: str):
         return None
     except (OSError, ValueError):
         raise UserError(f"el archivo {path} está dañado; bórralo y repite el paso")
-    return data if isinstance(data, dict) else None
+    if not isinstance(data, dict):
+        raise UserError(f"el archivo {path} está dañado; revísalo antes de seguir")
+    return data
 
 
 def env(name: str) -> str:
@@ -232,16 +248,23 @@ def call(method: str, url: str, headers=None, body=None, form=None):
     req = Request(url, data=data, headers=hdrs, method=method)
     try:
         with urlopen(req, timeout=30) as resp:
-            raw = resp.read()
+            raw = resp.read(MAX_RESPONSE + 1)
+            if len(raw) > MAX_RESPONSE:
+                raise Uncertain("la respuesta de LinkedIn es demasiado grande; no se usa")
             payload = json.loads(raw.decode("utf-8")) if raw.strip() else {}
             return resp.status, resp.headers, payload
     except HTTPError as exc:
+        if exc.code >= 500:
+            # Un error de servidor no demuestra que la operación no se hizo.
+            raise Uncertain(f"LinkedIn respondió {exc.code}")
         try:
             info = json.loads(exc.read().decode("utf-8", "replace"))
             detail = clean(info.get("message") or info.get("error_description") or "", 120) if isinstance(info, dict) else ""
         except ValueError:
             detail = ""
         raise Rejected(f"LinkedIn respondió {exc.code}" + (f": {detail}" if detail else ""))
+    except Uncertain:
+        raise
     except URLError as exc:
         raise Uncertain(f"no se pudo conectar con LinkedIn: {clean(exc.reason)}")
     except (ValueError, OSError):
@@ -265,7 +288,8 @@ def cmd_auth_start(args) -> int:
     print(f"{AUTH_URL}?{query}")
     print()
     print("Al aceptar, LinkedIn te redirige a tu dirección de retorno. La página puede no cargar; no importa.")
-    print("Copia la dirección completa de la barra del navegador y ejecuta auth-finish con ella entre comillas.")
+    print("Copia la dirección completa de la barra del navegador y ejecuta auth-finish sin argumentos: te la pedirá")
+    print("en pantalla, así no queda en el historial de la terminal ni en la lista de procesos.")
     print("Tienes 30 minutos.")
     return 0
 
@@ -278,37 +302,44 @@ def cmd_auth_finish(args) -> int:
         raise UserError("la autorización venció; ejecuta auth-start otra vez")
     if saved.get("client_id") != env("LINKEDIN_CLIENT_ID") or saved.get("redirect_uri") != redirect_uri():
         raise UserError("la app o la dirección de retorno cambiaron desde auth-start; repite auth-start")
-    parts = urllib.parse.urlsplit(args.redirect_url)
-    if args.redirect_url.split("?", 1)[0] != redirect_uri():
+    url = args.redirect_url
+    if not url:
+        if not (sys.stdin and sys.stdin.isatty()):
+            raise UserError("pega la dirección en una terminal interactiva o pásala como argumento")
+        url = input("Pega la dirección completa de retorno: ").strip()
+    parts = urllib.parse.urlsplit(url)
+    if url.split("?", 1)[0] != redirect_uri():
         raise UserError("la dirección recibida no corresponde a LINKEDIN_REDIRECT_URI")
     query = urllib.parse.parse_qs(parts.query)
     if any(len(v) > 1 for v in query.values()):
         raise UserError("la dirección trae parámetros repetidos; no se usa")
-    if "error" in query:
-        raise UserError(f"LinkedIn informó: {query['error'][0]} ({query.get('error_description', [''])[0]})")
     got_state = (query.get("state") or [""])[0]
     if not hmac.compare_digest(got_state.encode("utf-8"), str(saved["state"]).encode("utf-8")):
-        raise UserError("el valor state no coincide; no se usa el código (posible intento ajeno)")
+        raise UserError("el valor state no coincide; no se usa la dirección (posible intento ajeno)")
+    if "error" in query:
+        raise UserError(f"LinkedIn informó un error de autorización: {clean(query['error'][0], 60)}")
     code = (query.get("code") or [""])[0]
     if not code:
         raise UserError("la dirección no trae el parámetro code")
     _, _, tok = call("POST", TOKEN_URL, form={
         "grant_type": "authorization_code", "code": code, "client_id": env("LINKEDIN_CLIENT_ID"),
         "client_secret": env("LINKEDIN_CLIENT_SECRET"), "redirect_uri": redirect_uri()})
-    access = tok.get("access_token")
-    if not access:
-        raise UserError("LinkedIn no entregó access_token")
+    access = tok.get("access_token") if isinstance(tok, dict) else None
+    if not isinstance(access, str) or not access.strip() or BAD_CHARS.search(access) or " " in access:
+        raise UserError("LinkedIn no entregó un access_token válido")
     _, _, info = call("GET", USERINFO_URL, headers={"Authorization": f"Bearer {access}"})
+    if not isinstance(info, dict):
+        raise UserError("la respuesta de identidad de LinkedIn no es la esperada")
     sub = info.get("sub")
     if not isinstance(sub, str) or not PERSON_RE.fullmatch(f"urn:li:person:{sub}"):
         raise UserError("no se pudo obtener el identificador del miembro (¿falta el producto OpenID Connect?)")
-    try:
-        expires = int(time.time()) + int(tok.get("expires_in", 0))
-    except (TypeError, ValueError):
+    expires_in = tok.get("expires_in")
+    if isinstance(expires_in, bool) or not isinstance(expires_in, int) or expires_in <= 0:
         raise UserError("LinkedIn no informó cuánto dura la sesión")
+    expires = int(time.time()) + expires_in
     private_write(os.path.join(home_dir(), "token.json"), {
         "access_token": access, "expires_at": expires, "person_urn": f"urn:li:person:{sub}",
-        "scope": tok.get("scope", "")})
+        "scope": clean(tok.get("scope", ""), 200)})
     try:
         os.remove(os.path.join(home_dir(), "auth_state.json"))
     except OSError:
@@ -336,7 +367,7 @@ def cmd_status(args) -> int:
     if left <= 0:
         print("Sesión vencida.")
     else:
-        print(f"Sesión activa para {tok.get('person_urn')}. Quedan {left // 86400} días. Versión de la API: {api_version()}.")
+        print(f"Sesión activa para {clean(tok.get('person_urn'), 80)}. Quedan {left // 86400} días. Versión de la API: {api_version()}.")
     return 0
 
 
@@ -346,7 +377,9 @@ def cmd_logout(args) -> int:
             os.remove(os.path.join(home_dir(), name))
         except FileNotFoundError:
             pass
-    print("Sesión borrada de este equipo. Para revocar el acceso también en LinkedIn, hazlo en su configuración de permisos.")
+    print("Sesión borrada de este equipo. Se conserva publicaciones.json (huellas, fechas e identificadores) porque "
+          "sostiene el tope de 3 al día y evita repetir un texto; no se borra sin mirar tu perfil.")
+    print("Para revocar el acceso también en LinkedIn, hazlo en su configuración de permisos.")
     return 0
 
 
@@ -436,25 +469,16 @@ def read_post(path: str) -> str:
 
 
 def load_log() -> list:
-    data = private_read(os.path.join(home_dir(), "publicaciones.json")) or {}
-    items = data.get("items", [])
-    return items if isinstance(items, list) else []
+    data = private_read(os.path.join(home_dir(), "publicaciones.json"))
+    if data is None:
+        return []
+    items = data.get("items")
+    if not isinstance(items, list) or not all(isinstance(i, dict) for i in items):
+        raise UserError("publicaciones.json está dañado; no se publica hasta revisarlo (mira tu perfil antes de tocarlo)")
+    return items
 
 
-def build_body(session: dict, text: str, visibility: str, link: str, link_title: str, link_desc: str, api: str) -> dict:
-    if api == "ugc":
-        content = {"shareCommentary": {"text": text}, "shareMediaCategory": "NONE"}
-        if link:
-            media = {"status": "READY", "originalUrl": link}
-            if link_title:
-                media["title"] = {"text": link_title}
-            if link_desc:
-                media["description"] = {"text": link_desc}
-            content["shareMediaCategory"] = "ARTICLE"
-            content["media"] = [media]
-        return {"author": session["person_urn"], "lifecycleState": "PUBLISHED",
-                "specificContent": {"com.linkedin.ugc.ShareContent": content},
-                "visibility": {"com.linkedin.ugc.MemberNetworkVisibility": visibility}}
+def build_body(session: dict, text: str, visibility: str, link: str, link_title: str, link_desc: str) -> dict:
     body = {"author": session["person_urn"], "commentary": to_little(text), "visibility": visibility,
             "distribution": {"feedDistribution": "MAIN_FEED", "targetEntities": [], "thirdPartyDistributionChannels": []},
             "lifecycleState": "PUBLISHED", "isReshareDisabledByAuthor": False}
@@ -478,6 +502,8 @@ def cmd_post(args) -> int:
     link = args.link or ""
     link_title = (args.link_title or "").strip()
     link_desc = (args.link_description or "").strip()
+    if PENDING_RE.search(text):
+        raise UserError("el texto trae un marcador pendiente {{...}}: complétalo antes de publicar")
     for label, value in (("el texto", text), ("el título", link_title), ("la descripción", link_desc), ("el enlace", link)):
         check_clean(label, value)
     if link:
@@ -486,12 +512,12 @@ def cmd_post(args) -> int:
             raise UserError("--link debe ser una dirección https válida, sin usuario ni espacios")
     if (link_title or link_desc) and not link:
         raise UserError("--link-title y --link-description solo se usan junto con --link")
-    if link and not link_title and args.api == "posts":
+    if link and not link_title:
         raise UserError("con --link hay que dar --link-title: la API no lee el título de la página por su cuenta")
-    digest = text_hash(text, link, args.visibility, link_title, link_desc, session["person_urn"], args.api)
+    digest = text_hash(text, link, args.visibility, link_title, link_desc, session["person_urn"], "posts")
     text_id = text_hash(text)
 
-    print(f"Cuenta: {session['person_urn']}. API: {args.api}. Visibilidad: {args.visibility}.")
+    print(f"Cuenta: {session['person_urn']}. API: posts. Visibilidad: {args.visibility}.")
     print(f"Caracteres: {len(text)} de {limit}.")
     if link:
         print(f"Enlace: {link}")
@@ -505,62 +531,77 @@ def cmd_post(args) -> int:
     print(text)
     print()
 
-    now = int(time.time())
     previews_path = os.path.join(home_dir(), "previews.json")
     log_path = os.path.join(home_dir(), "publicaciones.json")
-    with locked():
+
+    def gate(now):
+        """Duplicados, tope y vistas previas vigentes. Se llama con el bloqueo tomado y con la hora actual."""
         log = load_log()
         if any(i.get("text_id") == text_id or i.get("hash") == digest for i in log):
             raise UserError("este mismo texto ya se publicó (o quedó en duda) con este programa; no se publica dos veces")
-        recent = [i for i in log if now - int(i.get("ts", 0)) < 86400]
+        try:
+            recent = [i for i in log if now - int(i.get("ts", 0)) < 86400]
+            previews = {k: v for k, v in (private_read(previews_path) or {}).items() if now - int(v) < PREVIEW_MAX_AGE}
+        except (TypeError, ValueError):
+            raise UserError("el registro local está dañado; no se publica hasta revisarlo")
         if len(recent) >= MAX_POSTS_PER_DAY:
             raise UserError(f"ya hay {len(recent)} publicaciones en las últimas 24 horas; el tope local es {MAX_POSTS_PER_DAY}")
-        previews = {k: v for k, v in (private_read(previews_path) or {}).items() if now - int(v) < PREVIEW_MAX_AGE}
-        if not args.confirm:
+        return log, previews
+
+    if not args.confirm:
+        with locked():
+            now = int(time.time())
+            _, previews = gate(now)
             previews[digest] = now
             private_write(previews_path, previews)
-            print(f"Vista previa. No se publicó nada. Huella de aprobación: {digest}")
-            print("Para publicar, la persona ejecuta en su terminal el mismo comando con --confirm " + digest)
-            return 0
-        if not hmac.compare_digest(args.confirm.encode("utf-8"), digest.encode("utf-8")):
-            raise UserError("la aprobación no coincide con el texto, el enlace, la visibilidad o la cuenta actuales; no se publicó")
+        print(f"Vista previa. No se publicó nada. Huella de aprobación: {digest}")
+        print("Para publicar, la persona ejecuta en su terminal el mismo comando con --confirm " + digest)
+        return 0
+    if not hmac.compare_digest(args.confirm.encode("utf-8"), digest.encode("utf-8")):
+        raise UserError("la aprobación no coincide con el texto, el enlace, la visibilidad o la cuenta actuales; no se publicó")
+    with locked():
+        _, previews = gate(int(time.time()))
+    if digest not in previews:
+        raise UserError("no hay una vista previa reciente de este texto; ejecuta primero post sin --confirm y muéstrasela a la persona")
+    # La persona escribe la huella sin tener tomado el bloqueo: puede tardar y no debe frenar a nadie.
+    if not human_confirms(digest):
+        raise UserError("la huella escrita no coincide; no se publicó")
+    session = load_session()
+    with locked():
+        now = int(time.time())
+        log, previews = gate(now)  # se revalida todo con la hora actual, después de la espera
         if digest not in previews:
-            raise UserError("no hay una vista previa reciente de este texto; ejecuta primero post sin --confirm y muéstrasela a la persona")
-        if not human_confirms(digest):
-            raise UserError("la huella escrita no coincide; no se publicó")
+            raise UserError("la vista previa venció mientras se confirmaba; repite desde la vista previa")
         previews.pop(digest, None)
         private_write(previews_path, previews)
         # Se reserva antes de enviar: si el resultado queda en duda, no se puede repetir a ciegas.
-        entry = {"hash": digest, "text_id": text_id, "ts": now, "id": "", "status": "pendiente"}
+        entry = {"hash": digest, "text_id": text_id, "ts": now, "id": "", "status": "pendiente",
+                 "author": session["person_urn"]}
         log.append(entry)
-        private_write(log_path, {"items": log[-200:]})
+        private_write(log_path, {"items": log[-LOG_KEEP:]})
 
-        body = build_body(session, text, args.visibility, link, link_title, link_desc, args.api)
-        headers = {"Authorization": f"Bearer {session['access_token']}", "X-Restli-Protocol-Version": "2.0.0"}
-        if args.api == "posts":
-            headers["Linkedin-Version"] = version
-            url = POSTS_URL
-        else:
-            url = UGC_URL
+        body = build_body(session, text, args.visibility, link, link_title, link_desc)
+        headers = {"Authorization": f"Bearer {session['access_token']}", "X-Restli-Protocol-Version": "2.0.0",
+                   "Linkedin-Version": version}
         try:
-            status, resp_headers, _ = call("POST", url, body=body, headers=headers)
+            status, resp_headers, _ = call("POST", POSTS_URL, body=body, headers=headers)
         except Rejected:
             log.remove(entry)
-            private_write(log_path, {"items": log[-200:]})
+            private_write(log_path, {"items": log[-LOG_KEEP:]})
             raise
         except UserError as exc:
             entry["status"] = "incierto"
-            private_write(log_path, {"items": log[-200:]})
+            private_write(log_path, {"items": log[-LOG_KEEP:]})
             raise UserError(f"{exc}. No se sabe si se publicó: mira tu perfil de LinkedIn antes de intentar otra vez. "
                             "Este texto queda bloqueado en el registro local.")
         post_id = resp_headers.get("X-RestLi-Id", "") if resp_headers is not None else ""
         if status != 201 or not URN_RE.fullmatch(post_id or ""):
             entry["status"] = "incierto"
-            private_write(log_path, {"items": log[-200:]})
+            private_write(log_path, {"items": log[-LOG_KEEP:]})
             raise UserError(f"LinkedIn respondió {status} sin un identificador reconocible. Mira tu perfil antes de intentar otra vez. "
                             "Este texto queda bloqueado en el registro local.")
         entry.update({"id": post_id, "status": "publicado"})
-        private_write(log_path, {"items": log[-200:]})
+        private_write(log_path, {"items": log[-LOG_KEEP:]})
     print(f"Publicado (estado {status}). Identificador: {post_id}")
     print(f"Para verlo: {FEED_URL}{post_id}/")
     return 0
@@ -570,15 +611,26 @@ def cmd_delete(args) -> int:
     session = load_session()
     if not URN_RE.fullmatch(args.urn):
         raise UserError("el identificador debe verse como urn:li:share:123 o urn:li:ugcPost:123")
-    if not any(i.get("id") == args.urn and i.get("status") == "publicado" for i in load_log()):
-        raise UserError("ese identificador no figura entre las publicaciones hechas con este programa; no se borra")
+    with locked():
+        mine = [i for i in load_log() if i.get("id") == args.urn and i.get("status") == "publicado"
+                and i.get("author") == session["person_urn"]]
+    if not mine:
+        raise UserError("ese identificador no figura entre las publicaciones hechas con este programa y esta cuenta; no se borra")
     if not args.yes:
         print(f"Se borraría {args.urn}. No se borró nada; agrega --yes para confirmar.")
         return 0
     url = POSTS_URL + "/" + urllib.parse.quote(args.urn, safe="")
-    status, _, _ = call("DELETE", url, headers={
-        "Authorization": f"Bearer {session['access_token']}", "X-Restli-Protocol-Version": "2.0.0",
-        "Linkedin-Version": api_version(), "X-RestLi-Method": "DELETE"})
+    try:
+        status, _, _ = call("DELETE", url, headers={
+            "Authorization": f"Bearer {session['access_token']}", "X-Restli-Protocol-Version": "2.0.0",
+            "Linkedin-Version": api_version(), "X-RestLi-Method": "DELETE"})
+    except Rejected:
+        raise
+    except UserError as exc:
+        raise UserError(f"{exc}. No se sabe si se borró: mira tu perfil de LinkedIn antes de repetir.")
+    if status != 204:
+        raise UserError(f"LinkedIn respondió {status} y no 204, que es lo documentado para un borrado. "
+                        "Mira tu perfil antes de darlo por hecho.")
     with locked():
         log = load_log()
         for i in log:
@@ -604,7 +656,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("auth-start").set_defaults(func=cmd_auth_start)
     f = sub.add_parser("auth-finish")
-    f.add_argument("redirect_url")
+    f.add_argument("redirect_url", nargs="?")
     f.set_defaults(func=cmd_auth_finish)
     sub.add_parser("status").set_defaults(func=cmd_status)
     sub.add_parser("logout").set_defaults(func=cmd_logout)
@@ -614,7 +666,6 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--link")
     q.add_argument("--link-title")
     q.add_argument("--link-description")
-    q.add_argument("--api", choices=("posts", "ugc"), default="posts")
     q.add_argument("--confirm")
     q.set_defaults(func=cmd_post)
     d = sub.add_parser("delete")

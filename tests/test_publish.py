@@ -35,8 +35,8 @@ class FakeResponse:
         self.status = status
         self.headers = headers or {}
 
-    def read(self):
-        return self._raw
+    def read(self, size=-1):
+        return self._raw if size is None or size < 0 else self._raw[:size]
 
     def __enter__(self):
         return self
@@ -287,21 +287,10 @@ class Publicar(Base):
         self.assertEqual(captured["body"]["content"]["article"],
                          {"source": link, "title": "Nota", "description": "Resumen"})
 
-    def test_legacy_api_option_uses_ugc_posts(self):
+    def test_the_legacy_ugc_api_can_no_longer_publish(self):
         self.write_session()
-        captured = {}
-
-        def fake(req, timeout=None):
-            captured["req"] = req
-            return FakeResponse({}, 201, {"X-RestLi-Id": "urn:li:share:1"})
-
-        with mock.patch.object(lp, "urlopen", fake):
-            code, _, _ = self.publish("--api", "ugc", api="ugc")
-        self.assertEqual(code, 0)
-        self.assertEqual(captured["req"].full_url, "https://api.linkedin.com/v2/ugcPosts")
-        self.assertIsNone(captured["req"].get_header("Linkedin-version"))
-        body = json.loads(captured["req"].data.decode("utf-8"))
-        self.assertEqual(body["specificContent"]["com.linkedin.ugc.ShareContent"]["shareMediaCategory"], "NONE")
+        code, _, err = self.preview("--api", "ugc")
+        self.assertEqual(code, 2)
 
     def test_same_text_is_not_published_twice(self):
         self.write_session()
@@ -511,10 +500,143 @@ class Garantias(Base):
         self.assertIn("cambiaron", err3)
 
 
+class Endurecimiento(Base):
+    publish = Publicar.publish
+
+    def test_server_errors_on_a_write_stay_uncertain_and_block_a_retry(self):
+        from urllib.error import HTTPError
+        self.write_session()
+
+        def boom(req, timeout=None):
+            raise HTTPError(req.full_url, 502, "Bad Gateway", {}, io.BytesIO(b"{}"))
+
+        with mock.patch.object(lp, "urlopen", boom):
+            code, _, err = self.publish()
+        self.assertEqual(code, 2)
+        self.assertIn("No se sabe si se publicó", err)
+        self.assertEqual(read_json(os.path.join(self.home, "publicaciones.json"))["items"][0]["status"], "incierto")
+
+    def test_client_errors_release_the_reservation(self):
+        from urllib.error import HTTPError
+        self.write_session()
+
+        def boom(req, timeout=None):
+            raise HTTPError(req.full_url, 422, "Unprocessable", {}, io.BytesIO(b"{}"))
+
+        with mock.patch.object(lp, "urlopen", boom):
+            code, _, _ = self.publish()
+        self.assertEqual(code, 2)
+        self.assertEqual(read_json(os.path.join(self.home, "publicaciones.json"))["items"], [])
+
+    def test_delete_only_counts_204_and_only_for_the_same_account(self):
+        self.write_session()
+        urn = "urn:li:share:9"
+        log = os.path.join(self.home, "publicaciones.json")
+        lp.private_write(log, {"items": [{"hash": "h", "ts": int(time.time()), "id": urn, "status": "publicado",
+                                          "author": "urn:li:person:otra"}]})
+        code, _, err = self.run_cli("delete", urn, "--yes")
+        self.assertEqual(code, 2)
+        self.assertIn("no figura", err)
+        lp.private_write(log, {"items": [{"hash": "h", "ts": int(time.time()), "id": urn, "status": "publicado",
+                                          "author": "urn:li:person:abc123"}]})
+        with mock.patch.object(lp, "urlopen", lambda req, timeout=None: FakeResponse({}, 202)):
+            code, out, err = self.run_cli("delete", urn, "--yes")
+        self.assertEqual(code, 2)
+        self.assertNotIn("Borrada", out)
+        self.assertEqual(read_json(log)["items"][0]["status"], "publicado")
+
+    def test_pending_markers_are_refused(self):
+        self.write_session()
+        self.write_text("Hola {{dato: cifra}} mundo")
+        code, _, err = self.preview()
+        self.assertEqual(code, 2)
+        self.assertIn("marcador pendiente", err)
+
+    def test_damaged_log_fails_closed(self):
+        self.write_session()
+        lp.private_write(os.path.join(self.home, "publicaciones.json"), {"items": "no soy una lista"})
+        with mock.patch.object(lp, "urlopen") as net:
+            code, _, err = self.preview()
+        net.assert_not_called()
+        self.assertEqual(code, 2)
+        self.assertIn("dañado", err)
+
+    def test_dedup_memory_outlives_200_attempts(self):
+        self.write_session()
+        old = {"hash": "x", "text_id": lp.text_hash(read_file(self.text_path)), "ts": int(time.time()) - 10 * 86400,
+               "id": "urn:li:share:1", "status": "publicado", "author": "urn:li:person:abc123"}
+        filler = [{"hash": "f%d" % i, "text_id": "t%d" % i, "ts": int(time.time()) - 10 * 86400, "id": "", "status": "borrado"}
+                  for i in range(300)]
+        lp.private_write(os.path.join(self.home, "publicaciones.json"), {"items": [old] + filler})
+        code, _, err = self.preview()
+        self.assertEqual(code, 2)
+        self.assertIn("ya se publicó", err)
+
+    def test_confirmation_happens_outside_the_lock_and_is_revalidated(self):
+        self.write_session()
+        self.assertEqual(self.preview()[0], 0)
+        seen = {}
+
+        def slow(digest):
+            seen["lock_free"] = not os.path.exists(os.path.join(self.home, "lock"))
+            # la vista previa vence mientras la persona decide
+            lp.private_write(os.path.join(self.home, "previews.json"), {})
+            return True
+
+        with mock.patch.object(lp, "human_confirms", slow), mock.patch.object(lp, "urlopen") as net:
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                code = lp.main(["post", self.text_path, "--visibility", "CONNECTIONS", "--confirm", self.digest()])
+        net.assert_not_called()
+        self.assertTrue(seen["lock_free"])
+        self.assertEqual(code, 2)
+        self.assertIn("venció mientras se confirmaba", err.getvalue())
+
+    def test_a_lock_is_only_removed_by_its_owner(self):
+        os.makedirs(self.home)
+        path = os.path.join(self.home, "lock")
+        with lp.locked():
+            with open(path, "w") as fh:
+                fh.write("otro-dueno")
+        self.assertTrue(os.path.exists(path))
+
+    def test_callback_error_is_shown_only_after_state_matches_and_is_sanitized(self):
+        self.run_cli("auth-start")
+        state = read_json(os.path.join(self.home, "auth_state.json"))["state"]
+        _, _, err = self.run_cli("auth-finish", "https://ejemplo.test/callback?error=%1b%5b2Jx&state=falso")
+        self.assertNotIn("\x1b", err)
+        self.assertIn("state", err)
+        _, _, err = self.run_cli("auth-finish", "https://ejemplo.test/callback?error=%1b%5b2Jx&state=" + state)
+        self.assertNotIn("\x1b", err)
+
+    def test_oauth_responses_of_the_wrong_type_are_rejected_cleanly(self):
+        self.run_cli("auth-start")
+        state = read_json(os.path.join(self.home, "auth_state.json"))["state"]
+        with mock.patch.object(lp, "urlopen", lambda req, timeout=None: FakeResponse([1, 2], 200)):
+            code, _, err = self.run_cli("auth-finish", f"https://ejemplo.test/callback?code=x&state={state}")
+        self.assertEqual(code, 2)
+        self.assertIn("access_token", err)
+
+    def test_auth_finish_without_a_terminal_and_without_argument_is_refused(self):
+        self.run_cli("auth-start")
+        with mock.patch.object(lp.sys, "stdin", io.StringIO("")):
+            code, _, err = self.run_cli("auth-finish")
+        self.assertEqual(code, 2)
+        self.assertIn("terminal interactiva", err)
+
+    def test_logout_keeps_the_publication_log_and_says_so(self):
+        self.write_session()
+        lp.private_write(os.path.join(self.home, "publicaciones.json"), {"items": []})
+        _, out, _ = self.run_cli("logout")
+        self.assertTrue(os.path.exists(os.path.join(self.home, "publicaciones.json")))
+        self.assertIn("publicaciones.json", out)
+
+
 class Borrar(Base):
     def seed(self, urn="urn:li:share:555"):
         self.write_session()
-        lp.private_write(os.path.join(self.home, "publicaciones.json"), {"items": [{"hash": "h", "ts": int(time.time()), "id": urn, "status": "publicado"}]})
+        lp.private_write(os.path.join(self.home, "publicaciones.json"), {"items": [{"hash": "h", "ts": int(time.time()), "id": urn, "status": "publicado",
+                                                                                     "author": "urn:li:person:abc123"}]})
 
     def test_delete_requires_yes_and_a_post_made_by_this_program(self):
         self.seed()
@@ -620,7 +742,8 @@ class Sesion(Base):
 
     def test_auth_error_from_linkedin_is_reported(self):
         self.run_cli("auth-start")
-        code, _, err = self.run_cli("auth-finish", "https://ejemplo.test/callback?error=user_cancelled_authorize&state=x")
+        state = read_json(os.path.join(self.home, "auth_state.json"))["state"]
+        code, _, err = self.run_cli("auth-finish", "https://ejemplo.test/callback?error=user_cancelled_authorize&state=" + state)
         self.assertEqual(code, 2)
         self.assertIn("user_cancelled_authorize", err)
 
