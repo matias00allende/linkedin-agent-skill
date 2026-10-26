@@ -1,5 +1,16 @@
 # Cambios
 
+## 1.8.0 - 2026-10-26
+
+- ag-publish pasa a la Posts API (/rest/posts), que reemplaza a ugcPosts, con la cabecera de versión obligatoria (por defecto 202610, ajustable con LINKEDIN_API_VERSION). La vía antigua queda como --api ugc.
+- El texto se envía en el formato de la API: caracteres reservados escapados y palabras con # como hashtag. Los enlaces exigen --link-title porque la API no lee la página.
+- La publicación exige una vista previa de las últimas 24 horas. Nuevo subcomando delete (solo publicaciones hechas con el programa y con --yes). El script imprime el enlace para ver la publicación.
+- La skill y la guía de configuración aclaran la integración: la app necesita una página de empresa solo como dueña, las publicaciones salen en el perfil personal, y es publicación asistida porque la cláusula 3.1.26 de los términos de las APIs prohíbe automatizar publicaciones.
+- La guía separa lo verificado de lo no verificado y lista los siguientes pasos posibles (PDF de carruseles, imágenes, renovación de sesión).
+- Endurecimiento tras la auditoría 8: la publicación exige que la persona escriba la huella en una terminal interactiva (un agente sin terminal no puede confirmar); la huella cubre cuenta, API, descripción y se calcula sobre una estructura canónica; la vista previa muestra todo lo que se envía y rechaza caracteres de control y de dirección; no se siguen redirecciones; escritura atómica sin enlaces simbólicos; bloqueo entre procesos; el intento se reserva antes de enviar y un resultado dudoso queda como incierto y bloquea el texto; el borrado no libera el tope; el estado OAuth queda ligado a la app y a la dirección de retorno; hashtags con guion bajo escapados.
+- La documentación deja de afirmar que el diseño cumple los términos de LinkedIn: es una salvaguarda de diseño sin confirmación de LinkedIn.
+- Pruebas: 177.
+
 ## 1.7.0 - 2026-10-26
 
 - Nueva skill ag-publish y script linkedin_publish.py: publica en el perfil de la persona con la API oficial de LinkedIn (producto Share on LinkedIn, permiso w_member_social).

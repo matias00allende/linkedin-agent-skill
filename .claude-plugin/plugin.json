@@ -1,7 +1,7 @@
 {
   "name": "agentin",
   "description": "Doce skills de Claude para redactar, revisar y publicar con tu aprobación contenido de LinkedIn en español de Chile: publicaciones, comentarios, respuestas, perfil, plan de contenido, mensajes, bandeja, carruseles, reutilización y auditoría, más un limpiador de borradores que corre en tu máquina. Nada se publica sin tu aprobación del texto exacto.",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "author": {
     "name": "Matías Allende",
     "url": "https://github.com/matias00allende"

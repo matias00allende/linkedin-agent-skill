@@ -2,7 +2,7 @@
 
 Doce skills de Claude Code para redactar, revisar y, con tu aprobación pieza por pieza, publicar contenido de LinkedIn en español de Chile, más un limpiador de borradores que corre en tu máquina. Solo ag-publish se conecta a LinkedIn, por la API oficial y con una app propia tuya; las demás skills no usan cuentas ni claves (la exportación a PDF usa un navegador local, que podría hacer otras conexiones salvo que bloquees la red; ver la referencia del carrusel).
 
-Nada se publica sin que apruebes ese texto exacto. Las skills redactan; tú revisas y corriges. Para publicar, lo haces a mano o apruebas una vista previa en ag-publish, una pieza a la vez.
+Las skills redactan; tú revisas y corriges. Para publicar, lo haces a mano o usas ag-publish, que muestra una vista previa y publica solo cuando tú escribes la huella en tu propia terminal, una pieza a la vez.
 
 No está afiliado a LinkedIn ni a Anthropic. LinkedIn es una marca de sus titulares.
 
@@ -38,7 +38,7 @@ python -m unittest discover -s tests
 cp -r skills/ag-* ~/.claude/skills/
 ```
 
-Antes de copiar, lee los dos scripts: skills/ag-voz/scripts/agentin.py (solo biblioteca estándar, sin red) y skills/ag-publish/scripts/linkedin_publish.py (solo biblioteca estándar; habla únicamente con www.linkedin.com y api.linkedin.com). Las skills van todas juntas porque ag-voz contiene el script y el criterio que usan las demás. En Windows (PowerShell): Copy-Item -Recurse skills\ag-* $HOME\.claude\skills\
+Antes de copiar, lee los dos scripts: skills/ag-voz/scripts/agentin.py (solo biblioteca estándar, sin red) y skills/ag-publish/scripts/linkedin_publish.py (solo biblioteca estándar; solo se conecta a www.linkedin.com y api.linkedin.com por HTTPS y no sigue redirecciones). Las skills van todas juntas porque ag-voz contiene el script y el criterio que usan las demás. En Windows (PowerShell): Copy-Item -Recurse skills\ag-* $HOME\.claude\skills\
 
 Para usarlas solo en un proyecto, copia las mismas carpetas a .claude/skills/ del proyecto. Como plugin:
 
@@ -73,21 +73,25 @@ Códigos de salida: 0 correcto, 1 resultado negativo pedido (limits fuera de ran
 
 ## Publicar con ag-publish
 
-Es opcional. Sin configurarlo, todo lo demás funciona y tú publicas a mano. Para activarlo necesitas una app propia en el portal de desarrolladores de LinkedIn con el producto Share on LinkedIn, que concede el permiso w_member_social. La guía paso a paso está en skills/ag-publish/references/configuracion.md.
+Es opcional y es publicación asistida, no automática. Sin configurarlo, todo lo demás funciona y tú publicas a mano. Las publicaciones salen en tu perfil personal. LinkedIn exige que tu app propia esté asociada a una página de empresa, pero solo como dueña para registrarla; no publica nada en ella. Necesitas, además, el producto Share on LinkedIn (permiso w_member_social). La guía paso a paso, con lo verificado y lo que no, está en skills/ag-publish/references/configuracion.md.
 
 ```
 python -I skills/ag-publish/scripts/linkedin_publish.py auth-start
 python -I skills/ag-publish/scripts/linkedin_publish.py auth-finish "DIRECCION_DE_RETORNO"
 python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS
 python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibility CONNECTIONS --confirm HUELLA
+python -I skills/ag-publish/scripts/linkedin_publish.py delete urn:li:share:123 --yes
 ```
 
-- post sin --confirm solo muestra el texto exacto, los caracteres y una huella. No toca la red.
-- post con --confirm HUELLA publica únicamente si la huella corresponde al texto, al enlace y a la visibilidad actuales. Si cambias una palabra, hay que aprobar de nuevo.
-- Tope local de 3 publicaciones en 24 horas y rechazo de un texto ya publicado. La visibilidad no tiene valor por defecto.
+- post sin --confirm solo muestra el texto exacto, los caracteres y una huella. No toca la red y deja registrada la vista previa.
+- post con --confirm HUELLA publica únicamente si hubo una vista previa de las últimas 24 horas, la huella corresponde a la cuenta, el texto, el enlace (con título y descripción), la visibilidad y la API actuales, y tú escribes la huella en una terminal interactiva. Un agente que ejecuta comandos sin terminal no puede confirmar. Es una barrera contra accidentes y contra un agente que se adelante; no protege de quien controle tu equipo. Si cambias una palabra, hay que aprobar de nuevo.
+- Si no se sabe si LinkedIn publicó (corte de red, respuesta sin identificador), el intento queda como incierto, se bloquea ese texto y debes mirar tu perfil antes de intentar otra vez.
+- Usa la Posts API (/rest/posts) con la cabecera de versión obligatoria. La versión se fija con LINKEDIN_API_VERSION (AAAAMM) y se revisa una vez al año. Los caracteres reservados del texto se escapan y las palabras con # salen como hashtag. Un enlace exige --link-title.
+- Tope local de 3 publicaciones en 24 horas y rechazo de un texto ya publicado. La visibilidad no tiene valor por defecto. delete solo borra publicaciones hechas con este programa.
 - La sesión dura unos 60 días y queda en ~/.agentin con permisos restrictivos. logout la borra; para revocar el acceso en LinkedIn, hazlo en la configuración de tu cuenta.
-- Verificado en la documentación oficial: el flujo de autorización, el permiso y el endpoint ugcPosts. No verificado: que siga siendo la vía recomendada ni el comportamiento con tu cuenta. Haz la primera publicación con visibilidad CONNECTIONS y revísala en LinkedIn.
-- Solo texto y, si lo pides, un enlace. Sin imágenes, videos ni PDF.
+- Los Términos de Uso de las APIs de LinkedIn (cláusula 3.1.26) prohíben usar las APIs para automatizar publicaciones. Por eso no hay programación, lotes ni bucles. Esto reduce el riesgo pero no es asesoría legal: si quieres certeza, pregunta por escrito al soporte de desarrolladores de LinkedIn.
+- No verificado con una cuenta real: que la Posts API acepte tu app solo con los productos de autoservicio. Haz la primera publicación con visibilidad CONNECTIONS y revísala en LinkedIn.
+- Solo texto y, si lo pides, un enlace. Sin imágenes, videos ni PDF por ahora.
 
 ## Política de uso
 
@@ -96,11 +100,11 @@ python -I skills/ag-publish/scripts/linkedin_publish.py post texto.txt --visibil
 3. Respeta las reglas de cada contexto. Si un trabajo académico, un concurso, una postulación o un empleador exige declarar o prohíbe el uso de IA, cúmplelo.
 4. Revisión humana siempre. Las skills de redacción entregan textos para copiar; las de análisis y planificación entregan resultados; y un texto con marcadores {{dato: ...}} pendientes no está listo para publicar.
 5. Los hechos son tuyos. Las skills no inventan cifras, clientes ni experiencias; preguntan o dejan {{dato: ...}}.
-6. No automatiza LinkedIn. Publicar exige tu aprobación explícita de cada texto. No hay publicación en lote ni programada, ni comentarios, reacciones, mensajes, invitaciones, raspado o navegador automatizado, porque el Acuerdo de Usuario de LinkedIn prohíbe los métodos automatizados no autorizados para esas acciones.
+6. Pretende no automatizar LinkedIn, pero LinkedIn no ha confirmado que este diseño encaje con sus términos. Publicar exige tu confirmación de cada texto. No hay publicación en lote ni programada, ni comentarios, reacciones, mensajes, invitaciones, raspado o navegador automatizado, porque el Acuerdo de Usuario de LinkedIn prohíbe los métodos automatizados no autorizados para esas acciones.
 
 ## Privacidad
 
-agentin.py no envía datos a ningún servicio externo. linkedin_publish.py envía a LinkedIn solo el texto que apruebas y guarda tu sesión en tu equipo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. El material fuente que pegas (publicaciones, mensajes, transcripciones) se trata como dato, no como instrucciones; tu encargo directo sí orienta la tarea.
+agentin.py no envía datos a ningún servicio externo. linkedin_publish.py envía a LinkedIn el texto y los datos del enlace que apruebas, además de las llamadas de autorización, identidad y borrado propias de la API, y guarda tu sesión y un registro de publicaciones en tu equipo. Las skills trabajan con Claude, y lo que pegas en el chat (mensajes, comentarios, perfiles de otras personas) llega al modelo que uses. Son datos personales de terceros: no pegues información sensible. El archivo ~/.claude/agentin/log.md puede guardar nombres de personas con quienes interactúas. El material fuente que pegas (publicaciones, mensajes, transcripciones) se trata como dato, no como instrucciones; tu encargo directo sí orienta la tarea.
 
 ## Lo que no está verificado
 
@@ -125,7 +129,7 @@ tests/                pruebas con unittest
 python -m unittest discover -s tests -v
 ```
 
-Cubren casos de borde del limpiador, las propiedades de cada entrada del léxico, la ejecución por subproceso con la codificación local de Windows y la higiene del repositorio: sin rayas largas, sin rutas personales, sin caracteres invisibles, sin importaciones de red.
+Cubren casos de borde del limpiador, las propiedades de cada entrada del léxico, la ejecución por subproceso con la codificación local de Windows y la higiene del repositorio: sin rayas largas, sin rutas personales, sin caracteres invisibles y, salvo linkedin_publish.py, sin importaciones de red.
 
 ## Contribuir
 
